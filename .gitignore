@@ -107,3 +107,13 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# VR-HE project-local data and secrets: use synthetic fixtures in source control.
+# These are safeguards, not a complete scanner for every sensitive file.
+/PrivateData/
+/Captures/
+/TourData/
+/Secrets/
+.env
+.env.*
+!.env.example
