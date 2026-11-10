@@ -154,6 +154,37 @@ Validation:
 - Documentation validation passed: 19 files, 77 resolved internal links and no Markdown table errors.
 - The inspection prompt has been prepared; Claude has not yet returned the local findings.
 
+## November 10, 2026 — local Unity inspection
+
+Human contribution:
+- Arlen pasted the local inspection prompt into the existing Claude Code session and asked for verified findings, assumptions and a starting-template recommendation.
+- The laptop had no Git author identity. Arlen chose the VR-HE account's GitHub noreply address for local commits; Claude set it in this repository's local Git config only.
+
+AI contribution:
+- Claude Code (Opus 5.5) confirmed a clean tree on docs/project-foundation, fast-forwarded it to 1bc0389, and read the project instructions, specification, decisions and handoff.
+- Claude ran read-only local checks: installed packages and paths, editor folders and module files, Hub and Unity CLI metadata (unity editors, unity status), Claude and Unity MCP configuration, running processes, listening ports and adb devices.
+- Web-fetch helper agents, used as this session's page reader, read the current primary sources cited in the handoff. They covered Unity 6 support and the 6.3 LTS announcement; Unity 6.3/6.6 WebGPU and browser pages; and the Unity 6.3 Meta Quest, template, build-profile and iOS setup pages. They also read the aras-p/UnityGaussianSplatting README and releases.
+- No Unity Editor was launched and no project, package, module or setting was changed. No command was sent to The Veil's Editor. Hub account, cookie and token stores were not read, and adb serial numbers were redacted.
+
+MAX verification for this session:
+- Process ancestry shows this session running as claude --effort max, started at 14:49 from the launcher's terminal, with CLAUDE_CODE_EFFORT_LEVEL=max. The running binary is 2.1.321.
+- The model is Opus 5.5 (claude-opus-5-5), selected with /model for this session only. The session reports max reasoning effort.
+- claude --version now reports 2.1.322 because Claude Code updated on disk during the session. Re-check version, model and effort at the next start.
+
+Findings (details in the handoff's local Unity inspection section):
+- Unity Hub 3.22.6 and Unity CLI 1.0.0-beta.13 are installed.
+- The installed editors are 6000.0.84f1, 6000.3.15f1 (6.3 LTS), 6000.6.2f1 and 6000.6.4f1. Only 6000.3.15f1 has both Android and Web support files.
+- No editor has iOS support. No device was attached to adb, and 24 GB of disk space was free.
+- The only live bridge target is The Veil's running Editor, which has the Pipeline and AI Assistant MCP relay attached. VR-HE has no Unity project or bridge target yet.
+
+Recommendation, not a decision: Unity 6.3 LTS (installed 6000.3.15f1) with the URP blank 3D template, adding OpenXR, OpenXR Meta and the XR Interaction Toolkit for the Quest slice. Arlen's approval is pending.
+
+Validation:
+- Documentation validation passed: 17 tracked Markdown files, 76 resolved internal links (none broken; 29 external links not fetched) and no table-structure errors.
+- No build, runtime, device, browser or splat-renderer test was performed. Module files and metadata do not prove a working build.
+- This commit is the local push test; GitHub history shows whether it reached origin.
+- CLAUDE.md, README.md and PRODUCT_SPEC.md still call Unity tooling and push access unverified. This task's scope was limited to the handoff and this log.
+
 ## Entry template
 
 For each meaningful change, record:
