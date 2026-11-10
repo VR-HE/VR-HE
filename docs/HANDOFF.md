@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Claude Code startup, active MAX effort and local push access are not yet verified.
+There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration; local Unity tooling and push access still need verification.
 
 ## Read in this order
 
@@ -30,9 +30,9 @@ The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The reposi
 
 ## Next setup work
 
-Local VR-HE sign-in and repository clone are confirmed by Arlen's screenshots. The working folder is /home/arlen/Projects/VR-HE and the branch is docs/project-foundation. Pull the latest branch updates, check the installed Claude Code version, then start the project launcher and verify active MAX effort. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
+Local VR-HE sign-in, clone and the displayed Claude session are confirmed by Arlen's screenshots. Claude Code v2.1.321 shows Opus 5.5 with max effort in ~/Projects/VR-HE; the model was selected for this session only. The working branch is docs/project-foundation. Next run the [local Unity inspection task](LOCAL_UNITY_INSPECTION.md) in that existing session, beginning with a clean-tree check and a safe fast-forward pull. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
 
-Authentication and repository read access are confirmed. Local push access and the Claude Code session are separate verification steps. Do not paste passwords, tokens or login codes into chat.
+Authentication and repository read access are confirmed. Claude's displayed configuration is confirmed. Local Unity versions/modules, bridge target and local push access are the next verification steps. Do not paste passwords, tokens or login codes into chat.
 
 If this documentation branch is still unmerged, read/check out the branch when continuing; do not mistake the starter README on main for the full project.
 
@@ -40,7 +40,7 @@ If this documentation branch is still unmerged, read/check out the branch when c
 
 Arlen explicitly requires MAX effort. The [launcher](../scripts/start-claude.sh) sets a process-scoped effort request and starts Claude in this repository.
 
-On the laptop:
+For later sessions:
 1. Pull the latest working branch with git pull --ff-only.
 2. Check claude --version.
 3. Run bash scripts/start-claude.sh.
@@ -49,9 +49,13 @@ On the laptop:
 
 The current Claude Code docs support session launch requests and a process environment setting; they do not accept max as a persisted effortLevel value. The client/model can reduce an unsupported request, so a successful launch alone does not prove MAX.
 
-If the option is unavailable or a lower level is shown, report the exact limitation and resolve support/configuration before describing the build as using MAX.
+The November 10 screenshot completes the current startup checkpoint: v2.1.321, Opus 5.5, max effort, correct project folder. Do not repeat this setup unless the session/configuration changes. If a later session shows a lower level, resolve and record the difference.
 
 References: [model/effort configuration](https://code.claude.com/docs/en/model-config), [CLI reference](https://code.claude.com/docs/en/cli-reference).
+
+## Immediate local inspection
+
+Use [the first task prompt](LOCAL_UNITY_INSPECTION.md) to gather installed Unity Editor versions, Android/Web build support and available Unity bridge targets. Record facts separately from recommendations, then select the project template and renderer feasibility experiment. Environment inspection can proceed independently of acquiring native spreadsheets.
 
 ## Next mapping work
 

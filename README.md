@@ -73,10 +73,10 @@ Arlen requires **MAX effort** for Claude build work. From this repository, run:
 bash scripts/start-claude.sh
 ```
 
-The [launcher](scripts/start-claude.sh) requests MAX for each session. Check the active level in Claude before starting implementation; see [the handoff](docs/HANDOFF.md). This launches the coding assistant, not a Unity application.
+The [launcher](scripts/start-claude.sh) requests MAX for each session. Check the active level in Claude before starting implementation; see [the handoff](docs/HANDOFF.md). The [first local inspection task](docs/LOCAL_UNITY_INSPECTION.md) gathers Unity versions/modules before project creation. This launches the coding assistant, not a Unity application.
 
 ## Working together
 
-ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshots confirm local VR-HE sign-in, cloning into /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code startup/effort and local push access remain to be verified. Use small reviewable changes and record what was planned, implemented and actually tested.
+ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshots confirm local VR-HE sign-in, cloning into /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration; local Unity tooling and push access still need verification. Use small reviewable changes and record what was planned, implemented and actually tested.
 
 Do not commit real headend scans, operational spreadsheets, credentials or private attachment data. Use synthetic data for the demo. The existing Unity ignore rules are retained; review them when the Unity project directory is chosen.

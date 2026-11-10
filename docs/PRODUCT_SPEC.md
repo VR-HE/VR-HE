@@ -135,7 +135,7 @@ Confirmed behavior for the official version:
 
 Account administration, assignment of editor rights, site-specific permissions, capture permissions and detailed delete/recovery rights remain to be specified. AI-generated live spreadsheet changes now require designated-editor approval. No additional general approval workflow for ordinary manual edits has been selected.
 
-Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository clone on docs/project-foundation and a clean working tree are confirmed by his next screenshot. Claude Code startup/active MAX and local push access remain unverified.
+Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository clone on docs/project-foundation and a clean working tree are confirmed by his next screenshot. A later screenshot confirms Claude Code v2.1.321 running Opus 5.5 with max effort in ~/Projects/VR-HE. Local Unity setup and push access remain unverified.
 
 ## Question 3 — resolved: reusable templates and local field changes
 
@@ -250,7 +250,7 @@ Verified November 10, 2026:
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
 - No Unity application, capture system, renderer, spreadsheet adapter or production security implementation exists yet.
-- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code startup, active effort and local push access remain unverified.
+- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code v2.1.321 is now shown running Opus 5.5 with max effort in ~/Projects/VR-HE; Unity inventory and local push access remain unverified.
 
 Canonical project records:
 - This file is the maintained requirements specification in the repository.

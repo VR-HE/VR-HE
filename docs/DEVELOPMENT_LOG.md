@@ -137,6 +137,23 @@ Validation:
 - No workbook adapter, approval UI or AI transcription accuracy test exists yet.
 - Local Claude version/model/active MAX still needs verification.
 
+## November 10, 2026 — Claude startup checkpoint complete
+
+Human-supplied evidence:
+- Screenshot image(20261110-195443).png shows Claude Code v2.1.321.
+- Header shows Opus 5.5 with max effort in ~/Projects/VR-HE.
+- Session output says Opus 5.5 was selected for this session only.
+
+AI contribution:
+- ChatGPT/Codex reviewed the displayed configuration and prepared the first local Unity inspection task.
+- Current startup/configuration verification is complete at the UI level.
+- Installed Unity versions/modules, bridge target and local push access remain unverified.
+- No application build, rendering/device test or native spreadsheet write is evidenced by this screenshot.
+
+Validation:
+- Documentation validation passed: 19 files, 77 resolved internal links and no Markdown table errors.
+- The inspection prompt has been prepared; Claude has not yet returned the local findings.
+
 ## Entry template
 
 For each meaningful change, record:
