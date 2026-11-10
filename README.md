@@ -2,7 +2,7 @@
 
 A planned Unity work utility for touring ISP hubsites and headends using Gaussian splats, with editable information attached to rooms, racks, rack-unit locations and equipment.
 
-**Current state: requirements and developer documentation only.** There is no runnable application or Unity project yet. Capture, rendering, authentication and spreadsheet synchronization are not implemented. Device compatibility has not been demonstrated.
+**Current state: requirements, developer documentation and a Claude launcher.** There is no runnable application or Unity project yet. Capture, rendering, authentication and spreadsheet synchronization are not implemented. Device compatibility has not been demonstrated.
 
 The repository is private. Open-source application code is the intended direction; the application license has not been selected. Unity itself remains subject to its own license.
 
@@ -56,12 +56,22 @@ These are targets, not a compatibility claim.
 
 ## Build and run
 
-There are no build or run commands yet. Google Drive, Sheets and Gemini compatibility is required. The Unity version, rendering approach, backend, credentials and exact integration contracts remain open. Record exact versions, package licenses, setup steps and successful build/device evidence when implementation starts.
+There are no Unity application build or run commands yet. Google Drive, Sheets and Gemini compatibility is required. The Unity version, rendering approach, backend, credentials and exact integration contracts remain open. Record exact versions, package licenses, setup steps and successful build/device evidence when implementation starts.
 
 The next product-design question is what Gemini should do and which data/actions it may use. Gemini's allowed tasks/data scope, spreadsheet mappings and provider-approval roles also need decisions. Early experiments must establish rendering feasibility and partial-update quality across the requested targets.
 
+## Start Claude Code for development
+
+Arlen requires **MAX effort** for Claude build work. From this repository, run:
+
+```bash
+bash scripts/start-claude.sh
+```
+
+The [launcher](scripts/start-claude.sh) requests MAX for each session. Check the active level in Claude before starting implementation; see [the handoff](docs/HANDOFF.md). This launches the coding assistant, not a Unity application.
+
 ## Working together
 
-ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshot confirms successful local VR-HE sign-in; local repository checkout/access and Claude Code use remain to be verified. Use small reviewable changes and record what was planned, implemented and actually tested.
+ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshots confirm local VR-HE sign-in, cloning into /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code startup/effort and local push access remain to be verified. Use small reviewable changes and record what was planned, implemented and actually tested.
 
 Do not commit real headend scans, operational spreadsheets, credentials or private attachment data. Use synthetic data for the demo. The existing Unity ignore rules are retained; review them when the Unity project directory is chosen.

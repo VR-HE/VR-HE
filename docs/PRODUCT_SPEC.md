@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.11; arrow/mobile/orbit controls and X reset confirmed. Documentation only.
+Status: requirements baseline 0.12; MAX build workflow and local clone confirmed. Requirements/development setup; no Unity application yet.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -41,6 +41,7 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Partial rescanning | Where feasible, rescan changed sections rather than the entire site; feasibility and quality require a prototype |
 | Built-in guidance | Teach scanning, adding information, navigation and finding stored information using familiar FPS/third-person conventions explained for non-gamers |
 | Development tracking | Use GitHub repository VR-HE/VR-HE; access is verified; include detailed developer handoff and transparent human/AI process records |
+| Claude build effort | Use MAX effort for Claude implementation/build sessions; verify the actual setting |
 
 The user's latest requirements supersede earlier suggested architecture where they conflict. In particular, the earlier proposal of a PlayCanvas browser viewer is not an accepted replacement for the requested Unity application.
 
@@ -130,7 +131,7 @@ Confirmed behavior for the official version:
 
 Account administration, assignment of editor rights, site-specific permissions, capture permissions and detailed delete/recovery rights remain to be specified. A mandatory review/approval workflow has not been selected.
 
-Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository checkout/access for Claude Code remains unverified.
+Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository clone on docs/project-foundation and a clean working tree are confirmed by his next screenshot. Claude Code startup/active MAX and local push access remain unverified.
 
 ## Question 3 — resolved: reusable templates and local field changes
 
@@ -217,7 +218,7 @@ See [integration controls](INTEGRATIONS.md), [capture updates](CAPTURE_UPDATES.m
 
 ## GitHub and developer handoff — confirmed process requirement
 
-Arlen requires development in the VR-HE GitHub repository with detailed developer notes and transparent records of human decisions, AI assistance, test evidence and limitations.
+Arlen requires development in the VR-HE GitHub repository with detailed developer notes and transparent records of human decisions, AI assistance, test evidence and limitations. He additionally requires MAX effort for Claude implementation/build work; actual effort must be verified, not inferred from a prompt.
 
 Verified November 10, 2026:
 - Intended account and authenticated connection: VR-HE.
@@ -227,7 +228,7 @@ Verified November 10, 2026:
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
 - No Unity application, capture system, renderer, spreadsheet adapter or production security implementation exists yet.
-- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. Repository checkout/access for Claude Code remains unverified.
+- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code startup, active effort and local push access remain unverified.
 
 Canonical project records:
 - This file is the maintained requirements specification in the repository.

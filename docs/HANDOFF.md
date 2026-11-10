@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. Repository checkout/access for Claude Code is still unverified.
+There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Claude Code startup, active MAX effort and local push access are not yet verified.
 
 ## Read in this order
 
@@ -27,11 +27,28 @@ The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The reposi
 
 ## Next setup work
 
-Local VR-HE sign-in is confirmed by Arlen's screenshot. Next guide cloning/checking out this repository on his Linux laptop, then verify the remote, branch and working tree before launching Claude Code. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on the user's laptop. Preserve his other project's Git configuration.
+Local VR-HE sign-in and repository clone are confirmed by Arlen's screenshots. The working folder is /home/arlen/Projects/VR-HE and the branch is docs/project-foundation. Pull the latest branch updates, check the installed Claude Code version, then start the project launcher and verify active MAX effort. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
 
-Use GitHub's ordinary interactive browser sign-in. Verify the intended account, remote and repository access. Do not paste passwords, tokens or login codes into chat. ChatGPT authentication does not authenticate Claude Code.
+Authentication and repository read access are confirmed. Local push access and the Claude Code session are separate verification steps. Do not paste passwords, tokens or login codes into chat.
 
 If this documentation branch is still unmerged, read/check out the branch when continuing; do not mistake the starter README on main for the full project.
+
+## MAX effort for Claude build work
+
+Arlen explicitly requires MAX effort. The [launcher](../scripts/start-claude.sh) sets a process-scoped effort request and starts Claude in this repository.
+
+On the laptop:
+1. Pull the latest working branch with git pull --ff-only.
+2. Check claude --version.
+3. Run bash scripts/start-claude.sh.
+4. Check the active model/effort control, using /model or /effort, before starting build work.
+5. Record the observed version, model and actual effort.
+
+The current Claude Code docs support session launch requests and a process environment setting; they do not accept max as a persisted effortLevel value. The client/model can reduce an unsupported request, so a successful launch alone does not prove MAX.
+
+If the option is unavailable or a lower level is shown, report the exact limitation and resolve support/configuration before describing the build as using MAX.
+
+References: [model/effort configuration](https://code.claude.com/docs/en/model-config), [CLI reference](https://code.claude.com/docs/en/cli-reference).
 
 ## Next primary product question
 
@@ -57,7 +74,7 @@ These are proposed stages, not a promise that every device has a compatible rend
 
 ## Start prompt for a coding assistant
 
-Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. Report the actual repository state and current branch. Preserve confirmed requirements and identify open choices. Continue the assigned small task, record human/AI contributions and test evidence, and leave a concrete handoff. Do not claim unrun device tests, infer shared credentials or silently redefine confirmed Google requirements, X semantics, AI powers or the renderer.
+Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. Report the actual repository state and current branch. Preserve confirmed requirements and identify open choices. Use verified MAX effort for Claude build work. Continue the assigned small task, record human/AI contributions and test evidence, and leave a concrete handoff. Do not claim unrun device tests, infer shared credentials or silently redefine confirmed Google requirements, X semantics, AI powers or the renderer.
 
 ## Current limitations
 

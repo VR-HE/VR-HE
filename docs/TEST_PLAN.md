@@ -116,6 +116,14 @@ Have a non-gamer follow the in-app instructions to scan/import, add information,
 
 Verify help can be reopened, shows device-appropriate controls, explains permission/connection states in plain language and does not advertise unimplemented workflows as available.
 
+## Claude development launcher
+
+- Validate the launcher's Bash syntax.
+- On the user's machine, verify it opens Claude Code from the VR-HE folder.
+- Verify the actual model/effort control reports MAX before build work; record version and model.
+- If the request is unsupported or capped, record that result instead of claiming MAX.
+- Local syntax checks do not establish that a real Claude backend honored the setting.
+
 ## Evidence format
 
 Each result should name the tested commit, exact device/software configuration, scenario, expected behavior, observed behavior, result and useful logs/screenshots. Label mocked components. Keep private operational data and credentials out of published evidence.

@@ -14,7 +14,7 @@ Confirmed user decisions take precedence over proposals. Current explicit user i
 
 ## Working state
 
-This repository starts with documentation only. Do not imply that a Unity app, splat capture/rendering pipeline, backend, spreadsheet integration or security system is implemented. The requested device matrix is not a tested support matrix.
+This repository currently contains requirements and developer setup only. Do not imply that a Unity app, splat capture/rendering pipeline, backend, spreadsheet integration or security system is implemented. The requested device matrix is not a tested support matrix.
 
 Ask one primary product question at a time. Explain meaningful consequences in plain language, record the answer and resolve important follow-ups before advancing. Continue independent authorized work while a question is pending.
 
@@ -38,6 +38,16 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - iPhone/Android require familiar mobile FPS/third-person movement/look controls, view switching and a separate camera-height up/down control.
 - Third-person view requires looking/orbiting around the avatar, not only a fixed behind-avatar camera. Preserve VR 6DoF when designing any VR camera behavior.
 - VR must support full 6DoF; browser camera commands do not authorize overriding tracked headset pose.
+
+## Claude build effort
+
+Arlen requires MAX effort for Claude implementation/build work.
+
+- Start through scripts/start-claude.sh or an equivalent explicit MAX launch.
+- Verify the selected model, installed Claude Code version and active effort before build work; record the evidence in the development log.
+- Do not equate an instruction in a prompt or this file with an actual client/model setting.
+- If the client, model or policy lowers the requested effort, report it and resolve the capability/configuration issue before claiming MAX is active.
+- This requirement does not authorize extra agent delegation, broader data access or permission bypass.
 
 ## Implementation guidance
 

@@ -28,6 +28,7 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D022 | Confirmed | Desktop browser supports up/down/left/right arrow movement in addition to WASD | Default mapping matches forward/back/left/right WASD directions |
 | D023 | Confirmed | iPhone/Android support familiar mobile FPS/third-person controls, view switching and separate camera-height up/down adjustment | Exact touch layout/gestures remain to be designed for non-gamers |
 | D024 | Confirmed | Third-person view supports looking/orbiting around the player/avatar | Default follow remains behind; orbit limits, collision and recenter/follow behavior need design |
+| D025 | Confirmed development requirement | Claude implementation/build sessions must use MAX effort | Launch explicitly and verify actual client/model effort; do not silently claim a lower level is MAX |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 

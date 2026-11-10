@@ -83,6 +83,23 @@ Validation:
 
 Earlier log entries record the open points at their respective checkpoints; current decisions are in DECISIONS.md.
 
+## November 10, 2026 — clone verified and MAX build requirement
+
+Human contribution:
+- Arlen's screenshot confirms successful cloning to /home/arlen/Projects/VR-HE, docs/project-foundation tracking its origin branch, and a clean working tree.
+- Arlen requires MAX effort for Claude build work.
+
+AI contribution:
+- ChatGPT/Codex reviewed the supplied setup evidence and updated the handoff.
+- ChatGPT/Codex added a process-scoped Claude launcher plus the shared MAX requirement.
+- ChatGPT/Codex checked Anthropic's current primary effort/CLI documentation; actual client/model behavior still requires local verification.
+
+Validation:
+- Validation passed: bash -n for the launcher, 15 files, 43 resolved internal links and no Markdown table errors. The launcher is executable.
+- The launcher has not been run against a real Claude session in this workspace.
+- Claude Code version, selected model, active MAX and local push access remain unverified.
+- No commands were executed on Arlen's laptop by ChatGPT/Codex.
+
 ## Entry template
 
 For each meaningful change, record:
