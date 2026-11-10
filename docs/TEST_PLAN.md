@@ -116,6 +116,28 @@ Have a non-gamer follow the in-app instructions to scan/import, add information,
 
 Verify help can be reopened, shows device-appropriate controls, explains permission/connection states in plain language and does not advertise unimplemented workflows as available.
 
+## Cabinet states
+
+- Capture a test cabinet closed and open with unchanged reference views and clear interior/inner-door coverage.
+- Switch visual states; inspect alignment, old-door ghosting, missing surfaces and selection/occlusion.
+- Verify door records follow the moving part and interior records remain fixed to the correct equipment.
+- Verify repeated toggles preserve asset IDs, annotations and spreadsheet mappings.
+- Test input equivalents and selected viewer/editor/state-persistence policy.
+- Test partial updates and multi-door cases once their scope is defined.
+
+## Capture-assisted inventory
+
+- Compare extracted label fields with independently checked ground truth on representative captures.
+- Record missed fields, incorrect values, incorrect asset matches and duplicates; do not infer accuracy from JSON validity.
+- Test blurry/obscured labels, similar devices, open/closed passes and repeat rescans.
+- Verify evidence image, timestamp, cabinet/rack context and units stay with each candidate field.
+- Distinguish nameplate ratings from timestamped displayed readings and derived audit values.
+- Verify the selected review/direct-write policy, editor roles, provider approval and company connection requirements.
+- Verify failed/retried writes do not create duplicate rows or silently replace verified values.
+- Measure capture/processing latency, thermal/memory behavior and network needs on the actual targets.
+
+Field scope, acceptance thresholds, real-time expectations and AI write policy are not selected. No field extraction or device test has run.
+
 ## Claude development launcher
 
 - Validate the launcher's Bash syntax.

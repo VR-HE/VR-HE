@@ -41,6 +41,14 @@ It does not demonstrate VR-HE's desired maintenance workflow, exact phone/Quest 
 
 Inferring a section-based update architecture is a design proposal based on these building blocks. It must be validated with the eventual renderer, reconstruction system and capture devices.
 
+## Cabinet appearance states and inventory
+
+Cabinet closed/open passes need common coordinates and enough reference views. Update the changed cabinet states together with their local capture/record mappings; unrelated rooms do not inherently need recapture.
+
+Door-mounted labels/records and fixed interior records must remain attached to their correct parts. A closed-state pass cannot establish that hidden interior equipment was removed.
+
+See [cabinet states](CABINET_STATES.md) and [capture-assisted inventory](AI_CAPTURE_INVENTORY.md) for state coverage and duplicate/identity handling.
+
 ## Prototype to run
 
 Use a small synthetic/authorized scene. Change one rack bay, capture it with overlap, then attempt replacement while retaining surrounding scan data and attached records.

@@ -18,7 +18,7 @@ Required compatibility is not an instruction to connect credentials, upload site
 | --- | --- | --- |
 | Google Drive | Compatible file/storage and linked-information workflows | Files, shared drives, scan/attachment storage, permissions and retention |
 | Google Sheets | Two-way values and mapped structural changes | Workbook layout, sparse fields, formulas, conflicts and recovery |
-| Google Gemini | Compatible AI integration | Product/API, tasks, allowed inputs, read/write powers and deployment |
+| Google Gemini | Assist baseline equipment/spreadsheet recording while capture proceeds | Product/API, field scope, draft-review/direct-write policy, allowed inputs and deployment |
 | Additional AI tools | Enable approved and disable unapproved integrations | Named adapters, supported tasks, data scopes and identity |
 | Additional spreadsheet apps | Approved compatibility, including Excel/OpenOffice paths | Hosted API versus file/desktop automation, format fidelity and sync behavior |
 
@@ -59,11 +59,11 @@ Do not treat an .xlsx/.ods import as proof of native two-way synchronization. De
 
 Excel and OpenOffice use different interfaces and deployment assumptions. The additional-adapter release order and supported formats/versions still need decisions.
 
-## Next AI questions
+## Capture role and next decision
 
-Establish what Gemini should actually do. The previous X-control question is resolved: restore both normal height and a level viewing angle. Possible discussion topics include finding approved records, explaining documentation or drafting edits; these are examples, not approved AI features.
+Arlen now requests baseline equipment/spreadsheet recording assistance during capture. See [AI capture inventory](AI_CAPTURE_INVENTORY.md) for evidence links, uncertain values, duplicate handling and the proposed workflow.
 
-Then define permitted data/actions, company approval roles, integration configuration and audit evidence. Do not assume AI may modify equipment records or spreadsheets without the applicable editor permissions.
+The next decision is whether candidate entries require designated-editor review before live writes or may be written directly under defined permissions. Draft-first review is recommended, not yet selected. Exact fields, permitted data/actions, company approval roles and audit evidence still need decisions. Do not assume AI may modify equipment records or spreadsheets without the applicable editor permissions.
 
 ## Primary references checked
 

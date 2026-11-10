@@ -55,6 +55,14 @@ Define what background sync may do after a client loses the required company con
 
 No production credentials or workbook contents belong in the source repository. Start with synthetic demo fixtures and a mock adapter when implementation reaches this module.
 
+## Gemini-assisted inventory
+
+Arlen requests baseline equipment/spreadsheet recording while capture proceeds. Candidate entries must use the same stable IDs, local-field rules and provider/role checks as ordinary editing.
+
+Draft/editor-review versus direct-write authority remains unresolved. Repeated frames and closed/open passes must not create duplicate rows. Missing visibility is not a delete request, and an unreadable field must not overwrite an existing verified value with a guess.
+
+See [AI capture inventory](AI_CAPTURE_INVENTORY.md). No live sheet has been connected.
+
 ## Required ecosystem and follow-ups
 
 Google Sheets is a required integration, with Google Drive compatibility and Gemini integration elsewhere in the application. Do not ask again whether Google Sheets is required.

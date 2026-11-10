@@ -18,6 +18,8 @@ The instructions must be part of the application. Developer documentation alone 
 | Navigate a tour | Move, look, adjust browser viewpoint height and switch agreed view modes |
 | Find stored information | Select the relevant room/rack/RU/equipment and open its attached information |
 | Use spreadsheet/AI connections | Recognize allowed connections, sync status, permissions and the chosen AI capabilities |
+| Inspect a cabinet | Open/close its virtual door and find door-mounted or interior records |
+| Capture inventory with Gemini | Capture readable labels, follow extraction status and handle uncertain candidate entries under the selected review/write policy |
 
 Exact screens, UI labels and integration workflows remain to be designed. Describe only capabilities implemented in the current build; explain unavailable actions in plain language.
 
@@ -72,6 +74,12 @@ Mobile movement/look, view switching and camera-height controls are required; th
 - Consider clickable/touch navigation alternatives and remapping as design options; scope is not yet approved.
 
 The practice sequence can cover: enter a tour, look/move, open a rack record, inspect a linked field, add a synthetic note if authorized, and return to the tour. The capture/update guide needs its own device-specific walkthrough.
+
+## Cabinet and AI capture guidance
+
+Teach the closed/open local capture passes with clear interior/inner-door coverage. In the viewer, use plain Open door, Close door and Open information actions with mouse, touch and VR equivalents. See [cabinet states](CABINET_STATES.md).
+
+For inventory assistance, explain what was read from a source image, what needs correction, which equipment it belongs to and whether it is still a draft or has synchronized. The review/direct-write policy has not been selected. Do not imply a successful AI response is verified equipment data.
 
 ## Validation
 

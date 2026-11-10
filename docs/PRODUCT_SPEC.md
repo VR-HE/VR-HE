@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.12; MAX build workflow and local clone confirmed. Requirements/development setup; no Unity application yet.
+Status: requirements baseline 0.13; cabinet inspection states and Gemini capture-assisted inventory added. Requirements/development setup; no Unity application yet.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -37,6 +37,9 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Shared spreadsheet | All data-set categories can link to a common ordinary spreadsheet with two-way value and mapped structural create/delete synchronization |
 | Google compatibility | Google Drive, Google Sheets and Google Gemini are required integrations; exact workflows, credentials and AI actions remain open |
 | Integration approval | Finished product can enable approved and disable unapproved AI tools and spreadsheet applications; support extension to ChatGPT, Claude, Excel, OpenOffice and others |
+| Cabinet inspection | Virtual open/closed door states with information on door-mounted panels and cabinet interiors, including breakers/fuses |
+| Cabinet capture | Local closed/open recording passes with inner-door and interior coverage as the proposed starting workflow; alignment/segmentation must be proven |
+| Capture-assisted inventory | Gemini assists baseline equipment/spreadsheet recording during Gaussian capture; write/review authority and exact fields remain open |
 | Site changes | Update the Gaussian splat tour to reflect changes to the physical site |
 | Partial rescanning | Where feasible, rescan changed sections rather than the entire site; feasibility and quality require a prototype |
 | Built-in guidance | Teach scanning, adding information, navigation and finding stored information using familiar FPS/third-person conventions explained for non-gamers |
@@ -183,7 +186,7 @@ Unresolved design questions:
 3. Exact row/column/tab representation of rooms, racks, RUs, equipment, nested data and attachments.
 4. Sync latency target, formula ownership, conflict resolution, and the meanings of delete versus clear/archive.
 
-Google ecosystem compatibility is confirmed. The next product-design question is Gemini's intended functions and permitted data/actions. Gemini's allowed functions/data scope and the remaining synchronization decisions follow; local Claude Code/Git setup is a separate task.
+Google ecosystem compatibility is confirmed. Gemini's capture-assisted baseline inventory role is now requested. The next product-design question is draft/editor-review versus direct live spreadsheet writing. Exact permitted data/actions, field scope and the remaining synchronization decisions follow; local Claude Code/Git setup is a separate task.
 
 ## Additional requirements — integrations, site updates and user guidance
 
@@ -205,7 +208,7 @@ Arlen confirmed X does both: restore normal camera height and level the viewing 
 
 Mobile touch layout, exact view-toggle gesture/button and third-person orbit limits/recentering behavior remain design details. A proposed familiar touch layout is a left movement stick, right-side look/drag input, a visible view-mode switch and separate camera-height controls. Looking up/down and changing camera height are different actions.
 
-The exact Gemini product/API, tasks, read/write powers, allowed data, provider-administration roles and additional spreadsheet release scope remain open. Compatibility does not itself grant an external tool access to every record or file.
+Gemini's baseline equipment/spreadsheet assistance during capture is requested. Its exact product/API, field scope, read/write powers, allowed data, provider-administration roles and additional spreadsheet release scope remain open. Compatibility does not itself grant an external tool access to every record or file.
 
 Proposed directions:
 - Use provider adapters and enforce company integration policy at application/service data boundaries. Direct Google Drive/Sheets access also needs appropriate Google account/sharing policy.
@@ -215,6 +218,22 @@ Proposed directions:
 - Provide a replayable guided walkthrough, contextual help and input-specific instructions.
 
 See [integration controls](INTEGRATIONS.md), [capture updates](CAPTURE_UPDATES.md) and [user guide plan](USER_GUIDE_PLAN.md). These are requirements/design notes, not implemented features.
+
+## Cabinet inspection and capture-assisted inventory
+
+Arlen requested virtual open/closed cabinet doors so users can inspect panels mounted on doors and information inside cabinets, including breakers, fuses and other equipment. He suggested two recording sets in the same location.
+
+Record closed and open local passes as the proposed starting workflow, including clear inner-door/interior coverage and common unchanged reference views. This does not mean repeating the entire site twice. More views may be needed; capture count is not a guarantee.
+
+Candidate implementation: aligned state-specific assets, or a hybrid movable 3D door plus captured cabinet/interior. Door separation, registration, occlusion and state-specific selection need a prototype. Geometry and records on a moving door must follow the correct part; interior records must remain at their correct locations. Shared/per-viewer state, setup rights and smooth animation are still design choices.
+
+Arlen also requested Gemini do much of the baseline equipment/spreadsheet recording while the Gaussian capture is underway. A proposed workflow selects clear label frames, extracts typed candidate fields, links evidence to the correct asset/location, and processes entries while recording continues.
+
+Candidate fields include equipment type, displayed identifier, manufacturer, model, serial and visible nameplate ratings. Exact fields are not yet selected. Keep observed ratings, timestamped displayed readings and derived values distinct. Unreadable/missing values must not become guessed facts or zeros.
+
+Recommendation, not a confirmed user decision: Gemini creates drafts for designated-editor review before live spreadsheet writes. Direct-write authority, field scope, queue/retry behavior and latency remain open. Repeated views, door states and partial rescans must not create duplicate records or erase equipment merely because it is not visible.
+
+See [cabinet states](CABINET_STATES.md) and [AI capture inventory](AI_CAPTURE_INVENTORY.md). No runtime implementation or accuracy has been demonstrated.
 
 ## GitHub and developer handoff — confirmed process requirement
 
@@ -258,7 +277,8 @@ Ask one primary question at a time, discuss its consequences, and record confirm
 - Fidelity: required readability, supported movement area, acceptable holes/artifacts, scale accuracy and measurement expectations.
 - Rescanning implementation: prove partial updates where feasible, including registration, old-geometry replacement, metadata preservation and fallback scope.
 - Controls: implement the confirmed arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls and third-person orbit. Decide detailed layout, orbit limits, view-toggle behavior, avatar dimensions, remapping and VR comfort.
-- Integrations: Gemini functions/data permissions, approval administration, Google Workspace hosting/access and additional spreadsheet compatibility scope.
+- Integrations: capture-assisted inventory field scope, draft-review/direct-write policy, Gemini data permissions, approval administration, Google Workspace hosting/access and additional spreadsheet compatibility scope.
+- Cabinet states: prove closed/open capture alignment, door/interior separation, visibility, per-door controls and annotation identity.
 - Release scope: what must ship first, device priorities, acceptance tests and what may be deferred.
 - Deployment and licensing: application license, dependency compatibility for workplace use, installation, updates and maintenance ownership.
 

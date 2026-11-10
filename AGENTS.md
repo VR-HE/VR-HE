@@ -31,6 +31,8 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - A local field removal must not accidentally delete a shared spreadsheet column or another record's data.
 - Google Drive, Google Sheets and Gemini compatibility is required; do not ask again whether Google Sheets is required.
 - The finished product must allow approved and disable unapproved AI/spreadsheet integrations, with extensibility for tools such as ChatGPT, Claude, Excel and OpenOffice. Exact roles/scopes remain open.
+- Virtual cabinets need open/closed inspection states with door-mounted and interior records. The proposed capture workflow uses closed/open local passes and clear inner-door/interior views; prove state registration/visibility.
+- Gemini should assist baseline equipment/spreadsheet recording during capture. Require source-linked extraction and record the unresolved draft-review/direct-write policy; do not invent production write permission.
 - Support site changes and target partial rescanning where feasible. Prove alignment, old-geometry removal and metadata preservation before claiming this works.
 - Include plain-language in-app guidance for scanning, editing, navigation and finding attached information, usable by non-gamers.
 - Desktop browsers support arrow-key movement as well as WASD; use up/down/left/right as forward/back/left/right equivalents unless the user changes that mapping.
@@ -51,7 +53,7 @@ Arlen requires MAX effort for Claude implementation/build work.
 
 ## Implementation guidance
 
-Separate visual capture/rendering, durable asset data, runtime editing, synchronization and access policy. Read docs/INTEGRATIONS.md, docs/CAPTURE_UPDATES.md and docs/USER_GUIDE_PLAN.md when working in those areas. Keep ordinary editing usable without Unity, code edits or recompilation.
+Separate visual capture/rendering, durable asset data, runtime editing, synchronization and access policy. Read docs/INTEGRATIONS.md, docs/CAPTURE_UPDATES.md, docs/USER_GUIDE_PLAN.md, docs/CABINET_STATES.md and docs/AI_CAPTURE_INVENTORY.md when working in those areas. Keep ordinary editing usable without Unity, code edits or recompilation.
 
 Stable IDs, interaction geometry and versioned schemas are proposed directions requiring concrete designs. Do not silently promote an unapproved renderer, provider, data model, deletion policy or conflict strategy into a user decision.
 

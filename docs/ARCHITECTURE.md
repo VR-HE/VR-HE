@@ -53,6 +53,14 @@ Desktop arrow keys supplement WASD movement. Browser Q/E move camera height; X r
 
 Build [plain-language guidance](USER_GUIDE_PLAN.md) into user flows. Unity/backend/renderer details belong in developer notes unless they help the person complete a task.
 
+## Cabinet states and capture-assisted inventory
+
+Cabinet inspection needs a separate appearance/interaction state layer, door-local versus interior anchors, and correctly retired/hidden closed-door geometry. A hybrid 3D door and captured interior is a candidate, not a selected renderer feature.
+
+Gemini-assisted inventory can consume selected evidence frames asynchronously while capture continues. Keep capture/pose context, source evidence, candidate extraction, review/write authority and spreadsheet synchronization as separate responsibilities. No automatic detection accuracy or real-time latency is established.
+
+See [cabinet states](CABINET_STATES.md) and [AI capture inventory](AI_CAPTURE_INVENTORY.md).
+
 ## Production access policy
 
 Production must require the company network/VPN and password access. Authorized viewers and designated editors have different rights.

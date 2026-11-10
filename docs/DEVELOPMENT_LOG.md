@@ -100,6 +100,25 @@ Validation:
 - Claude Code version, selected model, active MAX and local push access remain unverified.
 - No commands were executed on Arlen's laptop by ChatGPT/Codex.
 
+## November 10, 2026 — cabinet inspection and Gemini capture assistance
+
+Human contribution:
+- Arlen requested virtual opened/closed cabinet doors to inspect door-mounted panels and interior breakers, fuses and other information.
+- Arlen suggested two recording sets at the same location.
+- Arlen requested Gemini do much of baseline equipment/spreadsheet recording during Gaussian capture.
+
+AI contribution:
+- ChatGPT/Codex recorded the features, a proposed local closed/open capture workflow and candidate state-specific/hybrid rendering approaches.
+- ChatGPT/Codex documented source-linked frame extraction, uncertain values, duplicate handling and the unresolved editor-review/direct-write policy.
+- Primary Unity docs explicitly describe door open/close animation states; that does not prove splat separation/alignment.
+- Primary Google docs support video understanding and structured responses while warning that schema-correct values can be semantically wrong.
+- No headend images, operational workbook or credentials were sent to Gemini by this task.
+
+Validation:
+- Documentation validation passed: 17 files, 63 resolved internal links and no table errors. The validated MAX launcher is unchanged.
+- The features remain requirements/prototypes to prove; no cabinet-state or Gemini extraction implementation/test exists.
+- The MAX launcher was published separately; actual local MAX still requires verification.
+
 ## Entry template
 
 For each meaningful change, record:
