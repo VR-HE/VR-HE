@@ -183,10 +183,10 @@ Recommendation, not a decision:
 Confirmed after the prototype review (D033/D034):
 - Browser reference PC: Arlen's Panasonic Toughbook FZ-55 work laptop.
 - Minimum frame rates: 30 fps for the browser; 60 fps for VR headsets. These are requirements, not measured Toughbook/headset results.
-- CPU, RAM, GPU and OS/browser versions for that Toughbook are still unknown. Phone fps, representative capture/content size, resolution, memory/quality budgets and detailed pass criteria remain open.
+- Arlen's November 10 Task Manager photos identify an i5-8365U (4 cores / 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. GPU driver 31.0.101.2141 and a Samsung SATA SSD with 477 GB capacity are shown. Exact OS/browser versions, active browser backend and performance remain unverified. Phone fps, representative content, resolution, memory/quality budgets and detailed pass criteria remain open.
 - For Quest, keep application-rendered fps separate from display refresh and synthesized frames. The initial 72 fps at 72 Hz operating target is an engineering recommendation; it does not replace the user floor. Sources and checks are in [the test plan](TEST_PLAN.md).
 
-Next step: collect the actual Toughbook configuration, then prepare a synthetic benchmark package for testing on it, starting with Edge and Chrome if available. The existing auto-launcher uses Linux paths and POSIX process cleanup and has no Edge option; Windows behavior needs adaptation and actual verification. Its manual serve route has not been tested on Windows either. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files/preloaded range switches as proof of low-memory partial-rescan streaming.
+Next step: carry out [the Toughbook browser-test packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) on Arlen's Linux development laptop, where the existing build and generated synthetic fixtures are available. Prepare a transferable Windows test bundle with clear Edge/Chrome launch steps, then have Arlen run it on the Toughbook. The existing auto-launcher uses Linux paths and POSIX cleanup and has no Edge option; both automated and manual Windows paths still need verification. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files/preloaded range switches as proof of low-memory partial-rescan streaming.
 
 ## Next mapping work
 
@@ -221,7 +221,7 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 - Application license and third-party dependencies are undecided.
 - No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
 - Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested.
-- The Toughbook FZ-55 browser reference and 30 fps browser / 60 fps VR floors are selected (D033/D034), but its exact configuration and performance are unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
+- The Toughbook FZ-55 browser reference (i5-8365U, 32 GB RAM, UHD Graphics 620) and 30 fps browser / 60 fps VR floors are selected (D033/D034). Exact OS/browser versions and performance remain unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
 - Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.
 - Spreadsheet videos establish visible layouts only. Exact formulas, validation, protection, merged ranges and cell mappings have not been inspected in native workbooks.

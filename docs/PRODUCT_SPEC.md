@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.16; initial browser results recorded, Toughbook browser reference PC and browser/VR frame-rate floors confirmed. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
+Status: requirements baseline 0.17; initial browser results recorded, Toughbook reference hardware identified and browser/VR frame-rate floors confirmed. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -27,7 +27,7 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Capture devices | iPhone SE, third generation, or newer; comparable or better Android devices; Quest 3/3S or better |
 | Viewing devices | iPhone SE, third generation, or newer; comparable or better Android devices; Quest 2 or better |
 | Browsers | Chrome, Firefox, Edge, and Brave |
-| Browser reference PC | Arlen's Panasonic Toughbook FZ-55 work laptop; exact hardware configuration remains to be collected |
+| Browser reference PC | Arlen's Panasonic Toughbook FZ-55 work laptop: Intel Core i5-8365U, 32 GB RAM, Intel UHD Graphics 620; OS/browser versions and performance remain to verify |
 | Minimum frame rates | Browser: 30 fps; VR headsets: 60 fps. Phone frame-rate floor remains open |
 | Product character | Practical workplace tool; navigation conventions should feel familiar without adding game-like objectives |
 | Production access | Mandatory intranet/VPN access and mandatory password access |
@@ -97,7 +97,7 @@ Treat aras-p/UnityGaussianSplatting as a candidate/reference, not a proven solut
 
 The first tested candidate is arloopa/UnitySplats (MIT; pinned revision 689e0a7). On November 10 it rendered synthetic splats over WebGL 2 in Chrome, Firefox and Brave on one Linux laptop with an RTX 4060 Laptop GPU. Its web path sorts splats on the browser's main thread, which limited frame rate as splat counts grew. Overlapping sections drew in the correct order only when merged into one renderer. Edge, Windows, macOS, phones, Quest, weaker hardware and real captures are untested. See [the handoff](HANDOFF.md) for results.
 
-Arlen selected his Panasonic Toughbook FZ-55 work laptop as the minimum browser reference PC (D033), with 30 fps as the browser floor and 60 fps as the VR headset floor (D034). Its CPU, RAM, GPU, OS and browser versions are unverified. These are requirements, not passed tests; no Toughbook or headset run has occurred. Report application-rendered fps separately from headset display refresh. See [the test plan](TEST_PLAN.md) for the proposed Quest operating target and validation details.
+Arlen selected his Panasonic Toughbook FZ-55 work laptop as the minimum browser reference PC (D033), with 30 fps as the browser floor and 60 fps as the VR headset floor (D034). His November 10 Task Manager photos identify an Intel Core i5-8365U (4 cores, 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. Exact OS/browser versions and browser-backend behavior are unverified. Hardware identification does not establish performance; no Toughbook benchmark or headset run has occurred. Report application-rendered fps separately from headset display refresh. See [the test plan](TEST_PLAN.md) for the proposed Quest operating target and validation details.
 
 Early rendering work should therefore test the weakest required devices and browser path using a representative small headend scene before building a large editing system around a specific renderer.
 

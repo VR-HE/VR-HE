@@ -18,11 +18,26 @@ Arlen confirmed these inputs on November 10 (D033/D034):
 
 | Platform | Confirmed reference / minimum | Evidence still needed |
 | --- | --- | --- |
-| Desktop browser | Panasonic Toughbook FZ-55 work laptop; 30 fps floor (33.3 ms per frame) | Exact CPU/RAM/GPU, OS/browser versions, resolution, representative content and actual runs |
+| Desktop browser | Panasonic Toughbook FZ-55: i5-8365U, 32 GB RAM, UHD Graphics 620; 30 fps floor (33.3 ms per frame) | OS/browser versions, active browser GPU/backend, resolution, representative content and actual runs |
 | VR headset | Quest 2+ viewing target; 60 fps floor (16.7 ms per application-rendered frame) | Standalone device runs, frame pacing, display refresh, CPU/GPU time and thermal behavior |
 | iPhone / Android | Requested device targets remain unchanged; no phone fps floor selected | Named Android reference, device runs and a separate phone performance decision |
 
 Floors are requirements, not results. Preserve the measured RTX 4060 laptop results as historical evidence; do not infer a Toughbook splat budget from them. Report mean frame rate together with frame-time percentiles, stalls and time below the agreed floor during representative movement and record-panel interaction. Mark loading separately rather than hiding it in a run-wide average. Resolution, visual quality, memory/content budgets, test duration and the detailed pass/fail rule remain to be agreed.
+
+### Toughbook hardware evidence — November 10
+
+Arlen supplied four photographs of Windows Task Manager on the reference Toughbook. The typed inventory below records readable fields; the photos themselves are not committed.
+
+| Component | Observed value |
+| --- | --- |
+| CPU | Intel Core i5-8365U; 4 cores and 8 logical processors |
+| RAM | 32.0 GB installed, about 31.8 GB usable; 2400 MT/s; 2 of 2 slots occupied |
+| GPU shown | Intel UHD Graphics 620; shared system memory, not a separate 15.9 GB dedicated-VRAM allocation |
+| GPU driver | 31.0.101.2141; displayed driver date March 30, 2026 |
+| Storage | Samsung MZNLH512HALU-00A00 SATA SSD; 477 GB reported capacity. Free space was not shown |
+| OS / browsers | Windows Task Manager is visible; exact Windows edition/build and browser versions remain unverified |
+
+These are inventory observations, not a performance run. The images do not prove WebGL 2 availability, active browser acceleration, thermal behavior or the 30 fps requirement. Background utilization in a screenshot is not a benchmark baseline.
 
 ### Headset refresh and proposed operating target
 
@@ -32,7 +47,7 @@ Engineering recommendation: start Quest tests at 72 Hz and aim for 72 applicatio
 
 ### Next browser hardware gate
 
-Collect the actual Toughbook configuration and test the same synthetic benchmark there, starting with Edge and Chrome if available. The automatic launcher currently uses Linux executable paths and POSIX cleanup and has no Edge option; adapt/package it and verify Windows behavior before presenting it as a tested Windows launcher. A manual local-server route is a separate path that also needs a real Windows check. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
+The hardware inventory above is available. Follow [the local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md), then test the same synthetic benchmark on this Toughbook, starting with Edge and Chrome if available. The automatic launcher currently uses Linux executable paths and POSIX cleanup and has no Edge option; adapt/package it and verify Windows behavior before presenting it as a tested Windows launcher. A manual local-server route is a separate path that also needs a real Windows check. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
 
 | Target | Requested capability | Current evidence |
 | --- | --- | --- |

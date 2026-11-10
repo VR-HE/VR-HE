@@ -236,6 +236,21 @@ Validation:
 - Checked 6 edited Markdown files: 29 internal links resolve against the tracked tree, table structure and whitespace pass, and all 6 baseline file hashes match commit 3257f73. Existing benchmark source and results were not modified.
 - Documentation only: no Unity build, Toughbook/browser run, headset run, performance optimization or local laptop operation was performed for this update.
 
+## November 10, 2026 — Toughbook hardware identified from photos
+
+Human contribution:
+- Arlen supplied four Task Manager photos from his selected FZ-55 reference laptop. Readable fields identify i5-8365U (4 cores / 8 logical processors), 32 GB RAM, Intel UHD Graphics 620, graphics driver 31.0.101.2141 and a Samsung SATA SSD with 477 GB reported capacity.
+- The photos provide inventory, not a browser benchmark. The selected 30 fps browser / 60 fps VR floors remain unchanged.
+
+AI contribution:
+- ChatGPT/Codex inspected all four supplied images, recorded typed hardware observations in the test plan, and updated stale hardware-unknown statements in the shared instructions, specification, decision record and handoff.
+- Codex prepared TOUGHBOOK_BROWSER_TEST_TASK.md for Claude Code on the development laptop. It scopes a Windows Edge/Chrome test bundle using the existing benchmark and small synthetic fixtures, with explicit prerequisite and portability checks.
+- No raw photo was added to the repository. No device performance, free disk space, Windows build or browser version was inferred from the inventory.
+
+Validation:
+- Checked 7 Markdown files: 35 internal links resolve against the tracked tree and new task file, tables/whitespace pass, and all 6 existing-file baseline hashes match e40f668.
+- Documentation and task preparation only: no bundle was built, no Windows launcher executed, no Toughbook/browser/headset test run and no Unity project changed for this update.
+
 ## Entry template
 
 For each meaningful change, record:
