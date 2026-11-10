@@ -49,7 +49,7 @@ See [capture updates](CAPTURE_UPDATES.md) for proposed replaceable tour sections
 
 See [integrations](INTEGRATIONS.md) for required Google compatibility and policy-controlled provider adapters. Enforcement belongs at app/service data boundaries as well as the user interface. Direct Workspace access also needs matching Google authorization/sharing policy.
 
-Browser Q/E move camera height; X recenters with semantics pending. VR must preserve full 6DoF tracked pose. The input adapters must not treat browser camera repositioning as an instruction to overwrite the headset's physical pose.
+Desktop arrow keys supplement WASD movement. Browser Q/E move camera height; X restores normal height and levels the view. Mobile needs movement/look, first-/third-person switching and separate height adjustment. Third-person camera control must support looking/orbiting around the avatar with behind-avatar follow as the default. VR must preserve full 6DoF tracked pose. The input adapters must not treat browser camera repositioning as an instruction to overwrite the headset's physical pose.
 
 Build [plain-language guidance](USER_GUIDE_PLAN.md) into user flows. Unity/backend/renderer details belong in developer notes unless they help the person complete a task.
 
@@ -82,6 +82,6 @@ Record exact engine/package versions, artifact size, frame timing, peak memory, 
 - Partial-rescan partitioning, registration, replacement and fallback criteria.
 - Storage, company hosting, authentication and role administration.
 - Offline interruption/save recovery, conflict resolution and deletion semantics.
-- X recenter meaning, VR locomotion comfort and interpretation of third-person view.
+- Normal camera-height reference, mobile touch layout, third-person orbit/follow limits, VR locomotion comfort and headset presentation.
 
 Check current primary documentation when selecting dependencies. No backend or production security recommendation has been validated by this documentation change.

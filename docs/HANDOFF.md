@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Local VR-HE authentication/repository access is still unverified.
+There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. Repository checkout/access for Claude Code is still unverified.
 
 ## Read in this order
 
@@ -27,7 +27,7 @@ The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The reposi
 
 ## Next setup work
 
-Guide Arlen through VR-HE sign-in using the installed GitHub CLI on his Linux laptop, then verify local repository access and checkout. Installation is confirmed by user-supplied terminal output; authentication is not. Do not assume commands in a cloud workspace ran on the user's laptop. Preserve his other project's Git configuration.
+Local VR-HE sign-in is confirmed by Arlen's screenshot. Next guide cloning/checking out this repository on his Linux laptop, then verify the remote, branch and working tree before launching Claude Code. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on the user's laptop. Preserve his other project's Git configuration.
 
 Use GitHub's ordinary interactive browser sign-in. Verify the intended account, remote and repository access. Do not paste passwords, tokens or login codes into chat. ChatGPT authentication does not authenticate Claude Code.
 
@@ -35,11 +35,11 @@ If this documentation branch is still unmerged, read/check out the branch when c
 
 ## Next primary product question
 
-Clarify what browser X should recenter: viewing angle, camera height, both, or another intended meaning. Q raises and E lowers the viewpoint; those bindings are confirmed.
+Establish Gemini's intended tasks and allowed information/actions. X is resolved: restore both normal camera height and level viewing angle. Q raises and E lowers the viewpoint.
 
 Google Drive, Google Sheets and Gemini compatibility is now required. Do not reopen whether Google Sheets is required. Follow-up decisions are Gemini functions and allowed data/actions, integration-approval roles, workbook organization/mapping and synchronization policies.
 
-Also confirmed: policy-controlled additional AI/spreadsheet integrations, updateable tours, partial rescanning where feasible, built-in plain-language guidance and full VR 6DoF. See the linked design notes. Ask one primary question at a time and record confirmed answers.
+Also confirmed: desktop arrow-key movement in addition to WASD, mobile FPS/third-person movement/look/view switching and separate height controls, third-person orbit around the avatar, policy-controlled additional integrations, updateable tours, partial rescanning where feasible, built-in guidance and full VR 6DoF. See the linked design notes. Ask one primary question at a time and record confirmed answers.
 
 ## Early implementation work to scope
 
@@ -64,7 +64,7 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 - Application license and third-party dependencies are undecided.
 - No Unity version, renderer, backend or capture processing location is selected.
 - No Android reference device or performance/quality acceptance threshold is selected.
-- Q/E/X browser bindings and VR 6DoF are confirmed; X meaning, touch/controller traversal, comfort settings, avatar dimensions and scale verification remain open.
+- Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Google API/data contracts, Gemini functions, additional provider scope and approval roles remain open.
 - Partial rescanning is a required feasibility target, not a tested feature.
 - Data types, attachment formats, conflicts, deletion recovery and detailed permissions need decisions.

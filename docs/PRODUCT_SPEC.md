@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.10; Google integration, update workflow, guidance and controls requirements added. Documentation only.
+Status: requirements baseline 0.11; arrow/mobile/orbit controls and X reset confirmed. Documentation only.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -15,10 +15,11 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Site information | Attach descriptions and data sets to rooms, racks, RU locations/ranges, equipment, and other relevant areas |
 | Nested information | Add further sub-data sets and equipment information flexibly in the running app |
 | Ordinary-user editing | Simple mouse right-click interaction, designed for people who are not technically confident |
-| First-person movement | Familiar WASD and mouse controls on keyboard/mouse platforms |
-| Browser camera height/recenter | Q floats the viewpoint up, E lowers it, X returns to center view; exact recenter semantics need clarification |
+| First-person movement | Familiar WASD/mouse controls, with up/down/left/right arrow-key movement in the desktop browser |
+| Mobile controls | Familiar mobile FPS/third-person movement/look, first-/third-person switching and camera-view up/down adjustment |
+| Browser camera height/recenter | Q floats the viewpoint up, E lowers it, X restores normal camera height and levels the viewing angle |
 | VR movement | Full six-degree-of-freedom movement; locomotion and comfort details remain open |
-| Third-person view | Behind-the-avatar view with a generic non-gender humanoid to communicate relative size and scale |
+| Third-person view | Generic non-gender humanoid for scale, default behind-avatar follow and standard look/orbit controls around the player |
 | View switching | Familiar first-/third-person toggle; exact key and per-platform behavior remain to be selected |
 | Engine | Unity |
 | Source availability | Open-source application code; exact license remains to be chosen |
@@ -129,7 +130,7 @@ Confirmed behavior for the official version:
 
 Account administration, assignment of editor rights, site-specific permissions, capture permissions and detailed delete/recovery rights remain to be specified. A mandatory review/approval workflow has not been selected.
 
-Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Q/E/X browser bindings and full VR 6DoF are required; X semantics need clarification. Access to VR-HE/VR-HE is verified. Arlen reported Git and GitHub CLI installed on the laptop; local VR-HE authentication remains unverified.
+Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository checkout/access for Claude Code remains unverified.
 
 ## Question 3 — resolved: reusable templates and local field changes
 
@@ -181,7 +182,7 @@ Unresolved design questions:
 3. Exact row/column/tab representation of rooms, racks, RUs, equipment, nested data and attachments.
 4. Sync latency target, formula ownership, conflict resolution, and the meanings of delete versus clear/archive.
 
-Google ecosystem compatibility is confirmed. The immediate controls clarification is X recenter semantics. Gemini's allowed functions/data scope and the remaining synchronization decisions follow; local Claude Code/Git setup is a separate task.
+Google ecosystem compatibility is confirmed. The next product-design question is Gemini's intended functions and permitted data/actions. Gemini's allowed functions/data scope and the remaining synchronization decisions follow; local Claude Code/Git setup is a separate task.
 
 ## Additional requirements — integrations, site updates and user guidance
 
@@ -193,10 +194,15 @@ Confirmed November 10, 2026:
 - Target rescanning only changed portions where feasible, including sufficient unchanged overlap for alignment; do not claim this capability is proven.
 - Include instructions in the application for scanning, adding information, navigating a scanned environment and accessing information attached to different places.
 - Use FPS/third-person conventions while explaining them in language non-gamers understand.
-- Browser Q raises the camera viewpoint, E lowers it and X returns to center view.
+- Desktop browser arrow keys provide movement in addition to WASD. Default interpretation: up/forward, down/back, left/left and right/right, matching the corresponding WASD directions.
+- Browser Q raises the camera viewpoint, E lowers it and X restores normal camera height and levels the viewing angle.
+- iPhone/Android require familiar mobile FPS/third-person movement and look controls, first-/third-person switching and a separate camera-view up/down control.
+- Third-person view requires look/orbit controls around the player/avatar.
 - VR supports full 6DoF: three positional and three rotational degrees of freedom.
 
-X must be clarified before its exact behavior is implemented: level the view angle, restore normal camera height, both, or another intended meaning. It is distinct from the still-unselected first-/third-person toggle. The browser height/recenter bindings do not specify how to reposition a physically tracked headset.
+Arlen confirmed X does both: restore normal camera height and level the viewing angle. The actual normal-height reference and per-view-mode camera settings still need implementation design; this is distinct from the first-/third-person toggle. Browser/mobile height commands do not specify how to reposition a physically tracked headset.
+
+Mobile touch layout, exact view-toggle gesture/button and third-person orbit limits/recentering behavior remain design details. A proposed familiar touch layout is a left movement stick, right-side look/drag input, a visible view-mode switch and separate camera-height controls. Looking up/down and changing camera height are different actions.
 
 The exact Gemini product/API, tasks, read/write powers, allowed data, provider-administration roles and additional spreadsheet release scope remain open. Compatibility does not itself grant an external tool access to every record or file.
 
@@ -221,7 +227,7 @@ Verified November 10, 2026:
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
 - No Unity application, capture system, renderer, spreadsheet adapter or production security implementation exists yet.
-- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation; local VR-HE authentication/repository access for Claude Code has not been verified.
+- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. Repository checkout/access for Claude Code remains unverified.
 
 Canonical project records:
 - This file is the maintained requirements specification in the repository.
@@ -250,7 +256,7 @@ Ask one primary question at a time, discuss its consequences, and record confirm
 - Site scale: typical room/rack counts, site count, total storage and expected network bandwidth.
 - Fidelity: required readability, supported movement area, acceptable holes/artifacts, scale accuracy and measurement expectations.
 - Rescanning implementation: prove partial updates where feasible, including registration, old-geometry replacement, metadata preservation and fallback scope.
-- Controls: clarify X semantics; retain required Q/E bindings and VR 6DoF while deciding view-toggle behavior, avatar dimensions, remapping, touch equivalents and VR comfort.
+- Controls: implement the confirmed arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls and third-person orbit. Decide detailed layout, orbit limits, view-toggle behavior, avatar dimensions, remapping and VR comfort.
 - Integrations: Gemini functions/data permissions, approval administration, Google Workspace hosting/access and additional spreadsheet compatibility scope.
 - Release scope: what must ship first, device priorities, acceptance tests and what may be deferred.
 - Deployment and licensing: application license, dependency compatibility for workplace use, installation, updates and maintenance ownership.

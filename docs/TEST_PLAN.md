@@ -41,10 +41,14 @@ Selection geometry, relocation/rescan behavior, undo and concurrent-edit rules n
 ## Desktop, mobile and VR navigation
 
 - Verify WASD and mouse movement in first person.
+- Verify arrow-key movement matches the corresponding WASD directions in each required desktop browser.
 - Verify browser Q raises and E lowers the viewpoint.
-- After clarification, verify X restores exactly the agreed camera state at the agreed location.
+- Verify X restores both normal camera height and a level viewing angle using the selected height reference.
 - Verify VR translation on three axes and rotation on three axes; browser height/reset commands must not overwrite tracked headset pose.
-- Verify the selected first-/third-person toggle and behind-avatar view.
+- Verify the selected first-/third-person toggle and default behind-avatar view.
+- Verify look/orbit around the avatar in third person, including the selected orbit limits and follow/recenter rules.
+- On iPhone/Android, verify movement, look, first-/third-person switching and separate camera-height up/down controls.
+- Verify mobile height adjustment changes viewpoint height independently of looking up/down, and orbit input does not accidentally edit an attached record.
 - Verify generic non-gender avatar scale after a real-world scale method is established.
 - Verify predictable mouse cursor/menu behavior when editing.
 - Verify agreed touch and controller equivalents when designed.

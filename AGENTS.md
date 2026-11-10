@@ -33,7 +33,10 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - The finished product must allow approved and disable unapproved AI/spreadsheet integrations, with extensibility for tools such as ChatGPT, Claude, Excel and OpenOffice. Exact roles/scopes remain open.
 - Support site changes and target partial rescanning where feasible. Prove alignment, old-geometry removal and metadata preservation before claiming this works.
 - Include plain-language in-app guidance for scanning, editing, navigation and finding attached information, usable by non-gamers.
-- Browser Q raises and E lowers the camera; X recenters, with exact semantics still to clarify. The first-/third-person toggle is a separate binding.
+- Desktop browsers support arrow-key movement as well as WASD; use up/down/left/right as forward/back/left/right equivalents unless the user changes that mapping.
+- Browser Q raises and E lowers the camera; X restores both normal camera height and a level viewing angle. The first-/third-person toggle is a separate binding.
+- iPhone/Android require familiar mobile FPS/third-person movement/look controls, view switching and a separate camera-height up/down control.
+- Third-person view requires looking/orbiting around the avatar, not only a fixed behind-avatar camera. Preserve VR 6DoF when designing any VR camera behavior.
 - VR must support full 6DoF; browser camera commands do not authorize overriding tracked headset pose.
 
 ## Implementation guidance

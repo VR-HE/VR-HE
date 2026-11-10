@@ -16,15 +16,18 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D010 | Confirmed | Link all supported data-set categories to an ordinary external spreadsheet | Synchronization is a core capability, not just a link |
 | D011 | Confirmed | Synchronize values and mapped additions/deletions in both directions | Define mapping, conflict and deletion semantics before production writes |
 | D012 | Confirmed | Use VR-HE/VR-HE with detailed developer notes and transparent human/AI process records | Keep specification, change history and test evidence with source |
-| D013 | Confirmed | Provide WASD/mouse first person, third person behind a generic non-gender humanoid and view switching | Q/E/X browser bindings are in D020; view-toggle, avatar scale and VR comfort details remain open |
+| D013 | Confirmed | Provide WASD/mouse first person, generic non-gender humanoid third person and view switching | Behind-avatar follow is the default; orbit behavior is in D024; precise bindings/scale/VR comfort remain open |
 | D014 | Confirmed targets | Capture on iPhone SE Gen 3+, equivalent Android+, Quest 3/3S+; view on those phones, Quest 2+, Chrome/Firefox/Edge/Brave | Prove compatibility with representative devices before claiming support |
 | D015 | Confirmed | Require Google Drive, Google Sheets and Google Gemini compatibility | Define integration contracts and permissions; Google Sheets is no longer an optional provider choice |
 | D016 | Confirmed | Enable approved and disable unapproved AI/spreadsheet integrations in the finished app; extend to tools such as ChatGPT, Claude, Excel and OpenOffice | Policy enforcement and provider adapters are needed; exact roles, scopes and release sequence remain open |
 | D017 | Confirmed | Update splat tours to reflect physical site changes | Define versioned updates and preservation/remapping of attached records |
 | D018 | Confirmed feasibility target | Rescan only changed site sections where possible | Prove alignment, replacement of old geometry and sufficient reference overlap; no compatibility/quality guarantee yet |
 | D019 | Confirmed | Build plain-language guidance into scanning, adding information, navigation and information retrieval | Use familiar FPS/third-person patterns without assuming gaming knowledge |
-| D020 | Confirmed bindings; semantics partly open | Browser Q raises viewpoint, E lowers it, X returns to center view | Clarify whether X restores angle, height or both; keep it distinct from view toggle |
+| D020 | Confirmed | Browser Q raises viewpoint, E lowers it, X restores normal camera height AND levels viewing angle | Define the normal-height reference; X is distinct from the view toggle |
 | D021 | Confirmed | Headset version supports full 6DoF movement | Preserve positional/rotational head tracking; decide additional locomotion/comfort controls |
+| D022 | Confirmed | Desktop browser supports up/down/left/right arrow movement in addition to WASD | Default mapping matches forward/back/left/right WASD directions |
+| D023 | Confirmed | iPhone/Android support familiar mobile FPS/third-person controls, view switching and separate camera-height up/down adjustment | Exact touch layout/gestures remain to be designed for non-gamers |
+| D024 | Confirmed | Third-person view supports looking/orbiting around the player/avatar | Default follow remains behind; orbit limits, collision and recenter/follow behavior need design |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 
@@ -42,6 +45,8 @@ These proposals are not commitments to a particular package or backend.
 
 ## Next unresolved primary question
 
-What should the browser X command restore: level viewing angle, normal camera height, both, or another intended meaning?
+What should Gemini do in the application, and which information/actions may it access?
+
+X is resolved: both normal camera height and level viewing angle.
 
 Google Drive, Sheets and Gemini compatibility is confirmed. Subsequent decisions include Gemini tasks/data permissions, integration-approval roles, workbook scope, mapping, conflicts, latency, formulas and delete/clear/archive behavior. Excel/OpenOffice compatibility needs concrete adapter and release scope; it does not replace the Google requirement.

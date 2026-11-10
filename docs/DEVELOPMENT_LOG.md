@@ -62,6 +62,27 @@ Validation:
 - The prior spreadsheet-platform question was removed from active handoff/specification instructions; Google compatibility is confirmed.
 - Application code, runtime integrations and device testing remain absent.
 
+## November 10, 2026 — controls follow-up and local sign-in
+
+Human contribution:
+- Arlen required arrow-key desktop browser movement in addition to WASD.
+- Arlen required mobile FPS/third-person movement/look, first-/third-person switching and separate camera-height up/down controls.
+- Arlen required third-person look/orbit around the avatar.
+- Arlen confirmed X restores BOTH normal camera height and a level viewing angle.
+- Arlen's terminal screenshot confirms completed GitHub CLI authentication as VR-HE and a local account lookup returning VR-HE. He selected Git credential configuration during login. No authentication code, credential or device identifier is recorded here.
+
+AI contribution:
+- ChatGPT/Codex updated requirements, decisions, user-guide/input notes, acceptance checks and handoff.
+- Arrow directions are interpreted as equivalents to WASD. The familiar left-movement/right-look mobile layout is a proposal; exact UI and orbit/follow settings remain open.
+- ChatGPT/Codex reviewed the screenshot; it did not run commands on the user's laptop.
+
+Validation:
+- Documentation validation passed: 14 files, 39 resolved internal Markdown links and no table-structure errors.
+- Local repository checkout/access and Claude Code use remain unverified.
+- No application code, runtime control testing or physical device tests were performed.
+
+Earlier log entries record the open points at their respective checkpoints; current decisions are in DECISIONS.md.
+
 ## Entry template
 
 For each meaningful change, record:

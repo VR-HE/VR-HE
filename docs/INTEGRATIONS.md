@@ -61,7 +61,7 @@ Excel and OpenOffice use different interfaces and deployment assumptions. The ad
 
 ## Next AI questions
 
-After the immediate X-control clarification, establish what Gemini should actually do. Possible discussion topics include finding approved records, explaining documentation or drafting edits; these are examples, not approved AI features.
+Establish what Gemini should actually do. The previous X-control question is resolved: restore both normal height and a level viewing angle. Possible discussion topics include finding approved records, explaining documentation or drafting edits; these are examples, not approved AI features.
 
 Then define permitted data/actions, company approval roles, integration configuration and audit evidence. Do not assume AI may modify equipment records or spreadsheets without the applicable editor permissions.
 
