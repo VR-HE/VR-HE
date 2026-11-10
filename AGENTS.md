@@ -29,10 +29,16 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - Reusing a field in a template for future equipment is a separate action.
 - Spreadsheet integration means two-way values AND mapped structural create/delete changes. A hyperlink or one-time import/export does not satisfy it.
 - A local field removal must not accidentally delete a shared spreadsheet column or another record's data.
+- Google Drive, Google Sheets and Gemini compatibility is required; do not ask again whether Google Sheets is required.
+- The finished product must allow approved and disable unapproved AI/spreadsheet integrations, with extensibility for tools such as ChatGPT, Claude, Excel and OpenOffice. Exact roles/scopes remain open.
+- Support site changes and target partial rescanning where feasible. Prove alignment, old-geometry removal and metadata preservation before claiming this works.
+- Include plain-language in-app guidance for scanning, editing, navigation and finding attached information, usable by non-gamers.
+- Browser Q raises and E lowers the camera; X recenters, with exact semantics still to clarify. The first-/third-person toggle is a separate binding.
+- VR must support full 6DoF; browser camera commands do not authorize overriding tracked headset pose.
 
 ## Implementation guidance
 
-Separate visual capture/rendering, durable asset data, runtime editing, synchronization and access policy. Keep ordinary editing usable without Unity, code edits or recompilation.
+Separate visual capture/rendering, durable asset data, runtime editing, synchronization and access policy. Read docs/INTEGRATIONS.md, docs/CAPTURE_UPDATES.md and docs/USER_GUIDE_PLAN.md when working in those areas. Keep ordinary editing usable without Unity, code edits or recompilation.
 
 Stable IDs, interaction geometry and versioned schemas are proposed directions requiring concrete designs. Do not silently promote an unapproved renderer, provider, data model, deletion policy or conflict strategy into a user decision.
 

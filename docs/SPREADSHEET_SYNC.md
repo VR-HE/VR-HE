@@ -1,6 +1,6 @@
 # Spreadsheet synchronization
 
-Status: required behavior and open design, November 10, 2026. No provider, adapter or real workbook has been selected or connected.
+Status: required behavior and open design, November 10, 2026. Google Sheets and Drive compatibility is required. No adapter, credentials or real workbook have been connected.
 
 ## Required behavior
 
@@ -55,17 +55,24 @@ Define what background sync may do after a client loses the required company con
 
 No production credentials or workbook contents belong in the source repository. Start with synthetic demo fixtures and a mock adapter when implementation reaches this module.
 
-## First question and follow-ups
+## Required ecosystem and follow-ups
 
-First select the required provider/storage: Microsoft 365 Excel, Google Sheets, or a network Excel file.
+Google Sheets is a required integration, with Google Drive compatibility and Gemini integration elsewhere in the application. Do not ask again whether Google Sheets is required.
 
-Then decide workbook scope, schema/mapping, structural-operation meanings, update latency, conflict ownership, formula ownership and recovery.
+The finished product must allow approved and disable unapproved spreadsheet integrations, including extensibility for Excel and OpenOffice. Format import/export alone does not establish two-way synchronization. Each adapter must declare and test value, structural-edit, formula, permission and recovery capabilities.
+
+Decide workbook scope, schema/mapping, structural-operation meanings, update latency, conflict ownership, formula ownership and recovery. Define the release scope and storage/automation approach for additional spreadsheet applications.
+
+See [integration policy](INTEGRATIONS.md). Google sharing/permissions must also cover direct access outside the app's own integration path.
 
 These choices affect implementation. Do not represent direct editing of a network file and a hosted spreadsheet API as interchangeable integrations.
 
 ## Primary documentation starting points
 
+- [Google Drive API](https://developers.google.com/workspace/drive/api/guides/about-sdk)
+- [Google Sheets metadata](https://developers.google.com/workspace/sheets/api/guides/metadata)
+- [OpenOffice API](https://www.openoffice.org/api/)
 - [Google Sheets batch updates](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate)
 - [Microsoft Graph Excel APIs](https://learn.microsoft.com/en-us/graph/excel-concept-overview)
 
-Recheck current capabilities, authorization, limitations and deployment compatibility when the provider is selected. These references do not establish that synchronization has been implemented.
+Recheck current capabilities, authorization, limitations and deployment compatibility when choosing each provider's implementation. These references do not establish that synchronization has been implemented.

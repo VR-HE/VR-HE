@@ -16,8 +16,15 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D010 | Confirmed | Link all supported data-set categories to an ordinary external spreadsheet | Synchronization is a core capability, not just a link |
 | D011 | Confirmed | Synchronize values and mapped additions/deletions in both directions | Define mapping, conflict and deletion semantics before production writes |
 | D012 | Confirmed | Use VR-HE/VR-HE with detailed developer notes and transparent human/AI process records | Keep specification, change history and test evidence with source |
-| D013 | Confirmed | Provide WASD/mouse first person, third person behind a generic non-gender humanoid and view switching | Exact bindings, avatar scale and VR behavior remain open |
+| D013 | Confirmed | Provide WASD/mouse first person, third person behind a generic non-gender humanoid and view switching | Q/E/X browser bindings are in D020; view-toggle, avatar scale and VR comfort details remain open |
 | D014 | Confirmed targets | Capture on iPhone SE Gen 3+, equivalent Android+, Quest 3/3S+; view on those phones, Quest 2+, Chrome/Firefox/Edge/Brave | Prove compatibility with representative devices before claiming support |
+| D015 | Confirmed | Require Google Drive, Google Sheets and Google Gemini compatibility | Define integration contracts and permissions; Google Sheets is no longer an optional provider choice |
+| D016 | Confirmed | Enable approved and disable unapproved AI/spreadsheet integrations in the finished app; extend to tools such as ChatGPT, Claude, Excel and OpenOffice | Policy enforcement and provider adapters are needed; exact roles, scopes and release sequence remain open |
+| D017 | Confirmed | Update splat tours to reflect physical site changes | Define versioned updates and preservation/remapping of attached records |
+| D018 | Confirmed feasibility target | Rescan only changed site sections where possible | Prove alignment, replacement of old geometry and sufficient reference overlap; no compatibility/quality guarantee yet |
+| D019 | Confirmed | Build plain-language guidance into scanning, adding information, navigation and information retrieval | Use familiar FPS/third-person patterns without assuming gaming knowledge |
+| D020 | Confirmed bindings; semantics partly open | Browser Q raises viewpoint, E lowers it, X returns to center view | Clarify whether X restores angle, height or both; keep it distinct from view toggle |
+| D021 | Confirmed | Headset version supports full 6DoF movement | Preserve positional/rotational head tracking; decide additional locomotion/comfort controls |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 
@@ -35,10 +42,6 @@ These proposals are not commitments to a particular package or backend.
 
 ## Next unresolved primary question
 
-Which spreadsheet platform/storage must be supported first?
+What should the browser X command restore: level viewing angle, normal camera height, both, or another intended meaning?
 
-- Microsoft 365 Excel in OneDrive/SharePoint.
-- Google Sheets.
-- An Excel workbook on a company network location.
-
-No option has been selected. Workbook scope, mapping, conflict policy, latency, formulas and delete/clear/archive behavior are follow-ups.
+Google Drive, Sheets and Gemini compatibility is confirmed. Subsequent decisions include Gemini tasks/data permissions, integration-approval roles, workbook scope, mapping, conflicts, latency, formulas and delete/clear/archive behavior. Excel/OpenOffice compatibility needs concrete adapter and release scope; it does not replace the Google requirement.

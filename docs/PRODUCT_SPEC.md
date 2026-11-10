@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.9; requirements interview continues. Documentation only.
+Status: requirements baseline 0.10; Google integration, update workflow, guidance and controls requirements added. Documentation only.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -16,6 +16,8 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Nested information | Add further sub-data sets and equipment information flexibly in the running app |
 | Ordinary-user editing | Simple mouse right-click interaction, designed for people who are not technically confident |
 | First-person movement | Familiar WASD and mouse controls on keyboard/mouse platforms |
+| Browser camera height/recenter | Q floats the viewpoint up, E lowers it, X returns to center view; exact recenter semantics need clarification |
+| VR movement | Full six-degree-of-freedom movement; locomotion and comfort details remain open |
 | Third-person view | Behind-the-avatar view with a generic non-gender humanoid to communicate relative size and scale |
 | View switching | Familiar first-/third-person toggle; exact key and per-platform behavior remain to be selected |
 | Engine | Unity |
@@ -32,6 +34,11 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Equipment record setup | Reusable equipment-type templates with fields editors can customize in the app |
 | Field-change scope | Record-local by default, with a separate option to reuse the field in a template for future equipment |
 | Shared spreadsheet | All data-set categories can link to a common ordinary spreadsheet with two-way value and mapped structural create/delete synchronization |
+| Google compatibility | Google Drive, Google Sheets and Google Gemini are required integrations; exact workflows, credentials and AI actions remain open |
+| Integration approval | Finished product can enable approved and disable unapproved AI tools and spreadsheet applications; support extension to ChatGPT, Claude, Excel, OpenOffice and others |
+| Site changes | Update the Gaussian splat tour to reflect changes to the physical site |
+| Partial rescanning | Where feasible, rescan changed sections rather than the entire site; feasibility and quality require a prototype |
+| Built-in guidance | Teach scanning, adding information, navigation and finding stored information using familiar FPS/third-person conventions explained for non-gamers |
 | Development tracking | Use GitHub repository VR-HE/VR-HE; access is verified; include detailed developer handoff and transparent human/AI process records |
 
 The user's latest requirements supersede earlier suggested architecture where they conflict. In particular, the earlier proposal of a PlayCanvas browser viewer is not an accepted replacement for the requested Unity application.
@@ -122,7 +129,7 @@ Confirmed behavior for the official version:
 
 Account administration, assignment of editor rights, site-specific permissions, capture permissions and detailed delete/recovery rights remain to be specified. A mandatory review/approval workflow has not been selected.
 
-Current interview status: Questions 1–3 are resolved. Shared-spreadsheet synchronization is required; platform and mapping decisions remain open. Access to VR-HE/VR-HE is verified; local Claude Code setup remains unverified.
+Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Q/E/X browser bindings and full VR 6DoF are required; X semantics need clarification. Access to VR-HE/VR-HE is verified. Arlen reported Git and GitHub CLI installed on the laptop; local VR-HE authentication remains unverified.
 
 ## Question 3 — resolved: reusable templates and local field changes
 
@@ -148,9 +155,9 @@ Confirmed behavior:
 
 Question 3 outcome: template-based record setup and record-local field changes with optional future-template reuse are confirmed.
 
-## Question 4 — spreadsheet integration required; spreadsheet platform pending
+## Question 4 — Google ecosystem required; synchronization design pending
 
-Arlen requires all data sets to have the ability to point to a common, ordinary spreadsheet outside the virtual environment.
+Arlen requires all data sets to have the ability to point to a common, ordinary spreadsheet outside the virtual environment. His follow-up explicitly requires Google Drive, Google Sheets and Google Gemini compatibility. Google Sheets is therefore a required spreadsheet integration; do not reopen whether it is required.
 
 Confirmed functional requirements:
 - Two-way updates: edits in the ordinary spreadsheet update the corresponding virtual data sets, and edits in the virtual environment update the corresponding spreadsheet data.
@@ -169,12 +176,38 @@ Proposed implementation approach:
 - Keep mock/synthetic spreadsheet data available for the demo. No actual business workbook has been selected or modified.
 
 Unresolved design questions:
-1. Which spreadsheet platform/storage is required: Microsoft 365 Excel in OneDrive/SharePoint, Google Sheets, or an Excel file on a company network location?
+1. Exact Google Drive/Sheets workflows and credentials, plus the release scope and mapping of additional approved spreadsheet applications such as Excel and OpenOffice.
 2. Whether one workbook is shared across all sites, one per site, or another organization.
 3. Exact row/column/tab representation of rooms, racks, RUs, equipment, nested data and attachments.
 4. Sync latency target, formula ownership, conflict resolution, and the meanings of delete versus clear/archive.
 
-The next product-design question is spreadsheet platform. Repository access is verified; local Claude Code/Git setup remains a separate setup task.
+Google ecosystem compatibility is confirmed. The immediate controls clarification is X recenter semantics. Gemini's allowed functions/data scope and the remaining synchronization decisions follow; local Claude Code/Git setup is a separate task.
+
+## Additional requirements — integrations, site updates and user guidance
+
+Confirmed November 10, 2026:
+
+- Support Google Drive, Google Sheets and Google Gemini.
+- In the finished product, allow access through approved AI tools and spreadsheet applications, and close access through unapproved ones. Named examples are ChatGPT, Claude, Excel and OpenOffice.
+- Update Gaussian splats to reflect physical hubsite/headend changes.
+- Target rescanning only changed portions where feasible, including sufficient unchanged overlap for alignment; do not claim this capability is proven.
+- Include instructions in the application for scanning, adding information, navigating a scanned environment and accessing information attached to different places.
+- Use FPS/third-person conventions while explaining them in language non-gamers understand.
+- Browser Q raises the camera viewpoint, E lowers it and X returns to center view.
+- VR supports full 6DoF: three positional and three rotational degrees of freedom.
+
+X must be clarified before its exact behavior is implemented: level the view angle, restore normal camera height, both, or another intended meaning. It is distinct from the still-unselected first-/third-person toggle. The browser height/recenter bindings do not specify how to reposition a physically tracked headset.
+
+The exact Gemini product/API, tasks, read/write powers, allowed data, provider-administration roles and additional spreadsheet release scope remain open. Compatibility does not itself grant an external tool access to every record or file.
+
+Proposed directions:
+- Use provider adapters and enforce company integration policy at application/service data boundaries. Direct Google Drive/Sheets access also needs appropriate Google account/sharing policy.
+- Keep durable records and annotation identities separate from scan assets.
+- Partition the tour into replaceable sections with shared coordinates, versioned manifests and explicit handling of removed geometry.
+- Preserve unaffected records during updates; changed/moved/removed equipment needs explicit identity/remapping rules.
+- Provide a replayable guided walkthrough, contextual help and input-specific instructions.
+
+See [integration controls](INTEGRATIONS.md), [capture updates](CAPTURE_UPDATES.md) and [user guide plan](USER_GUIDE_PLAN.md). These are requirements/design notes, not implemented features.
 
 ## GitHub and developer handoff — confirmed process requirement
 
@@ -188,7 +221,7 @@ Verified November 10, 2026:
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
 - No Unity application, capture system, renderer, spreadsheet adapter or production security implementation exists yet.
-- Claude Code's local Git/GitHub authentication has not been verified.
+- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation; local VR-HE authentication/repository access for Claude Code has not been verified.
 
 Canonical project records:
 - This file is the maintained requirements specification in the repository.
@@ -216,8 +249,9 @@ Ask one primary question at a time, discuss its consequences, and record confirm
 - Reconstruction: on-device versus PC/private-server processing; acceptable wait time and hardware availability.
 - Site scale: typical room/rack counts, site count, total storage and expected network bandwidth.
 - Fidelity: required readability, supported movement area, acceptable holes/artifacts, scale accuracy and measurement expectations.
-- Rescanning: scan versions, historical visits, registration to previous scans and preserving equipment attachments.
-- Controls: first-/third-person behavior, avatar dimensions, remapping, accessibility, touch equivalents and VR comfort.
+- Rescanning implementation: prove partial updates where feasible, including registration, old-geometry replacement, metadata preservation and fallback scope.
+- Controls: clarify X semantics; retain required Q/E bindings and VR 6DoF while deciding view-toggle behavior, avatar dimensions, remapping, touch equivalents and VR comfort.
+- Integrations: Gemini functions/data permissions, approval administration, Google Workspace hosting/access and additional spreadsheet compatibility scope.
 - Release scope: what must ship first, device priorities, acceptance tests and what may be deferred.
 - Deployment and licensing: application license, dependency compatibility for workplace use, installation, updates and maintenance ownership.
 
@@ -234,7 +268,13 @@ This is a discovery agenda, not a confirmed feature backlog. Avoid presenting it
 - Creating a GitHub repository, including prefilled form URLs: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository
 - Switching GitHub accounts: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/switching-between-accounts
 - GitHub CLI authentication: https://docs.github.com/en/github-cli/github-cli/authenticating-with-github-cli
+- Google Drive API: https://developers.google.com/workspace/drive/api/guides/about-sdk
+- Google Sheets API: https://developers.google.com/workspace/sheets/api/guides/concepts
 - Google Sheets batch updates: https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate
+- Google Gen AI SDK: https://googleapis.github.io/js-genai/release_docs/
+- Google API authorization: https://developers.google.com/identity/protocols/oauth2
+- SplaTAM incremental Gaussian mapping research: https://spla-tam.github.io/
+- Apache OpenOffice API: https://www.openoffice.org/api/
 - Microsoft Graph Excel APIs: https://learn.microsoft.com/en-us/graph/excel-concept-overview
 - ChatGPT plugins and app connections: https://learn.chatgpt.com/docs/plugins
 - Claude Code workflows: https://code.claude.com/docs/en/common-workflows

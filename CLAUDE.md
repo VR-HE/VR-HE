@@ -6,4 +6,6 @@ The shared specification is [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md). Confir
 
 Current state: documentation only; no Unity application or tested device support. ChatGPT/Codex repository access is verified. Local Git/GitHub access for Claude Code is a separate setup task and has not been verified.
 
+Google Drive, Sheets and Gemini compatibility, controlled additional integrations, updateable tours, built-in guidance, browser Q/E/X and VR 6DoF are confirmed requirements. X meaning and partial-rescan feasibility still need resolution; read the updated handoff.
+
 Use the same repository and shared requirements. Do not assume this file grants credentials, tool access or permission to broaden the project scope.
