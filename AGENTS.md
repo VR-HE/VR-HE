@@ -20,7 +20,7 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 
 ## Preserve requirements
 
-- Unity and open-source application code are requested; no application license or Unity version is selected.
+- Unity and open-source application code are requested; no application license is selected. Unity 6.3 LTS 6000.3.15f1 with the plain URP template is approved for the initial prototype only; the long-term Unity version and renderer remain provisional (D031).
 - Production requires the company intranet/VPN and password access.
 - Loss of the required company connection must lock both viewing and editing, including downloaded tours and attached data.
 - The test demo is exempt from the production VPN/password/connection-lock requirements.

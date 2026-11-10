@@ -29,6 +29,8 @@ Two passes are a starting point, not an accuracy guarantee. Multi-door cabinets 
 
 Smooth animation is a possible extension; the requested minimum is usable open/closed states with correct information access. The renderer and exact approach are not selected.
 
+Rendering evidence so far: in the November 10 browser test, overlapping splat sections drawn by separate renderers were misordered in every browser, while one merged asset with per-section active ranges rendered and switched correctly. For aligned appearance variants this suggests, but does not prove, merging each cabinet's states into one asset with each state in its own range. See [the handoff](HANDOFF.md).
+
 Unity documents ordinary GameObject animation and door open/close states. Applying that to a reconstructed cabinet still requires a working representation:
 [Unity animation overview](https://docs.unity.com/en-us/engine/6000.0/manual/animation-section/animation-mecanim/animation-overview).
 

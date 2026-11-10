@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>VR-HE splat benchmark | {{{ PRODUCT_NAME }}}</title>
+    <!-- VR-HE browser splat-rendering prototype. Based on Unity's Minimal Web template.
+         Fixed 1280x720 canvas at device-pixel-ratio 1 so browsers render the same pixel count.
+         Console output is forwarded to the local test server (log/<run>) so that player
+         errors are recorded even if the page fails. Synthetic test data only. -->
+    <style>
+      html, body { margin: 0; padding: 0; border: 0; background: #08080a; color: #d8d8dc; }
+      body { font: 13px/1.4 monospace; }
+      #unity-canvas { display: block; width: 1280px; height: 720px; background: #050507; }
+      #vrhe-status { padding: 6px 8px; white-space: pre-wrap; }
+      #vrhe-error { padding: 0 8px 6px; color: #ff8a80; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" width="1280" height="720" tabindex="-1"></canvas>
+    <div id="vrhe-status">Loading Unity Web build...</div>
+    <div id="vrhe-error"></div>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var run = (params.get('run') || 'manual').replace(/[^A-Za-z0-9_.-]/g, '').slice(0, 80) || 'manual';
+        var enabled = params.get('report') !== 'none';
+        var queue = [];
+        var seq = 0;
+        var busy = false;
+
+        function flush() {
+          if (!enabled || busy || queue.length === 0) return;
+          busy = true;
+          var batch = queue.splice(0, queue.length);
+          fetch('log/' + encodeURIComponent(run), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(batch)
+          }).catch(function () {}).finally(function () {
+            busy = false;
+            if (queue.length) setTimeout(flush, 50);
+          });
+        }
+
+        function record(level, args) {
+          var text;
+          try {
+            text = Array.prototype.map.call(args, function (a) {
+              if (a && a.stack) return String(a.stack);
+              return (typeof a === 'object') ? JSON.stringify(a) : String(a);
+            }).join(' ');
+          } catch (e) {
+            text = String(args && args[0]);
+          }
+          if (queue.length < 5000)
+            queue.push({ seq: seq++, t: Math.round(performance.now()), level: level, text: text.slice(0, 4000) });
+          setTimeout(flush, 0);
+        }
+
+        ['log', 'info', 'warn', 'error'].forEach(function (level) {
+          var original = console[level];
+          console[level] = function () {
+            record(level, arguments);
+            return original.apply(console, arguments);
+          };
+        });
+        window.addEventListener('error', function (e) {
+          record('pageerror', [e.message + ' @ ' + e.filename + ':' + e.lineno]);
+        });
+        window.addEventListener('unhandledrejection', function (e) {
+          record('unhandledrejection', [e.reason]);
+        });
+      })();
+    </script>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
+    <script>
+      function vrheShowError(message) {
+        document.getElementById('vrhe-error').textContent += String(message) + '\n';
+      }
+
+      createUnityInstance(document.querySelector('#unity-canvas'), {
+        arguments: [],
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+        workerUrl: "Build/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        devicePixelRatio: 1,
+        showBanner: function (message, type) {
+          console[type === 'error' ? 'error' : 'warn']('[unity-banner] ' + message);
+          vrheShowError(message);
+        }
+      }, function (progress) {
+        document.getElementById('vrhe-status').textContent =
+          'Loading Unity Web build... ' + Math.round(progress * 100) + '%';
+      }).then(function (instance) {
+        window.unityInstance = instance;
+        console.log('[VRHE] Unity instance created');
+      }).catch(function (message) {
+        console.error('[VRHE] createUnityInstance failed: ' + message);
+        vrheShowError(message);
+      });
+    </script>
+  </body>
+</html>

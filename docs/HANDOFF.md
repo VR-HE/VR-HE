@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no Unity project or runnable demo yet. No rendering, capture, backend, sync or security implementation exists. No hardware compatibility has been tested. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; no Unity project was created or changed.
+There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone, Quest or Edge test has run. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
 
 ## Read in this order
 
@@ -25,16 +25,17 @@ There is no Unity project or runnable demo yet. No rendering, capture, backend, 
 11. [Cabinet inspection states](CABINET_STATES.md)
 12. [AI-assisted capture inventory](AI_CAPTURE_INVENTORY.md)
 13. [Supplied spreadsheet examples](SPREADSHEET_EXAMPLES.md)
+14. [Browser splat-rendering prototype](../prototypes/browser-splat-rendering/README.md)
 
 The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The repository specification is now the maintained project source of truth; do not maintain competing copies.
 
 ## Next setup work
 
-Local VR-HE sign-in, clone, the Claude session configuration and the local Unity inventory are complete. The working branch is docs/project-foundation. Next, Arlen approves or changes the recommended Unity version and template below; then run the project-creation task from a clean tree after a fast-forward pull. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
+Local VR-HE sign-in, clone, the Claude session configuration and the local Unity inventory are complete. Arlen approved Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for the initial prototype (D031). The prototype branch is **proto/browser-splat-rendering**, created from docs/project-foundation at ff1e070. It holds the prototype and this milestone's documentation updates; docs/project-foundation does not have them. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
 
-Authentication and repository read access are confirmed. Claude Code pushed the inspection's documentation commit from the laptop: if that commit is on origin/docs/project-foundation, local push access works. Local commits use the repository-local Git identity VR-HE with the account's GitHub noreply address, as Arlen chose on November 10. Do not paste passwords, tokens or login codes into chat.
+Authentication and repository read access are confirmed. Local push access is verified: the inspection commit ff1e070 is on origin/docs/project-foundation. Local commits use the repository-local Git identity VR-HE with the account's GitHub noreply address, as Arlen chose on November 10. Do not paste passwords, tokens or login codes into chat.
 
-If this documentation branch is still unmerged, read/check out the branch when continuing; do not mistake the starter README on main for the full project.
+If these branches are still unmerged, check out proto/browser-splat-rendering when continuing; do not mistake the starter README on main for the full project.
 
 ## MAX effort for Claude build work
 
@@ -55,7 +56,7 @@ References: [model/effort configuration](https://code.claude.com/docs/en/model-c
 
 ## Local Unity inspection — November 10 findings
 
-Claude Code completed [the inspection task](LOCAL_UNITY_INSPECTION.md) with read-only checks. Installed files and Hub/CLI metadata are installation evidence only. No Editor was launched, nothing was built, and no device, browser or splat renderer was tested.
+Claude Code completed [the inspection task](LOCAL_UNITY_INSPECTION.md) with read-only checks. Installed files and Hub/CLI metadata are installation evidence only. During the inspection no Editor was launched, nothing was built, and no device, browser or splat renderer was tested; the browser milestone below came later.
 
 Verified on Arlen's laptop:
 - Unity Hub 3.22.6 (apt package unityhub, /usr/bin/unityhub) and Unity CLI 1.0.0-beta.13 (~/.local/bin/unity).
@@ -74,29 +75,112 @@ Verified on Arlen's laptop:
 Bridges and existing projects:
 - Claude Code has no MCP servers configured for the user, VR-HE or any other project; Claude Desktop has none. The installed Unity plugin for Claude Code (unity@unity-agent-plugin 0.1.9-beta) provides skills only and drives editors through the unity CLI.
 - unity status reports one running Editor: The Veil (6000.6.4f1, /home/arlen/Desktop/The Veil (Unity)/The Veil), Pipeline state ready. A Unity AI Assistant MCP relay from The Veil's packages is attached to the same Editor; its MCP client port 9002 listens on all network interfaces. At inspection time another Claude Code session was working in The Veil's folder.
-- VR-HE has no Unity project, so it has no bridge target yet. Fourteen existing Unity projects were found outside this repository; none was modified.
+- At inspection time VR-HE had no Unity project. The browser prototype added since has no Pipeline or AI Assistant package and no bridge; it is driven only by batch-mode Editor runs with its explicit project path. Fourteen existing Unity projects were found outside this repository; none was modified.
 - Never send unity command or MCP requests to The Veil's Editor. Open VR-HE's own project in its own Editor and pass its full path with --project-path on every Editor command.
 
-Recommendation, pending Arlen's approval:
+Recommendation (Arlen approved the version and template for the initial prototype; D031):
 - Create the first prototype with the installed Unity 6.3 LTS editor (6000.3.15f1) and its bundled URP blank 3D template (com.unity.template.urp-blank, labeled 3D URP in its metadata). The template includes URP and the Input System.
 - Add OpenXR, OpenXR Meta and the XR Interaction Toolkit when the Quest slice starts, through Unity 6.3's Meta Quest build profile. The cached 6.3 VR template's versions (OpenXR 1.17.1, OpenXR Meta 2.5.1, XR Interaction Toolkit 3.5.1) are the reference set.
 - Reasons: no download is needed on a nearly full disk. Unity supports 6.3 LTS until December 2027; 6.0 LTS was supported through October 2026, and Update releases such as 6.6 are supported only until the next release. A plain URP project keeps browser and phone builds free of the VR template's XR, AR and hand-tracking packages and its VR-only rig.
 - Unity's guidance is mixed: its support page prefers Update releases for new productions, while its 6.3 LTS announcement recommends 6.3 for them. If Arlen wants to start with Quest, the cached 6.3 VR template (10.0.0) is the alternative.
 
 Untested assumptions and risks:
-- Browser: Unity 6.3 labels WebGPU experimental; Unity 6.6 says it is out of experimental release. Neither enables WebGPU automatically. The aras-p/UnityGaussianSplatting README names D3D12, Metal and Vulkan as the only known-working graphics APIs, says mobile/web are not tested and says WebGPU "might work someday". Treat the browser path as the highest-risk target. If 6.3's experimental WebGPU blocks it, retest on a newer release before changing the version decision.
+- Browser: Unity 6.3 labels WebGPU experimental; Unity 6.6 says it is out of experimental release. Neither enables WebGPU automatically. The aras-p/UnityGaussianSplatting README names D3D12, Metal and Vulkan as the only known-working graphics APIs, says mobile/web are not tested and says WebGPU "might work someday". Treat the browser path as the highest-risk target. If 6.3's experimental WebGPU blocks it, retest on a newer release before changing the version decision. The browser milestone below tested arloopa/UnitySplats over WebGL 2 instead; WebGPU remains untested.
 - Phone and Quest in one project: Unity 6.3's Meta Quest build profile shares Android Player settings and can override Player, Graphics and Quality settings. The docs do not say XR plug-in settings can differ per profile, so test an Android phone profile without XR beside the Quest profile.
 - Quest 2: Unity 6.3 lists Quest 2, 3, 3S and Pro for development, but the splat README reports only Quest 3 and Quest Pro among Quest headsets.
 - iPhone: native builds need iOS Build Support plus a Mac with Xcode, or Unity Build Automation. No Mac is known to be available.
-- The splat candidate is MIT-licensed, and its author plans no significant further development (README, November 2026). It remains a candidate, not a selection.
+- The aras-p splat candidate is MIT-licensed, and its author plans no significant further development (README, November 2026). It remains a candidate, not a selection.
 
-Before creating the project:
-- Get Arlen's approval of the version and template.
-- Choose the project folder inside this repository; the Hub's default new-project folder is elsewhere. The existing Unity ignore rules are anchored to the repository root (for example `/[Ll]ibrary/`), so create the Unity project at the root or put a copy of those rules in the project folder.
-- Decide whether VR-HE includes the Unity AI Assistant (pre-release) and Unity CLI Pipeline (experimental) packages. The Hub's saved preferences and recent project manifests suggest it adds both to new projects. Claude needs the Pipeline package to drive the VR-HE Editor through the unity CLI.
-- Free disk space before installing another editor or making Android/Web builds.
+Before creating the project (resolved November 10 for the browser prototype):
+- Arlen approved the version and template (D031).
+- The project is in prototypes/browser-splat-rendering with its own scoped .gitignore; the root ignore rules stay anchored to the repository root.
+- No AI Assistant or Pipeline package was added, as Arlen instructed. Without Pipeline, Claude drives the Editor only through batch-mode -executeMethod runs with the explicit project path. Whether later VR-HE projects include these packages remains open.
+- Disk space was checked before each step: 25 GB free before project creation and 21 GB after fixtures and builds. No editor or module was installed and nothing was deleted.
 
 Sources: [Unity 6 support](https://unity.com/releases/unity-6/support), [Unity 6.3 WebGPU limitations](https://docs.unity.com/en-us/engine/6000.3/manual/platform-specific/webgl/develop/graphics/web-gpu/limitations), [What's new in Unity 6.6](https://docs.unity.com/en-us/engine/6000.6/manual/whats-new/unity66), [Unity 6.3 Meta Quest packages and templates](https://docs.unity.com/en-us/engine/6000.3/manual/xr/configuring-project-for/meta-quest-develop/packages), [Unity 6.3 build-profile overrides](https://docs.unity.com/en-us/engine/6000.3/manual/building-and-publishing/build-settings/build-profiles-override-settings), [Unity 6.3 iOS setup](https://docs.unity.com/en-us/engine/6000.3/manual/platform-specific/iphone/getting-started/ios-environment-setup), [UnityGaussianSplatting README](https://github.com/aras-p/UnityGaussianSplatting).
+
+## Browser splat-rendering milestone — November 10 results
+
+Scope: rendering feasibility only (D032). The [prototype](../prototypes/browser-splat-rendering/README.md) is a separate Unity measurement project, not the VR-HE application. Branch: proto/browser-splat-rendering. Full tables: [benchmark results](../prototypes/browser-splat-rendering/TestResults/browser-splat-results.md).
+
+Setup:
+- Unity 6000.3.15f1, created in batch mode from its bundled URP blank template (com.unity.template.urp-blank 17.0.14, labeled 3D URP). Every Editor run passed the prototype's explicit project path. No AI Assistant or Pipeline package was added, the project has no bridge or MCP connection, and no command was sent to The Veil's Editor.
+- Web build: WebGL 2 only, no compression, 4096 MB maximum memory, and a fixed 1280x720 canvas at device-pixel-ratio 1. Rendering used the Mobile quality level (the WebGL default) at render scale 1.0, with HDR on, MSAA off and linear color space. Both builds succeeded with 0 errors.
+- UnitySplats 2.0.0 is pinned to Git revision 689e0a7dd2acfad813494a205f8ebbe8eee86434. Its WebP dependency, com.netpyoung.webp 0.3.22, comes from the OpenUPM registry scoped to com.netpyoung; Unity reports that package unsigned.
+- Fixtures are synthetic, generated locally and not committed. They comprise a procedural equipment room at 25k, 100k, 250k, 500k, 1M and 2M splats with base color only (SH0), the 500k room with third-degree spherical harmonics (SH3), and two overlapping sections. The page downloads PLY files from a local server and converts them at runtime with UnitySplats' default Spark compression.
+- The harness served the build on 127.0.0.1 only and started each browser with a fresh temporary profile. It stopped only the browser session it had started, and all temporary profiles were deleted.
+
+UnitySplats evaluation at the pinned revision:
+- Web path: no compute shaders. Splat data and draw order are packed into RGBA8 textures. A full-precision CPU radix sort runs on the browser's main thread every frame, because Unity Web builds have no managed background threads. The cross-renderer global merge is unavailable on the web, so each renderer draws separately and separate renderers are sorted as whole objects.
+- The package forces this texture path for every Unity Web build and disables GPU sorting whenever the path is active. Reading the code, a WebGPU build of the same package would still sort on the main thread; this was not built or tested.
+- License: MIT. The Third Party Notices list MIT-licensed gsplat-unity, PlayCanvas Engine, UnityGaussianSplatting, GPUSorting, Spark, Niantic SPZ and ZstdSharp, MIT Unity.WebP and BSD-3-Clause libwebp. A GPL-3.0 Blender add-on, Splatlight, is listed as a behavior reference only; the notice states that none of its code is included.
+- Runtime formats: PLY, SOG, SPZ and GLB. Only PLY was tested.
+
+Test laptop: Linux Mint 22.3 (kernel 7.0.0-42, X11, Cinnamon), Intel Core i7-13620H, NVIDIA GeForce RTX 4060 Laptop GPU with driver 595.99.02 and the NVIDIA PRIME profile. The display ran at 1920x1200 and 60 Hz; its 165 Hz mode was not tested.
+
+| Browser | Version | WebGL renderer reported | Runs | Result |
+| --- | --- | --- | --- | --- |
+| Google Chrome | 157.0.8103.50 | ANGLE on the RTX 4060 Laptop GPU (OpenGL 4.5.0) | 2 full, 3 memory | Rendered |
+| Mozilla Firefox | 159.0 | "NVIDIA GeForce GTX 980, or similar" (Firefox reports a generalized GPU name) | 1 full, 2 memory | Rendered |
+| Brave | 1.99.55 (Chromium 157) | Same as Chrome | 1 full | Rendered |
+| Microsoft Edge | Not installed | — | — | Untested |
+| Chromium | Not installed | — | — | Untested |
+
+- Unity reported its OpenGLES3 device, which is WebGL 2.0, in every browser. No browser flags were required. The harness's automation flags (fresh profile, no extensions or sync, no background throttling, fixed window) are recorded in the results JSON. Pages were cross-origin isolated. Chrome and Brave expose the WebGPU API and Firefox 159 did not; WebGPU was not built or tested.
+- Each browser rendered the room and the overlap sections; screenshots are in the prototype's TestResults/screenshots folder. The overlap verdicts below come from screen-region colors sampled from screenshots. No run logged a browser console error. Each page logged one expected warning that UnitySplats was using its CPU sort fallback.
+
+Overlapping sections, identical in all four full runs: section A, the larger existing capture, has a red sheet and a far backdrop. Section B, the rescanned area, has a blue sheet 0.3 m behind A's. In their shared band, A must be in front.
+
+| Case | Shared band shows | B-only region shows | Verdict |
+| --- | --- | --- | --- |
+| One merged asset and renderer | A | B | Correct |
+| Two separate renderers | B | B | Wrong: B's bounds center is nearer the camera, so all of B draws over A |
+| Two renderers, A forced last | A | A's backdrop | Wrong: A's backdrop now covers B |
+| Merged asset with active ranges | Expected section in each step | Expected section in each step | Correct for only A, only B, both and cleared; switching needed no reload |
+
+Splat-count scaling, as frames per second / mean main-thread sort time in ms. The 60 Hz display caps the frame rate.
+
+| Splats | Chrome | Firefox | Brave |
+| --- | --- | --- | --- |
+| 25k | 60 / 1.3 | 60 / 2.0 | 60 / 1.4 |
+| 100k | 60 / 4.1 | 60 / 7.0 | 60 / 3.7 |
+| 250k | 60 / 7.7 | 59.8 / 11.3 | 59.9 / 8.1 |
+| 500k | 60 / 14.6 | 54.5 / 16.8 | 59.8 / 14.8 |
+| 500k SH3 | 60 / 14.6 | 54.8 / 16.7 | 59.7 / 14.8 |
+| 1M | 29.4 / 32.9 | 26.2 / 37.0 | 29.1 / 33.3 |
+| 2M | 11.4 / 86.9 | 10.4 / 94.9 | 11.0 / 89.7 |
+
+- A second Chrome run matched the first within 2% from 500k splats up.
+- The sort dominated frame time. It cost about 29–33 ns per splat in Chrome and Brave from 250k to 1M splats, and 43–45 ns at 2M; Firefox cost 34–45 ns, and 47 ns at 2M. URP rendering took 0.5–1.3 ms on the main thread. GPU time was not measured.
+- SH3 did not change frame time at 500k splats; it cost load time and memory.
+- Over localhost, Chrome took 132 ms to download, 1.9 s to decode and 94 ms to upload 2M splats. The 500k SH3 file took 4.4–4.8 s to decode.
+- Memory, as the WebAssembly heap peak for one file in a fresh page (about 80 MB before loading): 454 MB for 1M splats, 833 MB for 2M and 1.7 GB for 500k SH3 from a 112.5 MB file. Loading every fixture in one page reached 2.0–2.2 GB, above Unity's default 2048 MB limit; this build allows 4096 MB.
+
+Failures and fixes during the milestone:
+- The first overlap fixture's backdrop was too narrow, so the forced-order failure showed only as a thin strip that the region check missed. The backdrop was widened and the fixtures regenerated; that smoke run is excluded from the results.
+- The first scale screenshot was a blurry close-up. The camera now takes an overview before orbiting.
+- Setup under -nographics logs missing UnitySplats compute kernels. The null graphics device has no compute support, and the web path uses no compute shaders.
+- During setup the batch Editor logged that it was stopping the ADB server. No device was attached; The Veil's Editor and its relay were checked afterwards and were still running.
+
+Limitations of this evidence:
+- One high-end laptop. Weaker CPUs will sort more slowly. Integrated graphics, Windows, macOS and Edge were not tested.
+- Synthetic fixtures with simple geometry and mostly base color; real captures differ in density, shape and overdraw.
+- Localhost delivery only: no network, compression, caching or slow connection.
+- Short sessions of about 90 s per full run. Context loss, long sessions and user interaction were not tested.
+- Frame times have 1 ms resolution, and the 60 Hz display hides any headroom above 60 fps.
+
+Why 6000.6.2f1 was not compared: the measured limit is UnitySplats' main-thread CPU sort. The package selects it for every Unity Web build, so it is not an engine limitation. A 6.6 WebGL 2 or WebGPU build of the same package would take the same path unless the package changes, so the comparison would not test the bottleneck.
+
+Remaining platform tests: Edge; Chrome and Firefox on Windows and macOS; the weakest PCs the browser view must support, including integrated graphics; this laptop's 165 Hz mode; a representative real or authorized capture; network delivery; long sessions; and WebGPU if a GPU sort is pursued. Native phone and Quest builds are a separate milestone.
+
+Recommendation, not a decision:
+- Keep UnitySplats at the pinned revision as the leading browser candidate on Unity 6.3 LTS. It rendered correctly in all three installed browsers over plain WebGL 2, with no flags and no console errors.
+- Budget browser scenes by splat count per view. On this laptop about 500k splats held 60 fps in Chrome and Brave (55 in Firefox), 1M gave about 30 fps and 2M about 10. Slower computers will have a lower budget, which needs measuring.
+- For partial rescans and cabinet states in the browser, merge overlapping sections into one asset and switch them with active ranges. Separate renderers misordered the overlap in every browser, and forcing the order only moved the error. By inference, the merge step must place each replaceable section or cabinet state in its own contiguous range.
+- Avoid runtime SH3 PLY decoding in browsers (1.7 GB peak at 500k splats). Test the compact SOG or SPZ formats, or lower SH degrees, next.
+- If the agreed target needs much more than about 500k splats per view at 60 fps on target hardware, the lever is the sort, not the engine version. Moving it to a Web Worker or a WebGPU compute pass would mean changing or forking UnitySplats; neither option has been tested.
+
+Next step: agree browser acceptance targets with Arlen: the weakest PC to support, the minimum frame rate and the expected splat count per view. Then run this unchanged build on that PC in Edge and Chrome. The harness's serve mode needs only Python 3 plus the build and fixtures; it has not been run on Windows.
 
 ## Next mapping work
 
@@ -109,8 +193,8 @@ Also confirmed: desktop arrow-key movement in addition to WASD, mobile FPS/third
 ## Early implementation work to scope
 
 After the necessary choices are made:
-- Select/pin a Unity version and establish the project layout.
-- Test renderer feasibility with a small representative scene on the weakest required devices and browser path.
+- Select/pin a long-term Unity version and establish the application project layout; 6.3 LTS is approved for the initial prototype only (D031).
+- Continue renderer feasibility. The browser path has first results on one laptop (above); test the weakest required computers, Edge and then phones and Quest.
 - Build a small synthetic runtime-editing example with durable record identity.
 - Prototype Google Sheets synchronization against synthetic audit-form and rack/RU layouts using the confirmed AI approval gate. Preserve formula/validation/format semantics.
 - Prove partial-rescan alignment/replacement using a small changed section.
@@ -129,7 +213,8 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 ## Current limitations
 
 - Application license and third-party dependencies are undecided.
-- No Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is recommended, pending Arlen's approval.
+- No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
+- Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested.
 - No Android reference device or performance/quality acceptance threshold is selected.
 - Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.

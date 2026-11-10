@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.14; AI editor approval confirmed and spreadsheet video examples reviewed. Requirements/development setup; no Unity application yet.
+Status: requirements baseline 0.15; Unity 6.3 LTS approved for the initial prototype and first browser splat-rendering results recorded. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -91,7 +91,9 @@ A splat should not be assumed to supply equipment identity, clean object boundar
 
 Unity's current web documentation lists desktop Chrome, Firefox and Edge, plus Safari, and defines browser requirements. That does not establish that any particular Gaussian splat renderer will work in them.
 
-Treat aras-p/UnityGaussianSplatting as a candidate/reference, not a proven solution for this device matrix. Recheck its current platform support, graphics-backend requirements, maintenance status and license before selecting any dependency. No renderer has been selected or tested for VR-HE.
+Treat aras-p/UnityGaussianSplatting as a candidate/reference, not a proven solution for this device matrix. Recheck its current platform support, graphics-backend requirements, maintenance status and license before selecting any dependency. No renderer has been selected for VR-HE.
+
+The first tested candidate is arloopa/UnitySplats (MIT; pinned revision 689e0a7). On November 10 it rendered synthetic splats over WebGL 2 in Chrome, Firefox and Brave on one Linux laptop with an RTX 4060 Laptop GPU. Its web path sorts splats on the browser's main thread, which limited frame rate as splat counts grew. Overlapping sections drew in the correct order only when merged into one renderer. Edge, Windows, macOS, phones, Quest, weaker hardware and real captures are untested. See [the handoff](HANDOFF.md) for results.
 
 Early rendering work should therefore test the weakest required devices and browser path using a representative small headend scene before building a large editing system around a specific renderer.
 
@@ -135,7 +137,7 @@ Confirmed behavior for the official version:
 
 Account administration, assignment of editor rights, site-specific permissions, capture permissions and detailed delete/recovery rights remain to be specified. AI-generated live spreadsheet changes now require designated-editor approval. No additional general approval workflow for ordinary manual edits has been selected.
 
-Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository clone on docs/project-foundation and a clean working tree are confirmed by his next screenshot. A later screenshot confirms Claude Code v2.1.321 running Opus 5.5 with max effort in ~/Projects/VR-HE. Local Unity setup and push access remain unverified.
+Current interview status: Questions 1–3 are resolved. Google Drive, Google Sheets and Gemini compatibility is now required; spreadsheet mapping and AI capabilities/permissions remain open. Arrow-key desktop movement, familiar mobile controls, third-person orbit and full VR 6DoF are required. X restores both normal camera height and level viewing angle. Access to VR-HE/VR-HE is verified. Arlen reported Git/GitHub CLI installed and supplied a screenshot confirming local VR-HE sign-in; repository clone on docs/project-foundation and a clean working tree are confirmed by his next screenshot. A later screenshot confirms Claude Code v2.1.321 running Opus 5.5 with max effort in ~/Projects/VR-HE. Claude's November 10 inspection verified the installed Unity tooling (Hub 3.22.6; Editors 6000.0.84f1, 6000.3.15f1, 6000.6.2f1 and 6000.6.4f1; Android and Web support files together only in 6000.3.15f1; no iOS support). Local push access is verified by commit ff1e070 on origin/docs/project-foundation. Installed tools are not tested functionality; build and browser evidence is recorded in the handoff and development log.
 
 ## Question 3 — resolved: reusable templates and local field changes
 
@@ -249,8 +251,8 @@ Verified November 10, 2026:
 - Read and write permissions are available to this project's connection.
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
-- No Unity application, capture system, renderer, spreadsheet adapter or production security implementation exists yet.
-- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code v2.1.321 is now shown running Opus 5.5 with max effort in ~/Projects/VR-HE; Unity inventory and local push access remain unverified.
+- No VR-HE application, capture system, spreadsheet adapter or production security implementation exists yet. A rendering-only browser prototype is in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; no renderer has been selected.
+- Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code v2.1.321 is shown running Opus 5.5 with max effort in ~/Projects/VR-HE. The local Unity inventory was verified on November 10 (installed tools, not tested functionality), and local push access is verified by commit ff1e070 on origin/docs/project-foundation.
 
 Canonical project records:
 - This file is the maintained requirements specification in the repository.

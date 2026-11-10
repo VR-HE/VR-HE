@@ -34,6 +34,8 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D028 | Confirmed desired capability | Gemini assists baseline equipment/spreadsheet recording during capture | Editor approval is selected in D029; field scope, accuracy and implementation remain open |
 | D029 | Confirmed; option 1 | Gemini creates drafts; designated editors approve AI-generated entries and updates before live spreadsheet writes | Approval applies to AI proposals; preserve existing ordinary manual-edit behavior |
 | D030 | Supplied integration examples | Facilities-audit forms and rack/RU diagrams shown in two user videos | Use template-aware mappings; native cell/formula/protection details remain unverified |
+| D031 | Confirmed for the initial prototype | Use the installed Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for the initial VR-HE prototype | The long-term Unity version and renderer stay provisional until browser rendering has been tested |
+| D032 | Confirmed | Browser Gaussian-splat rendering is the first implementation milestone, evaluating arloopa/UnitySplats at a pinned revision with synthetic fixtures, increasing splat counts and two overlapping sections | Keep the milestone to rendering feasibility; a successful build alone is not rendering evidence |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 

@@ -2,7 +2,7 @@
 
 A planned Unity work utility for touring ISP hubsites and headends using Gaussian splats, with editable information attached to rooms, racks, rack-unit locations and equipment.
 
-**Current state: requirements, developer documentation and a Claude launcher.** There is no runnable application or Unity project yet. Capture, rendering, authentication and spreadsheet synchronization are not implemented. Device compatibility has not been demonstrated.
+**Current state: requirements, developer documentation and a rendering-only browser prototype.** There is no VR-HE application yet. A separate Unity measurement project, [the browser splat-rendering prototype](prototypes/browser-splat-rendering/README.md), rendered synthetic Gaussian splats in Chrome, Firefox and Brave on one Linux laptop; [the handoff](docs/HANDOFF.md) has the results and the untested platforms. Capture, navigation, editing, authentication and spreadsheet synchronization are not implemented. Compatibility with phones, Quest, Edge and other computers has not been demonstrated.
 
 The repository is private. Open-source application code is the intended direction; the application license has not been selected. Unity itself remains subject to its own license.
 
@@ -61,7 +61,7 @@ These are targets, not a compatibility claim.
 
 ## Build and run
 
-There are no Unity application build or run commands yet. Google Drive, Sheets and Gemini compatibility is required. The Unity version, rendering approach, backend, credentials and exact integration contracts remain open. Record exact versions, package licenses, setup steps and successful build/device evidence when implementation starts.
+There are no VR-HE application build or run commands yet. The browser prototype's setup, build and test commands are in [its README](prototypes/browser-splat-rendering/README.md). Unity 6.3 LTS 6000.3.15f1 with the URP blank template is approved for the initial prototype only (D031); the long-term Unity version and renderer remain provisional. Google Drive, Sheets and Gemini compatibility is required. The backend, credentials and exact integration contracts remain open. Record exact versions, package licenses, setup steps and successful build/device evidence as implementation continues.
 
 Gemini drafts inventory entries/updates for designated-editor approval before live spreadsheet writes. The supplied examples require mappings for both facilities-audit forms and rack/RU diagrams. Gemini's allowed tasks/data scope, spreadsheet mappings and provider-approval roles also need decisions. Early experiments must establish rendering feasibility and partial-update quality across the requested targets.
 
@@ -73,10 +73,10 @@ Arlen requires **MAX effort** for Claude build work. From this repository, run:
 bash scripts/start-claude.sh
 ```
 
-The [launcher](scripts/start-claude.sh) requests MAX for each session. Check the active level in Claude before starting implementation; see [the handoff](docs/HANDOFF.md). The [first local inspection task](docs/LOCAL_UNITY_INSPECTION.md) gathers Unity versions/modules before project creation. This launches the coding assistant, not a Unity application.
+The [launcher](scripts/start-claude.sh) requests MAX for each session. Check the active level in Claude before starting implementation; see [the handoff](docs/HANDOFF.md). The [local Unity inspection](docs/LOCAL_UNITY_INSPECTION.md) is complete; its findings are in the handoff. This launches the coding assistant, not a Unity application.
 
 ## Working together
 
-ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshots confirm local VR-HE sign-in, cloning into /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration; local Unity tooling and push access still need verification. Use small reviewable changes and record what was planned, implemented and actually tested.
+ChatGPT/Codex access to this repository has been verified as VR-HE. Arlen reported Git 2.43.0 and successful installation of GitHub CLI 2.45.0 on his Linux laptop. His screenshots confirm local VR-HE sign-in, cloning into /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude's November 10 inspection verified the installed Unity tooling: Unity Hub 3.22.6 and Editors 6000.0.84f1, 6000.3.15f1 (6.3 LTS), 6000.6.2f1 and 6000.6.4f1. Only 6000.3.15f1 has both Android and Web support files, and no Editor has iOS support. Installed modules are not tested functionality; see the handoff for what has actually been built and run. Local push access is verified: the inspection commit ff1e070 reached origin/docs/project-foundation from the laptop. Use small reviewable changes and record what was planned, implemented and actually tested.
 
-Do not commit real headend scans, operational spreadsheets, credentials or private attachment data. Use synthetic data for the demo. The existing Unity ignore rules are retained; review them when the Unity project directory is chosen.
+Do not commit real headend scans, operational spreadsheets, credentials or private attachment data. Use synthetic data for the demo. The root Unity ignore rules are anchored to the repository root, so each Unity project folder carries its own scoped .gitignore (see [the browser prototype](prototypes/browser-splat-rendering/.gitignore)).

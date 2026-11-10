@@ -185,6 +185,42 @@ Validation:
 - This commit is the local push test; GitHub history shows whether it reached origin.
 - CLAUDE.md, README.md and PRODUCT_SPEC.md still call Unity tooling and push access unverified. This task's scope was limited to the handoff and this log.
 
+## November 10, 2026 — browser splat-rendering milestone
+
+Human contribution:
+- Arlen approved Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for an initial prototype; the long-term version and renderer stay provisional (D031).
+- He made browser Gaussian-splat rendering the first implementation milestone, with arloopa/UnitySplats as the candidate (D032). He asked for a separate prototype branch, synthetic fixtures, increasing splat counts, two overlapping sections and tests in the installed browsers.
+- His constraints: explicit project paths, no changes to The Veil or its bridge, no automatic AI Assistant or Pipeline packages, no deletions and no new editor.
+
+AI contribution:
+- Claude Code (Opus 5.5, max effort, in the same session as the inspection) found a clean tree on docs/project-foundation, already up to date at ff1e070. It created branch proto/browser-splat-rendering from there.
+- Claude evaluated UnitySplats from its GitHub metadata, source, package dependencies and license notices, and pinned revision 689e0a7dd2acfad813494a205f8ebbe8eee86434.
+- Claude created the Unity project in batch mode from the bundled URP blank template and added UnitySplats and its WebP dependency. It wrote the benchmark scene, setup and build scripts, page template, fixture generator, browser harness and results summarizer. Every Editor run passed the prototype's explicit project path.
+- Claude ran the browser tests and condensed the results. No helper agents were used in this task.
+- Claude updated the stale tooling and push statements in README.md, CLAUDE.md and PRODUCT_SPEC.md, added D031 and D032, and recorded the results in the handoff, test plan and capture/cabinet notes.
+
+MAX verification: the session process runs as claude --effort max from the 2.1.321 binary, with CLAUDE_CODE_EFFORT_LEVEL=max. The model is Opus 5.5 (claude-opus-5-5) with max reasoning effort.
+
+Commands and checks:
+- Disk: 25 GB free before project creation, 23 GB after it, 22 GB after fixtures and 21 GB after builds. Library (3.8 GB), fixtures (331 MB) and the build (61 MB) are all ignored by Git.
+- Setup and two WebGL builds succeeded with 0 errors. The 7 warnings per build were UnitySplats shader notes and Unity's WebGPU library note.
+- Ten browser runs completed. One Chrome smoke run on the first overlap fixture is excluded; four full runs (Chrome twice, Firefox and Brave) and five fresh-page memory runs are summarized. Edge and Chromium are not installed and are untested.
+- git status --ignored confirmed that Library, Logs, UserSettings, IDE files, builds, generated fixtures and raw results are ignored. The tracked summary contains no absolute paths, user names or host names.
+- After the runs, no harness browser process remained and the temporary profile folder was empty. No command was sent to The Veil's Editor.
+
+Results and recommendation, detailed in the handoff's browser milestone section:
+- All three installed browsers rendered correctly over WebGL 2.
+- About 500k splats held 60 fps in Chrome and Brave on this laptop. UnitySplats' main-thread CPU sort limited larger scenes.
+- Overlapping sections were ordered correctly only when merged into one renderer.
+- Recommendation, not a decision: keep UnitySplats as the leading browser candidate on 6.3 LTS and merge overlapping sections. Do not switch to 6000.6.2f1, because the bottleneck is the package's web sort path, not the engine.
+
+Validation:
+- Documentation validation passed: 19 tracked Markdown files (including the prototype README and results summary), 91 resolved internal links (none broken; 29 external links not fetched) and no table-structure errors.
+- git diff --check passed for the 51 hand-written staged files. Unity-serialized YAML (.meta, .asset, .unity) and the template's TutorialInfo files contain trailing spaces by Unity's design and were left as generated.
+- No Library, Temp, build, Logs, UserSettings, IDE, generated-fixture, raw-result, PLY or Python-cache file was staged. A scan of the staged prototype files found no user names, home paths, email addresses or credentials.
+- A final read-only process and port check showed The Veil's Editor still running, with its relay port 9002 listening as before.
+- Not tested: Edge, Windows, macOS, integrated or weaker GPUs, 165 Hz, phones, Quest, real captures, network delivery, long sessions and WebGPU. No acceptance threshold has been agreed.
+
 ## Entry template
 
 For each meaningful change, record:

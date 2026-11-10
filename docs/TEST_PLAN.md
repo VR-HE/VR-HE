@@ -1,6 +1,6 @@
 # Test and acceptance plan
 
-Status: planned checks, November 10, 2026. No application tests or device builds have run.
+Status: planned checks, November 10, 2026. Only the rendering-only browser prototype has run (synthetic scenes on one Linux laptop; see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
 
 ## Current foundation
 
@@ -9,6 +9,8 @@ The initial change contains documentation and ignore-rule updates. Validate inte
 ## Rendering feasibility
 
 Use a representative small synthetic or appropriately authorized scene. Record exact Unity/package versions, graphics backend, device/OS/browser versions, scene size, load time, frame timing, memory and visible artifacts.
+
+The November 10 [browser prototype](../prototypes/browser-splat-rendering/README.md) recorded these for synthetic scenes on one laptop; results are in the handoff. Still to test: Edge, Windows and macOS, weaker and integrated GPUs, a representative real or authorized capture, network delivery, long sessions, phones and Quest.
 
 Set acceptance thresholds with Arlen. Do not invent an FPS, memory, scale or image-quality target and present it as agreed.
 
@@ -19,10 +21,10 @@ Set acceptance thresholds with Arlen. Do not invent an FPS, memory, scale or ima
 | Quest 3 | Capture/view/edit | Not tested |
 | Quest 3S | Capture/view/edit | Not tested |
 | Quest 2 | View/edit | Not tested |
-| Chrome | Browser view/edit | Not tested |
-| Firefox | Browser view/edit | Not tested |
-| Edge | Browser view/edit | Not tested |
-| Brave | Browser view/edit | Not tested |
+| Chrome | Browser view/edit | Rendering only: Chrome 157 rendered synthetic splats on one Linux laptop (RTX 4060 Laptop GPU). View/edit not tested |
+| Firefox | Browser view/edit | Rendering only: Firefox 159 on the same laptop. View/edit not tested |
+| Edge | Browser view/edit | Not installed on the test laptop; not tested |
+| Brave | Browser view/edit | Rendering only: Brave 1.99.55 (Chromium 157) on the same laptop. View/edit not tested |
 
 The role/capability for each test user still determines who can edit. The table does not grant editing to all viewers.
 
@@ -108,7 +110,7 @@ These are planned acceptance checks. Exact roles, Gemini actions and revocation 
 - Test repeat updates and rejection/recovery of a failed or misaligned update.
 - Verify fallback guidance when a broader recapture or reconstruction is required.
 
-No partial-rescan method or quality threshold has been proven.
+No partial-rescan method or quality threshold has been proven. The November 10 browser prototype tested only the drawing order of two synthetic overlapping sections (see the handoff).
 
 ## Built-in guidance
 

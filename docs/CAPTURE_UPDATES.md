@@ -41,6 +41,8 @@ It does not demonstrate VR-HE's desired maintenance workflow, exact phone/Quest 
 
 Inferring a section-based update architecture is a design proposal based on these building blocks. It must be validated with the eventual renderer, reconstruction system and capture devices.
 
+Browser rendering evidence so far (November 10; synthetic sections; UnitySplats over WebGL 2): two overlapping sections drew in the correct depth order only when merged into one asset and renderer. As separate renderers they were ordered as whole objects, and the wrong section showed in the overlap. Showing and hiding sections through the merged asset's active ranges worked without reloading. This tested drawing order only, not registration, capture or seam quality. See [the handoff](HANDOFF.md).
+
 ## Cabinet appearance states and inventory
 
 Cabinet closed/open passes need common coordinates and enough reference views. Update the changed cabinet states together with their local capture/record mappings; unrelated rooms do not inherently need recapture.
