@@ -57,9 +57,15 @@ Build [plain-language guidance](USER_GUIDE_PLAN.md) into user flows. Unity/backe
 
 Cabinet inspection needs a separate appearance/interaction state layer, door-local versus interior anchors, and correctly retired/hidden closed-door geometry. A hybrid 3D door and captured interior is a candidate, not a selected renderer feature.
 
-Gemini-assisted inventory can consume selected evidence frames asynchronously while capture continues. Keep capture/pose context, source evidence, candidate extraction, review/write authority and spreadsheet synchronization as separate responsibilities. No automatic detection accuracy or real-time latency is established.
+Gemini-assisted inventory can consume selected evidence frames asynchronously while capture continues. Keep capture/pose context, source evidence, candidate extraction, designated-editor approval and spreadsheet synchronization as separate responsibilities. No automatic detection accuracy or real-time latency is established.
 
 See [cabinet states](CABINET_STATES.md) and [AI capture inventory](AI_CAPTURE_INVENTORY.md).
+
+## Existing spreadsheet templates
+
+The supplied examples require both field-oriented facilities forms and spatial rack/RU layouts. Maintain explicit template/slot/range mappings alongside stable record IDs; do not derive database identity from visible colour or cell address alone.
+
+Gemini proposals must pass the confirmed designated-editor approval gate before live writes. Native workbook metadata is required to identify formulas, validations, protection and merge/layout rules. See [spreadsheet examples](SPREADSHEET_EXAMPLES.md).
 
 ## Production access policy
 
@@ -86,7 +92,7 @@ Record exact engine/package versions, artifact size, frame timing, peak memory, 
 - Capture versus import for the first demonstrator.
 - Reconstruction location, processing hardware and acceptable wait.
 - Google integration contracts, workbook structure and additional spreadsheet adapter scope.
-- Gemini tasks/data permissions and who may change integration approval policy.
+- Exact capture-assisted inventory fields, additional Gemini data/actions and who may change integration approval policy.
 - Partial-rescan partitioning, registration, replacement and fallback criteria.
 - Storage, company hosting, authentication and role administration.
 - Offline interruption/save recovery, conflict resolution and deletion semantics.

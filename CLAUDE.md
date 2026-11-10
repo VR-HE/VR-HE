@@ -10,6 +10,6 @@ Current state: requirements and developer setup; no Unity application or tested 
 
 Google Drive, Sheets and Gemini compatibility, controlled additional integrations, updateable tours, built-in guidance, browser Q/E/X and VR 6DoF are confirmed requirements. X now restores both normal height and level angle. Arrow movement, mobile movement/look/view/height controls and third-person orbit are required. Partial-rescan feasibility still needs validation; read the updated handoff.
 
-Cabinet open/closed inspection states and Gemini-assisted baseline inventory during capture are requested. Read the new design notes and preserve the unresolved AI review/write policy.
+Cabinet open/closed inspection states and Gemini-assisted baseline inventory during capture are requested. Read the new design notes and preserve the confirmed draft-then-designated-editor-approval policy for AI-generated live spreadsheet writes. Read SPREADSHEET_EXAMPLES.md in docs for the supplied video layouts and native-workbook evidence gaps.
 
 Use the same repository and shared requirements. Do not assume this file grants credentials, tool access or permission to broaden the project scope.

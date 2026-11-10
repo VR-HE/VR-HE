@@ -132,11 +132,20 @@ Verify help can be reopened, shows device-appropriate controls, explains permiss
 - Test blurry/obscured labels, similar devices, open/closed passes and repeat rescans.
 - Verify evidence image, timestamp, cabinet/rack context and units stay with each candidate field.
 - Distinguish nameplate ratings from timestamped displayed readings and derived audit values.
-- Verify the selected review/direct-write policy, editor roles, provider approval and company connection requirements.
+- Verify AI drafts cannot change live spreadsheets before approval, viewers cannot approve, rejection leaves live cells untouched, and approved writes still respect roles/provider/company-connection checks.
 - Verify failed/retried writes do not create duplicate rows or silently replace verified values.
 - Measure capture/processing latency, thermal/memory behavior and network needs on the actual targets.
 
-Field scope, acceptance thresholds, real-time expectations and AI write policy are not selected. No field extraction or device test has run.
+AI approval policy is selected. Field scope, acceptance thresholds, real-time expectations and review UI still need design. No field extraction or device test has run.
+
+## Supplied spreadsheet layout families
+
+- Test approved field writes into synthetic facilities-form equipment slots without replacing formulas, dropdown rules, number/date formats or unrelated values.
+- Test VA/kVA, A, V, W and battery-capacity fields as distinct typed quantities using the destination's intended units.
+- Test rack/RU block placement, occupied spans, categories and literal blank/no-rack/open-rack labels without inferring undocumented meanings.
+- Test multi-RU layout changes against the chosen merge/overlap policy.
+- Verify a colour used for equipment category is not treated as a universal status/permission marker.
+- Native workbook formulas, protection and exact ranges remain unverified; test them after an authorized native copy is available.
 
 ## Claude development launcher
 

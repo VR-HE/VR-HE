@@ -18,6 +18,7 @@ The repository is private. Open-source application code is the intended directio
 - [Built-in user guide plan](docs/USER_GUIDE_PLAN.md): scanning, editing, navigation and finding information.
 - [Cabinet inspection](docs/CABINET_STATES.md): virtual open/closed doors and interior information.
 - [Gemini-assisted capture](docs/AI_CAPTURE_INVENTORY.md): baseline inventory while recording.
+- [Spreadsheet examples](docs/SPREADSHEET_EXAMPLES.md): visual review of the supplied facilities-audit and rack/RU layouts.
 - [Test plan](docs/TEST_PLAN.md): acceptance checks and untested device targets.
 - [Development log](docs/DEVELOPMENT_LOG.md): human/AI contributions and validation evidence.
 - [Shared contributor instructions](AGENTS.md): applies to developers and coding assistants.
@@ -33,7 +34,7 @@ The repository is private. Open-source application code is the intended directio
 - Update tours as sites change; target rescanning only changed sections plus alignment overlap where feasible. This requires a prototype.
 - Include plain-language in-app guidance for scanning, adding information, navigating and finding stored information.
 - Support virtual cabinet open/closed states and information on doors/interiors; prototype aligned local captures or a hybrid movable-door representation.
-- Use Gemini to assist baseline equipment/spreadsheet recording during capture. The AI write/review policy is still to be decided.
+- Use Gemini to assist baseline equipment/spreadsheet recording during capture. AI-generated entries and updates require designated-editor approval before live spreadsheet writes.
 - Provide WASD or arrow-key movement in desktop browsers, with mouse look and first-/third-person views using a generic non-gender humanoid for scale.
 - Third-person cameras support looking/orbiting around the avatar, with behind-avatar follow as the default presentation.
 - iPhone/Android use familiar mobile FPS/third-person movement and look controls, view switching and a separate camera-height up/down control.
@@ -62,7 +63,7 @@ These are targets, not a compatibility claim.
 
 There are no Unity application build or run commands yet. Google Drive, Sheets and Gemini compatibility is required. The Unity version, rendering approach, backend, credentials and exact integration contracts remain open. Record exact versions, package licenses, setup steps and successful build/device evidence when implementation starts.
 
-Gemini's capture-assisted inventory role is requested. The next decision is whether it drafts entries for editor review or writes directly to the live spreadsheet. Gemini's allowed tasks/data scope, spreadsheet mappings and provider-approval roles also need decisions. Early experiments must establish rendering feasibility and partial-update quality across the requested targets.
+Gemini drafts inventory entries/updates for designated-editor approval before live spreadsheet writes. The supplied examples require mappings for both facilities-audit forms and rack/RU diagrams. Gemini's allowed tasks/data scope, spreadsheet mappings and provider-approval roles also need decisions. Early experiments must establish rendering feasibility and partial-update quality across the requested targets.
 
 ## Start Claude Code for development
 

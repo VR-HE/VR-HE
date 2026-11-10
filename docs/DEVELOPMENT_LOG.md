@@ -119,6 +119,24 @@ Validation:
 - The features remain requirements/prototypes to prove; no cabinet-state or Gemini extraction implementation/test exists.
 - The MAX launcher was published separately; actual local MAX still requires verification.
 
+## November 10, 2026 — AI approval selected and spreadsheet examples reviewed
+
+Human contribution:
+- Arlen selected option 1: Gemini drafts entries/updates, with designated-editor approval before live spreadsheet writes.
+- Arlen supplied IMG_3850.mp4 and IMG_3851.mp4 as examples of Google Drive/Sheets files the product should interface with.
+
+AI contribution and evidence scope:
+- ChatGPT/Codex sampled visual frames across the approximately 72-second facilities-audit clip and 36-second rack/RU clip.
+- The review identified bilingual field-oriented equipment sections, units/dropdowns/date cells and displayed calculations in one layout, and colour-coded rack/RU blocks across site tabs in the other.
+- Analysis was of supplied video images; no native workbook/formula/protection read or audio transcription was performed.
+- ChatGPT/Codex recorded generic structural observations and mapping implications. Operational values, actual rack/site identifiers, source screenshots and video files were not committed.
+- No real workbook or Gemini request was modified/executed.
+
+Validation:
+- Documentation validation passed: 18 files, 73 resolved internal Markdown links and no table-structure errors.
+- No workbook adapter, approval UI or AI transcription accuracy test exists yet.
+- Local Claude version/model/active MAX still needs verification.
+
 ## Entry template
 
 For each meaningful change, record:

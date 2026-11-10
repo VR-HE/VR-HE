@@ -59,9 +59,19 @@ No production credentials or workbook contents belong in the source repository. 
 
 Arlen requests baseline equipment/spreadsheet recording while capture proceeds. Candidate entries must use the same stable IDs, local-field rules and provider/role checks as ordinary editing.
 
-Draft/editor-review versus direct-write authority remains unresolved. Repeated frames and closed/open passes must not create duplicate rows. Missing visibility is not a delete request, and an unreadable field must not overwrite an existing verified value with a guess.
+Confirmed: designated-editor approval is required before AI-generated draft entries or updates change the live spreadsheet. Repeated frames and closed/open passes must not create duplicate rows. Missing visibility is not a delete request, and an unreadable field must not overwrite an existing verified value with a guess.
 
 See [AI capture inventory](AI_CAPTURE_INVENTORY.md). No live sheet has been connected.
+
+## Template-aware mapping
+
+The supplied videos show two layout families: facilities-audit forms and rack-elevation/RU diagrams. Do not assume every record is one ordinary row. See [spreadsheet examples](SPREADSHEET_EXAMPLES.md).
+
+Inspect the authorized native workbook before binding exact cells. Identify input/formula cells, number/date formats, dropdown validation, protection, repeated equipment slots and any merged ranges. Preserve those semantics and each workbook's colour legend.
+
+Use stable asset/field identities plus an explicit template/slot/range mapping. Rack diagrams also need rack identity and RU start/end; changing an equipment block can affect layout and must not overwrite another occupied range.
+
+Review approved AI proposals against the intended destination and current data before applying writes; conflict/retry details remain open. Approval does not authorize arbitrary formula/format replacement.
 
 ## Required ecosystem and follow-ups
 
@@ -77,6 +87,7 @@ These choices affect implementation. Do not represent direct editing of a networ
 
 ## Primary documentation starting points
 
+- [Google Sheets cell data](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/cells)
 - [Google Drive API](https://developers.google.com/workspace/drive/api/guides/about-sdk)
 - [Google Sheets metadata](https://developers.google.com/workspace/sheets/api/guides/metadata)
 - [OpenOffice API](https://www.openoffice.org/api/)

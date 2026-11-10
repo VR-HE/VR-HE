@@ -46,7 +46,7 @@ Show discoverable Open door/Close door actions and input equivalents. State-depe
 
 Partial rescans need to update the affected cabinet states and mappings consistently. Equipment hidden behind a closed door is not evidence that it was removed.
 
-Gemini can be tasked with extracting candidate labels from the appropriate captured surfaces; that does not automatically identify every breaker/fuse or authorize spreadsheet changes. See [AI capture inventory](AI_CAPTURE_INVENTORY.md).
+Gemini can be tasked with extracting candidate labels from the appropriate captured surfaces; that does not automatically identify every breaker/fuse or bypass designated-editor approval of AI-generated spreadsheet changes. See [AI capture inventory](AI_CAPTURE_INVENTORY.md).
 
 ## Validation and open choices
 

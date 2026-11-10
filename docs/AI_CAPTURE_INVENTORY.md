@@ -14,7 +14,7 @@ Google documents video understanding and structured responses. These are buildin
 2. Select readable source frames or close-up images while recording continues.
 3. Process candidate labels/visible information asynchronously through an approved Gemini integration.
 4. Produce typed candidate fields with asset/location context, source image/crop, capture time and processing status.
-5. Apply the chosen review/write policy before synchronizing to Google Sheets.
+5. Present the draft to a designated editor; synchronize only approved AI-generated entries/updates to Google Sheets.
 6. Retry/reconcile safely without duplicate records.
 
 Selected close-up frames are a proposed implementation; continuous live video analysis is not a selected requirement or proven path. Define acceptable lag and what can complete after recording.
@@ -41,13 +41,19 @@ Closed/open cabinet passes, repeated video frames and partial rescans require du
 
 Do not overwrite a verified record merely because a new frame is blurred or differently labeled. Follow the confirmed record-local field/template and spreadsheet structural-change rules.
 
-## Review and write authority — decision pending
+## Review and write authority — confirmed option 1
 
-Recommendation: draft candidate rows/fields during capture and have a designated editor confirm them before writes to the live spreadsheet.
+Arlen selected draft-first review. Gemini creates candidate entries/updates during capture, and a designated editor approves before those AI proposals can change the live spreadsheet.
 
-Arlen has not yet chosen draft-review versus direct writing. Exact allowed fields/actions, correction/history, automation limits and sheet permissions remain open. Do not treat this recommendation as a user-selected mandatory approval workflow.
+Proposed review UI shows the current value, proposed value, units, supporting image/context and destination. Editors can correct or reject proposals. Approval granularity/batching, revision/conflict handling, correction/history and exact field scope still need design.
+
+This is an AI-proposal gate, not a new general approval requirement for ordinary manual edits. A viewer must not approve a live write. Apply the normal role/provider/network checks when executing approved changes.
 
 All integration activity must respect provider approval, application roles and production company-network/password requirements. Define capture/job behavior on connection loss. No real company data or credentials are authorized by this design note alone.
+
+## Existing workbook targets
+
+The supplied videos show facilities forms and rack/RU diagrams, not a single flat inventory table. Map approved fields to the intended template slots/ranges, preserving units, formulas and layout. See [spreadsheet examples](SPREADSHEET_EXAMPLES.md).
 
 ## Prototype evidence
 

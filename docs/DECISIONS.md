@@ -31,7 +31,9 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D025 | Confirmed development requirement | Claude implementation/build sessions must use MAX effort | Launch explicitly and verify actual client/model effort; do not silently claim a lower level is MAX |
 | D026 | Confirmed feasibility target | Users can open/close virtual cabinet doors and inspect door-mounted panels and interior information | Prove rendering/selection and attachment behavior; no automatic articulation claim |
 | D027 | User-proposed capture workflow | Record the same cabinet area closed and open, including inner-door/interior views | Start with local state passes and common references; more views may be needed |
-| D028 | Confirmed desired capability | Gemini assists baseline equipment/spreadsheet recording during capture | Field scope, accuracy, review and live-write authority remain open |
+| D028 | Confirmed desired capability | Gemini assists baseline equipment/spreadsheet recording during capture | Editor approval is selected in D029; field scope, accuracy and implementation remain open |
+| D029 | Confirmed; option 1 | Gemini creates drafts; designated editors approve AI-generated entries and updates before live spreadsheet writes | Approval applies to AI proposals; preserve existing ordinary manual-edit behavior |
+| D030 | Supplied integration examples | Facilities-audit forms and rack/RU diagrams shown in two user videos | Use template-aware mappings; native cell/formula/protection details remain unverified |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 
@@ -47,10 +49,12 @@ D004 does not request automatic deletion of downloaded content. D006 does not es
 
 These proposals are not commitments to a particular package or backend.
 
-## Next unresolved primary question
+## Next mapping work
 
-For the requested capture-assisted baseline inventory, should Gemini create drafts for designated-editor review or write directly to the live spreadsheet?
+AI write authority is resolved: Gemini drafts, and a designated editor approves before live spreadsheet writes. Do not ask this question again.
+
+Define the initial field mapping and obtain an authorized native workbook/copy for exact metadata. The two video examples establish layout families, not cell-level integration.
 
 X is resolved: both normal camera height and level viewing angle.
 
-Google Drive, Sheets and Gemini compatibility is confirmed. Subsequent decisions include exact inventory fields, Gemini data/actions, integration-approval roles, workbook scope, mapping, conflicts, latency, formulas and delete/clear/archive behavior. Excel/OpenOffice compatibility needs concrete adapter and release scope; it does not replace the Google requirement.
+Google Drive, Sheets and Gemini compatibility is confirmed. Subsequent decisions include exact inventory fields, review UI, Gemini data/actions, integration-approval roles, workbook scope, mapping, conflicts, latency, formulas and delete/clear/archive behavior. Excel/OpenOffice compatibility needs concrete adapter and release scope; it does not replace the Google requirement.
