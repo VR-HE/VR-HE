@@ -36,6 +36,8 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D030 | Supplied integration examples | Facilities-audit forms and rack/RU diagrams shown in two user videos | Use template-aware mappings; native cell/formula/protection details remain unverified |
 | D031 | Confirmed for the initial prototype | Use the installed Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for the initial VR-HE prototype | The long-term Unity version and renderer stay provisional until browser rendering has been tested |
 | D032 | Confirmed | Browser Gaussian-splat rendering is the first implementation milestone, evaluating arloopa/UnitySplats at a pinned revision with synthetic fixtures, increasing splat counts and two overlapping sections | Keep the milestone to rendering feasibility; a successful build alone is not rendering evidence |
+| D033 | Confirmed browser reference PC | Use Arlen's Panasonic Toughbook FZ-55 work laptop as the weakest browser PC to support | Collect its exact CPU, RAM, GPU and OS/browser versions; the RTX 4060 laptop results do not qualify the Toughbook |
+| D034 | Confirmed frame-rate floors | Browser: 30 fps minimum; VR headsets: 60 fps minimum | Test these as application-rendered frame rates with frame-pacing evidence; headset display refresh and an engineering target are separate. Mobile-phone fps, test resolution, scene/quality/memory budgets and detailed pass criteria remain open |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 
@@ -47,7 +49,7 @@ D004 does not request automatic deletion of downloaded content. D006 does not es
 | Stable record/field/mapping IDs | Avoid incorrect links after names or row positions change | Representation in the spreadsheet |
 | Shared logical editing commands with input adapters | Consistent behavior across mouse, touch and VR | Exact touch and controller interactions |
 | Explicit demo/production configuration boundary | Prevent demo exemptions from leaking into production | Deployment and enforcement design |
-| Small feasibility scene on weakest targets | Expose rendering constraints early | Scene, renderer candidates and acceptance thresholds |
+| Small feasibility scene on weakest targets | Expose rendering constraints early | D033/D034 select the browser reference PC and browser/VR fps floors; scene, memory/quality budgets, phone fps and detailed acceptance criteria remain open |
 
 These proposals are not commitments to a particular package or backend.
 

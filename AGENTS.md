@@ -14,7 +14,7 @@ Confirmed user decisions take precedence over proposals. Current explicit user i
 
 ## Working state
 
-This repository currently contains requirements and developer setup only. Do not imply that a Unity app, splat capture/rendering pipeline, backend, spreadsheet integration or security system is implemented. The requested device matrix is not a tested support matrix.
+This repository contains requirements, developer setup and a rendering-only browser prototype with results on one Linux laptop. The full VR-HE application, capture pipeline, backend, spreadsheet integration and security system are not implemented. Consult docs/HANDOFF.md for tested conditions; the requested device matrix is not a tested support matrix.
 
 Ask one primary product question at a time. Explain meaningful consequences in plain language, record the answer and resolve important follow-ups before advancing. Continue independent authorized work while a question is pending.
 
@@ -41,6 +41,8 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - iPhone/Android require familiar mobile FPS/third-person movement/look controls, view switching and a separate camera-height up/down control.
 - Third-person view requires looking/orbiting around the avatar, not only a fixed behind-avatar camera. Preserve VR 6DoF when designing any VR camera behavior.
 - VR must support full 6DoF; browser camera commands do not authorize overriding tracked headset pose.
+- The browser reference PC is Arlen's Panasonic Toughbook FZ-55 work laptop; its exact CPU, RAM, GPU and OS/browser versions are still unverified (D033).
+- Arlen's minimum frame rates are 30 fps for the browser and 60 fps for VR headsets (D034). Report application-rendered fps separately from headset display Hz and synthesized/reprojected frames. The initial 72 fps / 72 Hz Quest engineering target is a recommendation, not a replacement for his floor; see docs/TEST_PLAN.md.
 
 ## Claude build effort
 

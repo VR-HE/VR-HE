@@ -221,6 +221,21 @@ Validation:
 - A final read-only process and port check showed The Veil's Editor still running, with its relay port 9002 listening as before.
 - Not tested: Edge, Windows, macOS, integrated or weaker GPUs, 165 Hz, phones, Quest, real captures, network delivery, long sessions and WebGPU. No acceptance threshold has been agreed.
 
+## November 10, 2026 — reference PC and frame-rate floors
+
+Human contribution:
+- Arlen selected option 1: his Panasonic Toughbook FZ-55 work laptop is the weakest browser PC to support (D033).
+- He accepted 30 fps for the browser and set 60 fps as the floor for VR headsets (D034). He supplied no exact Toughbook CPU/RAM/GPU or new device measurements.
+
+AI contribution:
+- ChatGPT/Codex recorded the decisions in the specification, decision record, shared instructions, test plan and handoff, and corrected the stale shared-instructions statement that the repository contained setup only.
+- Codex checked Meta's specific performance VRC and display-refresh documentation. It preserved the user floors and recorded 72 application-rendered fps at 72 Hz as the recommended first Quest operating target, separating app frames from display refresh and synthesized frames.
+- The prototype source and existing measurements remain unchanged. The next hardware input is the actual Toughbook configuration; launcher portability, compact formats and sort-refresh experiments remain future work.
+
+Validation:
+- Checked 6 edited Markdown files: 29 internal links resolve against the tracked tree, table structure and whitespace pass, and all 6 baseline file hashes match commit 3257f73. Existing benchmark source and results were not modified.
+- Documentation only: no Unity build, Toughbook/browser run, headset run, performance optimization or local laptop operation was performed for this update.
+
 ## Entry template
 
 For each meaningful change, record:

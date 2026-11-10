@@ -12,7 +12,27 @@ Use a representative small synthetic or appropriately authorized scene. Record e
 
 The November 10 [browser prototype](../prototypes/browser-splat-rendering/README.md) recorded these for synthetic scenes on one laptop; results are in the handoff. Still to test: Edge, Windows and macOS, weaker and integrated GPUs, a representative real or authorized capture, network delivery, long sessions, phones and Quest.
 
-Set acceptance thresholds with Arlen. Do not invent an FPS, memory, scale or image-quality target and present it as agreed.
+### Confirmed reference PC and frame-rate floors
+
+Arlen confirmed these inputs on November 10 (D033/D034):
+
+| Platform | Confirmed reference / minimum | Evidence still needed |
+| --- | --- | --- |
+| Desktop browser | Panasonic Toughbook FZ-55 work laptop; 30 fps floor (33.3 ms per frame) | Exact CPU/RAM/GPU, OS/browser versions, resolution, representative content and actual runs |
+| VR headset | Quest 2+ viewing target; 60 fps floor (16.7 ms per application-rendered frame) | Standalone device runs, frame pacing, display refresh, CPU/GPU time and thermal behavior |
+| iPhone / Android | Requested device targets remain unchanged; no phone fps floor selected | Named Android reference, device runs and a separate phone performance decision |
+
+Floors are requirements, not results. Preserve the measured RTX 4060 laptop results as historical evidence; do not infer a Toughbook splat budget from them. Report mean frame rate together with frame-time percentiles, stalls and time below the agreed floor during representative movement and record-panel interaction. Mark loading separately rather than hiding it in a run-wide average. Resolution, visual quality, memory/content budgets, test duration and the detailed pass/fail rule remain to be agreed.
+
+### Headset refresh and proposed operating target
+
+Source check, November 10: [Meta VRC.Quest.Performance.1](https://developers.meta.com/vr/resources/vrc-quest-performance-1/) permits a 60 fps rendering minimum and specifies allowed interactive display rates beginning at 72 Hz. [Meta's display-refresh guidance](https://developers.meta.com/vr/documentation/unity/unity-set-disp-freq/) reserves 60 Hz for media apps and calls for sustaining the requested rate.
+
+Engineering recommendation: start Quest tests at 72 Hz and aim for 72 application-rendered fps (13.9 ms per frame), preserving Arlen's 60 fps floor. This is not a user-selected steady 60 Hz mode or a guarantee of comfort/store acceptance. Log application fps, actual/requested display Hz, CPU/GPU frame times and missed frames separately. Do not count compositor/reprojection-generated frames toward the application-rendered floor; a lower native rate using Application SpaceWarp would require a separate explicit decision.
+
+### Next browser hardware gate
+
+Collect the actual Toughbook configuration and test the same synthetic benchmark there, starting with Edge and Chrome if available. The automatic launcher currently uses Linux executable paths and POSIX cleanup and has no Edge option; adapt/package it and verify Windows behavior before presenting it as a tested Windows launcher. A manual local-server route is a separate path that also needs a real Windows check. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
 
 | Target | Requested capability | Current evidence |
 | --- | --- | --- |

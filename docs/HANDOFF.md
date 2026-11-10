@@ -180,7 +180,13 @@ Recommendation, not a decision:
 - Avoid runtime SH3 PLY decoding in browsers (1.7 GB peak at 500k splats). Test the compact SOG or SPZ formats, or lower SH degrees, next.
 - If the agreed target needs much more than about 500k splats per view at 60 fps on target hardware, the lever is the sort, not the engine version. Moving it to a Web Worker or a WebGPU compute pass would mean changing or forking UnitySplats; neither option has been tested.
 
-Next step: agree browser acceptance targets with Arlen: the weakest PC to support, the minimum frame rate and the expected splat count per view. Then run this unchanged build on that PC in Edge and Chrome. The harness's serve mode needs only Python 3 plus the build and fixtures; it has not been run on Windows.
+Confirmed after the prototype review (D033/D034):
+- Browser reference PC: Arlen's Panasonic Toughbook FZ-55 work laptop.
+- Minimum frame rates: 30 fps for the browser; 60 fps for VR headsets. These are requirements, not measured Toughbook/headset results.
+- CPU, RAM, GPU and OS/browser versions for that Toughbook are still unknown. Phone fps, representative capture/content size, resolution, memory/quality budgets and detailed pass criteria remain open.
+- For Quest, keep application-rendered fps separate from display refresh and synthesized frames. The initial 72 fps at 72 Hz operating target is an engineering recommendation; it does not replace the user floor. Sources and checks are in [the test plan](TEST_PLAN.md).
+
+Next step: collect the actual Toughbook configuration, then prepare a synthetic benchmark package for testing on it, starting with Edge and Chrome if available. The existing auto-launcher uses Linux paths and POSIX process cleanup and has no Edge option; Windows behavior needs adaptation and actual verification. Its manual serve route has not been tested on Windows either. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files/preloaded range switches as proof of low-memory partial-rescan streaming.
 
 ## Next mapping work
 
@@ -215,7 +221,7 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 - Application license and third-party dependencies are undecided.
 - No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
 - Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested.
-- No Android reference device or performance/quality acceptance threshold is selected.
+- The Toughbook FZ-55 browser reference and 30 fps browser / 60 fps VR floors are selected (D033/D034), but its exact configuration and performance are unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
 - Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.
 - Spreadsheet videos establish visible layouts only. Exact formulas, validation, protection, merged ranges and cell mappings have not been inspected in native workbooks.
