@@ -318,6 +318,22 @@ Validation:
 - Checked 9 edited Markdown files: 64 internal links resolve, tables/whitespace pass, and all 9 baseline file hashes match commit 023951f. Existing benchmark code, generated bundle and measurements are unchanged.
 - Documentation only. No benchmark code, bundle, launcher or recorded measurement changed, and no test or device access was performed.
 
+## November 10, 2026 — reviewed real Windows Edge and Chrome baselines
+
+Human contribution:
+- Arlen ran the existing bundle on his personal Windows 11 gaming PC and uploaded VRHE-results-20261110-212233.zip. The company Toughbook was not tested.
+
+AI contribution:
+- ChatGPT/Codex reviewed the immutable archive, validated CRCs and case/summary consistency, recomputed FPS from all frame arrays, compared image hashes and visually inspected representative synthetic screenshots.
+- Codex recorded compact metrics and selected screenshots under TestResults/windows-personal-20261110 and updated stale Windows/Edge status statements. Raw results, the archive and full-size PNGs remain outside Git.
+- Both native Windows records show 3840x2160 @ 30 Hz. All cases are near 30 fps while measured 250k CPU work is about 9 ms; display-paced scheduling is the leading explanation. Higher-refresh capacity remains unmeasured.
+- Both runs completed with all eight expected overlap outcomes, no page-console errors, no recorded interval >=36 ms, and reported cleanup success. Expected outcomes include the known separate-renderer ordering errors.
+- The source inspection explains the likely Edge shutdown-reset logging, and the unrounded values explain misleading <30 markers. No cleanup fix, rounding fix, benchmark setting, bundle rebuild or device operation was performed.
+
+Validation:
+- Checked 9 edited/new Markdown files and one compact JSON report: 69 internal links resolve, tables/whitespace and JSON syntax pass, and all 8 baseline hashes match 8f68545. New report text contains no home-folder path or e-mail address. All 22 case/summary pairs and recomputed frame-rate arrays agree; the source archive passes every CRC check.
+- Evidence review only: no new browser, Windows, headset or company-device test was executed by Codex. Archive SHA-256 is 62be2a96730f29f79c8da69c889a6090bbebf3ca0e7babc25af87dc639ca8b2c.
+
 ## Entry template
 
 For each meaningful change, record:

@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.18; browser reference hardware and fps floors recorded; company-device testing awaits authorization and the next host is a personal Windows 11 PC. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
+Status: requirements baseline 0.19; personal Windows Edge/Chrome baselines reviewed at a recorded 30 Hz display mode; company-device testing awaits authorization. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
 Updated: November 10, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -95,11 +95,11 @@ Unity's current web documentation lists desktop Chrome, Firefox and Edge, plus S
 
 Treat aras-p/UnityGaussianSplatting as a candidate/reference, not a proven solution for this device matrix. Recheck its current platform support, graphics-backend requirements, maintenance status and license before selecting any dependency. No renderer has been selected for VR-HE.
 
-The first tested candidate is arloopa/UnitySplats (MIT; pinned revision 689e0a7). On November 10 it rendered synthetic splats over WebGL 2 in Chrome, Firefox and Brave on one Linux laptop with an RTX 4060 Laptop GPU. Its web path sorts splats on the browser's main thread, which limited frame rate as splat counts grew. Overlapping sections drew in the correct order only when merged into one renderer. Edge, Windows, macOS, phones, Quest, weaker hardware and real captures are untested. See [the handoff](HANDOFF.md) for results.
+The first tested candidate is arloopa/UnitySplats (MIT; pinned revision 689e0a7). On November 10 it rendered synthetic splats over WebGL 2 in Chrome, Firefox and Brave on one Linux laptop with an RTX 4060 Laptop GPU. Its web path sorts splats on the browser's main thread, which limited frame rate as splat counts grew. Overlapping sections drew in the correct order only when merged into one renderer. Subsequent Edge/Chrome runs on the personal Windows 11 PC completed; [the reviewed report](../prototypes/browser-splat-rendering/TestResults/windows-personal-20261110/README.md) identifies a recorded 30 Hz display mode, complete data and the same overlap limitations. macOS, phones, Quest, weaker hardware and real captures remain untested. See [the handoff](HANDOFF.md) for results.
 
 Arlen selected his Panasonic Toughbook FZ-55 work laptop as the minimum browser reference PC (D033), with 30 fps as the browser floor and 60 fps as the VR headset floor (D034). His November 10 Task Manager photos identify an Intel Core i5-8365U (4 cores, 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. Exact OS/browser versions and browser-backend behavior are unverified. Hardware identification does not establish performance; no Toughbook benchmark or headset run has occurred. Report application-rendered fps separately from headset display refresh. See [the test plan](TEST_PLAN.md) for the proposed Quest operating target and validation details.
 
-Testing availability (D035): Arlen cannot execute the benchmark on his company Toughbook without company authorization, which has not been provided. His personal Windows 11 VR gaming PC is the next available browser-test host. The Toughbook remains the requested minimum reference; its performance and all standalone Quest behavior remain unverified. Record personal-PC results under that machine's actual configuration rather than presenting them as minimum-hardware qualification.
+Testing availability (D035): Arlen cannot execute the benchmark on his company Toughbook without company authorization, which has not been provided. His personal Windows 11 VR gaming PC completed the first Edge/Chrome baselines; a higher-refresh repeat is the next diagnostic step. The Toughbook remains the requested minimum reference; its performance and all standalone Quest behavior remain unverified. Record personal-PC results under that machine's actual configuration rather than presenting them as minimum-hardware qualification.
 
 Early rendering work should therefore test the weakest required devices and browser path using a representative small headend scene before building a large editing system around a specific renderer.
 

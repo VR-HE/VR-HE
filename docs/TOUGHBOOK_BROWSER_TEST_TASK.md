@@ -1,6 +1,6 @@
 # Next local task: Toughbook browser test bundle
 
-Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only. Company authorization is required for the work Toughbook and has not been provided. The next available execution host is Arlen's personal Windows 11 VR gaming PC (D035), using the existing bundle. See the handoff for current steps; all real Windows and Toughbook results remain pending.
+Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only. Company authorization is required for the work Toughbook and has not been provided. Arlen completed Edge/Chrome baselines on his personal Windows 11 VR gaming PC (D035) using the existing bundle; the uploaded archive was reviewed. See the handoff for the recorded 30 Hz display finding and next diagnostic step. Higher-refresh Windows capacity and all Toughbook results remain pending.
 
 ## Context and target
 

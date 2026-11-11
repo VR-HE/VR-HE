@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "evidence": "Reviewed user-uploaded archive; no new browser or device run was executed in the review workspace",
+  "archive": {
+    "name": "VRHE-results-20261110-212233.zip",
+    "sha256": "62be2a96730f29f79c8da69c889a6090bbebf3ca0e7babc25af87dc639ca8b2c",
+    "crc_valid": true,
+    "entries": 109,
+    "unpacked_bytes": 13076034
+  },
+  "configuration": {
+    "os": "Windows 11 Home 26H2",
+    "windows": {
+      "product": "Windows 11 Home",
+      "edition": "Core",
+      "display_version": "26H2",
+      "build": "26300.9711",
+      "installation_type": "Client"
+    },
+    "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+    "logical_processors": 16,
+    "ram_gib_reported": 31.2,
+    "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "canvas": [
+      1280,
+      720
+    ],
+    "quality": "Mobile",
+    "render_scale": 1,
+    "display_mode": "3840x2160 @ 30 Hz",
+    "bundle_source_commit": "7d077329695f9b0a1fbc835fd8dfa2c96d0d9f89"
+  },
+  "checks": {
+    "case_summary_matches": 22,
+    "frame_rate_recomputed_cases": 22,
+    "pairwise_identical_pngs": 11,
+    "case_artifacts_present": true
+  },
+  "units": {
+    "cpu_ms": "Main-thread frame start to end of URP; GPU execution unmeasured",
+    "sort_stage_ms": "CPU sort plus order upload and draw submission",
+    "heap_mib": "Allocated WebAssembly linear-memory capacity, not total browser RAM",
+    "frame_timer": "About 1 ms resolution"
+  },
+  "runs": [
+    {
+      "run": "results/tb-20261110-210406-edge-baseline",
+      "browser": "edge",
+      "version": "Microsoft Edge 155.0.4283.45",
+      "display": "3840x2160 @ 30 Hz",
+      "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+      "ram_gb": 31.2,
+      "cleanup": {
+        "leftover_processes": [],
+        "profile_deleted": true
+      },
+      "outcome": "done",
+      "app_console_errors": 0,
+      "cases": [
+        {
+          "case": "overlap_merged_single_renderer",
+          "frames": 91,
+          "fps": 29.993408042,
+          "cpu_ms": 3.495,
+          "sort_stage_ms": 2.945,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_separate_renderers",
+          "frames": 90,
+          "fps": 30,
+          "cpu_ms": 3.5,
+          "sort_stage_ms": 2.944,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "blue_B",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_separate_A_forced_last",
+          "frames": 90,
+          "fps": 30,
+          "cpu_ms": 3.522,
+          "sort_stage_ms": 3,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "backdrop_A"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__only_A",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 3.222,
+          "sort_stage_ms": 2.778,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "backdrop_A"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__only_B",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 1.067,
+          "sort_stage_ms": 0.556,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "background",
+            "shared_band": "blue_B",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__A_and_B",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 3.622,
+          "sort_stage_ms": 2.978,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__cleared",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 3.622,
+          "sort_stage_ms": 2.756,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges",
+          "frames": 91,
+          "fps": 30.003297066,
+          "cpu_ms": 3.505,
+          "sort_stage_ms": 2.989,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "scale_25000",
+          "frames": 181,
+          "fps": 29.996685449,
+          "cpu_ms": 1.116,
+          "sort_stage_ms": 0.674,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {}
+        },
+        {
+          "case": "scale_100000",
+          "frames": 180,
+          "fps": 30,
+          "cpu_ms": 3.394,
+          "sort_stage_ms": 3.228,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {}
+        },
+        {
+          "case": "scale_250000",
+          "frames": 180,
+          "fps": 30,
+          "cpu_ms": 9.061,
+          "sort_stage_ms": 8.906,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 198.75,
+          "regions": {}
+        }
+      ]
+    },
+    {
+      "run": "results/tb-20261110-211805-chrome-baseline",
+      "browser": "chrome",
+      "version": "Google Chrome 155.0.8059.82",
+      "display": "3840x2160 @ 30 Hz",
+      "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+      "ram_gb": 31.2,
+      "cleanup": {
+        "leftover_processes": [],
+        "profile_deleted": true
+      },
+      "outcome": "done",
+      "app_console_errors": 0,
+      "cases": [
+        {
+          "case": "overlap_merged_single_renderer",
+          "frames": 91,
+          "fps": 30.003297066,
+          "cpu_ms": 3.22,
+          "sort_stage_ms": 2.945,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_separate_renderers",
+          "frames": 91,
+          "fps": 30.003297066,
+          "cpu_ms": 3.187,
+          "sort_stage_ms": 3.011,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "blue_B",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_separate_A_forced_last",
+          "frames": 90,
+          "fps": 29.990003332,
+          "cpu_ms": 3.133,
+          "sort_stage_ms": 2.9,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "backdrop_A"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__only_A",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 2.911,
+          "sort_stage_ms": 2.667,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "backdrop_A"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__only_B",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 0.867,
+          "sort_stage_ms": 0.667,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "background",
+            "shared_band": "blue_B",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__A_and_B",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 3.356,
+          "sort_stage_ms": 3,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges__cleared",
+          "frames": 45,
+          "fps": 30,
+          "cpu_ms": 3.356,
+          "sort_stage_ms": 3,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "overlap_merged_active_ranges",
+          "frames": 90,
+          "fps": 30,
+          "cpu_ms": 3.078,
+          "sort_stage_ms": 2.889,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {
+            "a_only": "red_A",
+            "shared_band": "red_A",
+            "b_only": "blue_B"
+          }
+        },
+        {
+          "case": "scale_25000",
+          "frames": 180,
+          "fps": 29.995000833,
+          "cpu_ms": 1.289,
+          "sort_stage_ms": 0.811,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {}
+        },
+        {
+          "case": "scale_100000",
+          "frames": 180,
+          "fps": 30,
+          "cpu_ms": 3.661,
+          "sort_stage_ms": 3.35,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 138,
+          "regions": {}
+        },
+        {
+          "case": "scale_250000",
+          "frames": 180,
+          "fps": 30,
+          "cpu_ms": 9.011,
+          "sort_stage_ms": 8.8,
+          "p95_ms": 34,
+          "max_ms": 34,
+          "slow36": 0,
+          "stalls100": 0,
+          "heap_mib": 198.75,
+          "regions": {}
+        }
+      ]
+    }
+  ],
+  "png_sha256": {
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_active_ranges.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_active_ranges__A_and_B.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_active_ranges__cleared.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_active_ranges__only_A.png": "3bd6359045f56f555ec8740ca47372b4ebf007f5135394e79e2301b57dc110ab",
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_active_ranges__only_B.png": "037f32f230c51bb8d4e1b19cad8bfcbbd83842e436722af213421d6b5b74db19",
+    "results/tb-20261110-210406-edge-baseline/overlap_merged_single_renderer.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-210406-edge-baseline/overlap_separate_A_forced_last.png": "5f5e4c1d214d600449926cd0bc048cdbda747b2d9882ced5ec482ec456255dbc",
+    "results/tb-20261110-210406-edge-baseline/overlap_separate_renderers.png": "297a1958d89a9172ea0ba060c8206f7d0d4e988e153da6f53d731d261b264d5e",
+    "results/tb-20261110-210406-edge-baseline/scale_100000.png": "d1f2761d2175a6552b3e935fa0250132c22805ff8846c9d1523b84713e425a3d",
+    "results/tb-20261110-210406-edge-baseline/scale_25000.png": "f948b33983bbb6df03a2eace0ea9cc457f90c7752e5786d48288e660d790c059",
+    "results/tb-20261110-210406-edge-baseline/scale_250000.png": "a53d71682162c9e101b61e456a45c443daa7854fb460b42161e1a0aa0f6e7c30",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_active_ranges.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_active_ranges__A_and_B.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_active_ranges__cleared.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_active_ranges__only_A.png": "3bd6359045f56f555ec8740ca47372b4ebf007f5135394e79e2301b57dc110ab",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_active_ranges__only_B.png": "037f32f230c51bb8d4e1b19cad8bfcbbd83842e436722af213421d6b5b74db19",
+    "results/tb-20261110-211805-chrome-baseline/overlap_merged_single_renderer.png": "ac595685120bf2956b0cd75c310cc57285540281cb9bc2fa07f7c1279aac9c8a",
+    "results/tb-20261110-211805-chrome-baseline/overlap_separate_A_forced_last.png": "5f5e4c1d214d600449926cd0bc048cdbda747b2d9882ced5ec482ec456255dbc",
+    "results/tb-20261110-211805-chrome-baseline/overlap_separate_renderers.png": "297a1958d89a9172ea0ba060c8206f7d0d4e988e153da6f53d731d261b264d5e",
+    "results/tb-20261110-211805-chrome-baseline/scale_100000.png": "d1f2761d2175a6552b3e935fa0250132c22805ff8846c9d1523b84713e425a3d",
+    "results/tb-20261110-211805-chrome-baseline/scale_25000.png": "f948b33983bbb6df03a2eace0ea9cc457f90c7752e5786d48288e660d790c059",
+    "results/tb-20261110-211805-chrome-baseline/scale_250000.png": "a53d71682162c9e101b61e456a45c443daa7854fb460b42161e1a0aa0f6e7c30"
+  },
+  "selected_screenshots": [
+    {
+      "file": "overlap_merged_single_renderer.jpg",
+      "sha256": "16c60533c051f3078fac61efa4aa3c78fc1126a789db9b1accbe927d380ecf5b"
+    },
+    {
+      "file": "overlap_separate_A_forced_last.jpg",
+      "sha256": "c456ae7cd4051bca9da5fd8c39320d2e9017f2a33b6069e1948a186019f875c3"
+    }
+  ],
+  "limitations": [
+    "One personal Windows PC; company Toughbook authorization pending",
+    "30 Hz display-paced short baselines; uncapped performance unmeasured",
+    "Synthetic SH0 scenes only; phone/standalone Quest and full application untested",
+    "Chrome process stdout includes background-service diagnostics despite zero page-console errors"
+  ],
+  "followups": [
+    "Check the actual browser display and supported refresh modes",
+    "Repeat unchanged baselines at a supported 60 Hz or higher outside OneDrive",
+    "Handle expected peer resets narrowly during cleanup; preserve unexpected errors",
+    "Clarify <30 labels around floating-point/timer precision without weakening the user floor"
+  ]
+}

@@ -1,6 +1,6 @@
 # Test and acceptance plan
 
-Status: planned checks, November 10, 2026. Only the rendering-only browser prototype has run (synthetic scenes on one Linux laptop; see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
+Status: planned checks, November 10, 2026. Only the rendering-only browser prototype has run (synthetic scenes on one Linux laptop and one personal Windows 11 PC; see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
 
 ## Current foundation
 
@@ -10,7 +10,7 @@ The initial change contains documentation and ignore-rule updates. Validate inte
 
 Use a representative small synthetic or appropriately authorized scene. Record exact Unity/package versions, graphics backend, device/OS/browser versions, scene size, load time, frame timing, memory and visible artifacts.
 
-The November 10 [browser prototype](../prototypes/browser-splat-rendering/README.md) recorded these for synthetic scenes on one laptop; results are in the handoff. Still to test: Edge, Windows and macOS, weaker and integrated GPUs, a representative real or authorized capture, network delivery, long sessions, phones and Quest.
+The November 10 [browser prototype](../prototypes/browser-splat-rendering/README.md) recorded these for synthetic scenes on one laptop; results are in the handoff. Personal Windows Edge/Chrome baselines are now reviewed in [the Windows results](../prototypes/browser-splat-rendering/TestResults/windows-personal-20261110/README.md). Still to test: higher-refresh Windows performance, macOS, weaker and integrated GPUs, a representative real or authorized capture, network delivery, long sessions, phones and Quest.
 
 ### Confirmed reference PC and frame-rate floors
 
@@ -47,7 +47,7 @@ Engineering recommendation: start Quest tests at 72 Hz and aim for 72 applicatio
 
 ### Next browser hardware gate
 
-The hardware inventory above is available. [The local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) is done: a Windows Edge/Chrome test bundle of the same synthetic benchmark is prepared, as described in the handoff's bundle section. It was checked on Linux and under Wine emulation only. Under D035, execution on the company Toughbook is blocked pending company authorization. Next, use Arlen's personal Windows 11 VR gaming PC, Edge first, then Chrome. This can validate the launchers, real browsers, cleanup and rendering on that actual configuration; it cannot qualify the Toughbook or standalone Quest. Preserve the 30 fps browser floor, record actual hardware/OS/browser facts, and keep the Toughbook result pending. The bundle's name or run prefix may mention Toughbook; classify results by the actual test machine. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
+The hardware inventory above is available. [The local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) is done: a Windows Edge/Chrome test bundle of the same synthetic benchmark is prepared, as described in the handoff's bundle section. It was checked on Linux and under Wine emulation only. Under D035, execution on the company Toughbook is blocked pending company authorization. Arlen has completed those personal Windows Edge/Chrome baselines. Both report 3840x2160 @ 30 Hz and roughly 30 fps, with measured 250k CPU work near 9 ms. Next, confirm the browser display and repeat unchanged baselines at a supported 60 Hz or higher outside OneDrive if available; otherwise identify the display/connection setup first. These results do not qualify the Toughbook or standalone Quest. Preserve the 30 fps browser floor, record actual hardware/OS/browser facts, and keep the Toughbook result pending. The bundle's name or run prefix may mention Toughbook; classify results by the actual test machine. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
 
 | Target | Requested capability | Current evidence |
 | --- | --- | --- |
@@ -56,9 +56,9 @@ The hardware inventory above is available. [The local packaging task](TOUGHBOOK_
 | Quest 3 | Capture/view/edit | Not tested |
 | Quest 3S | Capture/view/edit | Not tested |
 | Quest 2 | View/edit | Not tested |
-| Chrome | Browser view/edit | Rendering only: Chrome 157 rendered synthetic splats on one Linux laptop (RTX 4060 Laptop GPU). View/edit not tested |
+| Chrome | Browser view/edit | Rendering only: Chrome 157 on the Linux laptop and Chrome 155.0.8059.82 on the personal Windows 11 PC. Windows baseline is 30 Hz display-paced; view/edit not implemented |
 | Firefox | Browser view/edit | Rendering only: Firefox 159 on the same laptop. View/edit not tested |
-| Edge | Browser view/edit | Not installed on the development laptop; not tested. The prepared bundle's next Edge run is on the personal Windows 11 PC; company Toughbook execution awaits authorization |
+| Edge | Browser view/edit | Edge 155.0.4283.45 rendered the synthetic baseline on the personal Windows 11 PC at a recorded 30 Hz display mode. View/edit and company Toughbook qualification remain open |
 | Brave | Browser view/edit | Rendering only: Brave 1.99.55 (Chromium 157) on the same laptop. View/edit not tested |
 
 The role/capability for each test user still determines who can edit. The table does not grant editing to all viewers.

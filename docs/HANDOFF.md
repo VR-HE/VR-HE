@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone, Quest or Edge test has run. A Windows Edge/Chrome test bundle for the Toughbook reference PC is prepared but has not run on Windows (see the bundle section below). Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
+There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone or Quest test has run. The prepared Windows bundle completed Edge/Chrome baselines on the personal Windows 11 PC; its recorded 30 Hz display mode limits performance interpretation (see the reviewed Windows results below). Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
 
 ## Read in this order
 
@@ -190,7 +190,7 @@ The Toughbook browser-test bundle requested next is prepared; see the following 
 
 ## Toughbook browser test bundle — November 10
 
-Claude Code carried out [the packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) on Arlen's development laptop. The ZIP has not run on Windows, so nothing in this section is a Toughbook result.
+Claude Code carried out [the packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) on Arlen's development laptop. At packaging signoff the ZIP had not run on Windows. Subsequent personal-PC runs are recorded below; no Toughbook result is claimed.
 
 The ZIP (ignored by Git, on the development laptop):
 - Path: ~/Projects/VR-HE/prototypes/browser-splat-rendering/Bundles/VRHE-Toughbook-Browser-Test-20261110-7d07732.zip
@@ -211,7 +211,7 @@ Privacy:
 
 Toughbook requirements: Windows 10 or 11, Microsoft Edge and/or Google Chrome, at least 0.3 GB free disk space (1 GB recommended), no administrator rights and nothing to install. An installed Python 3.8 or newer is used if present, otherwise the bundled one.
 
-Current test-host constraint (D035): Arlen needs company authorization before executing the benchmark on his work Toughbook and does not have it. Use his personal Windows 11 VR gaming PC for the next run. Keep the Toughbook minimum reference and 30 fps floor unchanged; this run can establish only the personal PC's Windows/browser behavior and performance.
+Current test-host constraint (D035): Arlen needs company authorization before executing the benchmark on his work Toughbook and does not have it. Initial Edge/Chrome baselines on his personal Windows 11 VR gaming PC are now reviewed below. Keep the Toughbook minimum reference and 30 fps floor unchanged; this run can establish only the personal PC's Windows/browser behavior and performance.
 
 Arlen's steps on his personal Windows 11 PC:
 1. Transfer the existing ZIP from the Linux development laptop into Downloads on the personal PC using an ordinary permitted method, such as USB. Leave Windows security protections enabled.
@@ -246,7 +246,20 @@ Still needs the Toughbook:
 
 Wine is emulation, and the mock browser is not a browser.
 
-Next step: Arlen runs the existing bundle on his personal Windows 11 VR gaming PC and brings back the results ZIP. The bundle filename and run prefix may still say Toughbook; label the evidence by the actual Windows PC and recorded hardware. Copy runs into TestResults/raw, summarize them with Tools/summarize_results.py, and describe them against the 30 fps browser floor together with frame pacing and stalls. The company Toughbook run is deferred until company authorization is explicitly confirmed; do not suggest a different launcher or transfer route as a workaround. Personal-PC results do not qualify the Toughbook or standalone Quest. Detailed pass criteria remain open, and compact files or preloaded range switches do not prove low-memory partial-rescan streaming.
+## Reviewed personal Windows results — November 10
+
+Arlen supplied a collected ZIP containing completed Edge 155.0.4283.45 and Chrome 155.0.8059.82 baselines. [The report and compact metrics](../prototypes/browser-splat-rendering/TestResults/windows-personal-20261110/README.md) preserve archive provenance and selected synthetic screenshots.
+
+- Actual host: Ryzen 7 7800X3D, native RAM report 31.2 GiB, RTX 5070 Ti through ANGLE / Direct3D 11, Windows 11 Home 26H2 build 26300.9711.
+- Both Windows records show **3840x2160 @ 30 Hz**. All cases are near 30 fps, including the lightest scenes; 250k CPU work averages 9.06 ms (Edge) and 9.01 ms (Chrome). Display pacing is the leading explanation, not measured uncapped capacity.
+- All 22 case records match their summaries, frame arrays reproduce FPS, and corresponding PNGs are byte-identical across browsers. All eight expected overlap outcomes match in each run; the known separate-renderer errors remain.
+- There are no page-console errors or measured intervals of 36 ms or longer. Peak allocated WebAssembly capacity is 198.75 MiB. Both harnesses report no leftover test processes and deleted temporary profiles.
+- The pasted Edge WinError 10054 tracebacks occurred while closing the browser. Complete saved data supports a cleanup-logging issue; fix it narrowly in future tooling without masking failed runs or unrelated errors.
+- Chrome process stdout includes background push/updater diagnostics. Unity's browser hardware placeholders differ from native Windows facts; use the latter. OneDrive synchronization and short run duration remain confounders.
+
+Next step: confirm which display hosted the browser and inspect its supported refresh modes. If a supported 60 Hz or higher mode is available, repeat the unchanged baselines outside OneDrive, retaining the original runs; if not, identify the display and connection/virtual-display setup first. Do not infer maximum FPS from CPU time alone. The same ZIP remains usable; no benchmark or bundle was changed during this review.
+
+The company Toughbook stays deferred until company authorization is explicitly confirmed (D035); do not suggest a launcher or transfer workaround. Personal-PC results do not qualify it or standalone Quest. Detailed acceptance criteria and partial-rescan streaming remain open.
 
 ## Next mapping work
 
@@ -280,7 +293,7 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 
 - Application license and third-party dependencies are undecided.
 - No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
-- Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested. The Windows test bundle was checked on Linux and under Wine emulation only.
+- Browser rendering is tested with synthetic scenes on one Linux laptop (Chrome/Firefox/Brave) and one personal Windows 11 PC (Edge/Chrome, 30 Hz display-paced baselines). Higher-refresh Windows capacity, macOS, weaker hardware and real captures are untested. The Windows test bundle was checked on Linux and under Wine emulation only.
 - The Toughbook FZ-55 browser reference (i5-8365U, 32 GB RAM, UHD Graphics 620) and 30 fps browser / 60 fps VR floors are selected (D033/D034). Exact OS/browser versions and performance remain unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
 - Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.
