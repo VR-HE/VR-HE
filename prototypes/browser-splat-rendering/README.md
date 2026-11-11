@@ -4,6 +4,8 @@ First VR-HE implementation milestone: prove or disprove Gaussian-splat rendering
 
 Status and results: see [TestResults/browser-splat-results.md](TestResults/browser-splat-results.md), the [handoff](../../docs/HANDOFF.md) and the [development log](../../docs/DEVELOPMENT_LOG.md).
 
+The same project also holds the first [interactive browser demo](#interactive-browser-demo-prototype) (branch proto/interactive-browser-demo) in its own scene, source folders and WebGL template. The benchmark below is unchanged and still builds into `Builds/WebGL`.
+
 ## Results so far (November 10, 2026)
 
 Tested on one laptop: Linux Mint 22.3, Intel Core i7-13620H, NVIDIA RTX 4060 Laptop GPU, 60 Hz display.
@@ -100,3 +102,55 @@ On Windows the launchers find an installed Python (`py -3`, `python`, `python3`;
 - Fixtures are synthetic: a procedural equipment room (floor, walls, two rack rows with RU-like bands and LEDs, a wall cabinet) sampled at 25k-2M splats, plus overlap sections. No capture or operational data is used.
 - Overlap sections model a partial rescan. Section A, the larger existing capture, has a red sheet at z = 0.0 and a far backdrop. Section B, the rescanned area, has a blue sheet at z = 0.3. They share the band x = -0.5 to 0.5, where A's sheet is in front of B's. Correct per-splat ordering shows red in that band. If whole renderers are ordered by bounds-center distance, B draws last and the band turns blue. Forcing A to draw last fixes the band but paints A's backdrop over B's own region. The cases compare one merged renderer, two separate renderers, forced render order and active-range switching on one merged asset.
 - A screenshot proves the page rendered something. Region colors sampled from the screenshot check that the overlap cases rendered in the expected order. A successful build alone is not treated as rendering evidence.
+
+## Interactive browser demo (prototype)
+
+A small work-utility slice built on the tested 250k synthetic room ([task](../../docs/INTERACTIVE_BROWSER_DEMO_TASK.md)): walk around, select a rack, open its record, edit the description and find the saved text again after a reload or browser restart. Everything is synthetic, and the records are labelled LOCAL DEMO DATA. Results, the Windows bundle and the next user test are in the [handoff](../../docs/HANDOFF.md).
+
+| Path | Purpose |
+| --- | --- |
+| `Assets/InteractiveDemo/Data/demo-site.json` | Synthetic site: frozen site/record/anchor IDs (prefixed UUIDs), ten rack anchors, proxy obstacles and the spawn point. `Tools/check_demo_site.py` checks it against the generated room |
+| `Assets/InteractiveDemo/Records/` | Assembly `VRHE.InteractiveDemo.Records`: site validation, `DemoRecordStore` (versioned local schema, revision checks, labelled JSON export), `IKeyValueStorage` and `DemoPaths` |
+| `Assets/InteractiveDemo/Runtime/` | `DemoApp` (startup, per-frame flow, page bridge), `DemoPlayer` (walking, camera height, first/third person, orbit), `DemoInput` (input gate and sources), selection, outlines and frame pacing |
+| `Assets/InteractiveDemo/Plugins/WebGL/DemoBridge.jslib` | Page bridge: messages, mouse frames and localStorage access with error envelopes |
+| `Assets/InteractiveDemo/Editor/DemoProjectSetup.cs` | Creates the scene and materials; builds only the demo scene into `Builds/InteractiveDemo` |
+| `Assets/InteractiveDemo/Tests/Editor/` | EditMode tests: record identity, persistence, conflicts, damaged or newer data, export and the URL rule |
+| `Assets/WebGLTemplates/VRHEInteractiveDemo/` | Page: panels, help, record editor, input gate, mouse and pointer lock, HUD, local results reporting |
+| `Tools/interactive_demo_unity.sh` | `setup`, `test` and `build` with this project's explicit path only |
+| `Tools/demo_server.py` | Local demo server at the fixed address `http://127.0.0.1:8791/`; `run` opens Edge, Chrome or Brave with a persistent demo profile; `serve`; `collect` |
+| `Tools/verify_interactive_demo.py` | Real-browser checks through the Chrome DevTools Protocol, on the development build or an extracted bundle (`--bundle`) |
+| `Tools/package_demo_bundle.py`, `Tools/windows-demo-bundle/` | Windows ZIP, launchers and `START-HERE-DEMO.txt` |
+
+```bash
+P=~/Projects/VR-HE/prototypes/browser-splat-rendering
+"$P/Tools/interactive_demo_unity.sh" test     # EditMode tests (Unity batch mode, explicit project path)
+"$P/Tools/interactive_demo_unity.sh" build    # Builds/InteractiveDemo; never touches Builds/WebGL
+python3 -I "$P/Tools/check_demo_site.py"      # proxies against the generated room
+python3 -I "$P/Tools/demo_server.py" run --browser chrome --build "$P/Builds/InteractiveDemo" \
+  --fixtures "$P/Fixtures/Generated" --results "$P/TestResults/raw/interactive-demo/manual"
+python3 -I "$P/Tools/verify_interactive_demo.py" --browser chrome --profile-dir <throwaway folder>
+python3 -I "$P/Tools/package_demo_bundle.py"  # needs a clean tree and a build of committed source
+```
+
+The Unity script refuses to run while an Editor has this project open, and puts back the one-line URP migration note (`k_AssetPreviousVersion`) that Unity writes into `Assets/Settings/PC_RPAsset.asset` on exit. `demo_server.py run` keeps one demo profile per browser (Linux: `~/.local/share/vrhe-interactive-demo/browser-profiles/<browser>`; Windows: `%LOCALAPPDATA%\VRHE-Interactive-Demo\browser-profiles\<browser>`) so saved records survive a browser restart. It never stops a browser and ends by itself about a minute after the demo page closes; Ctrl+C stops it at once. Saved records belong to that profile and the exact address, which is why the port is fixed.
+
+How the pieces fit:
+- The splat is a picture only. Walking uses a CharacterController against proxy BoxColliders, and picking raycasts against anchor boxes; both come from `demo-site.json`, in metres, Unity's left-handed Y-up frame. The generated room spans x -4..4 and z -3..3 with the floor at y = 0.
+- Records are keyed by `recordId`. Display names, anchor IDs and splat indexes are never keys. The store lives under `vrhe.demo.records.v1.<siteId>` in the page's localStorage, in the `vrhe.demo.local-records` schema, version 1. Saves carry the revision they were based on, and a stale revision is refused. Entries for unknown records are kept. Newer-schema data is read-only. Unreadable data is backed up before the first write.
+- Input: the page decides whether Unity may act on the keyboard and mouse (the canvas and window have focus, and no panel or text field is active). Unity forgets held keys at every change. The page sends one packed mouse frame per Unity update and owns pointer lock and the context menu.
+- Runtime files sit under `data/` in the build (`DemoPaths`). Unity reads a bare `site.json` as a host name and refuses `http://site.json/`.
+- Extension points: a site package or tour content would replace `demo-site.json`. A server, spreadsheet or Gemini-draft adapter would implement `IKeyValueStorage` or replace `DemoRecordStore` behind the same record contract. None is implemented.
+
+Prototype defaults (implementation choices, not user decisions; all are fields in `DemoPlayer`, `DemoApp` or the page script):
+
+| Setting | Default |
+| --- | --- |
+| Walk / Shift speed | 1.3 / 2.6 m/s |
+| Arrow keys | As W/S/A/D (D022): Up forward, Down back, Left/Right step sideways; turning is by mouse. The unexposed `arrowKeysTurn` option in `DemoApp` makes Left/Right turn at 90 deg/s instead |
+| Mouse look | 0.15 deg per pixel, adjustable 0.25-3x in Help; first-person pitch limit 80 deg |
+| Eye height, Q/E | 1.6 m; Q/E move 0.6 m/s within -0.9 to +1.0 m; X restores 1.6 m and a level view |
+| View switch | V; third person starts 2.6 m behind (wheel 1.2-5 m), orbit pitch -30 to 70 deg, the camera pulls in at walls |
+| Placeholder figure | Plain, non-gendered, about 1.73 m tall; a rough size cue, not a verified scale reference |
+| Canvas | 1280x720 when the window allows, otherwise reduced to fit and labelled; devicePixelRatio 1; no frame cap |
+
+Not in this slice: authentication, Google Drive/Sheets/Gemini, live sync, capture, cabinet states, partial rescanning, touch and VR controls. Physical scale accuracy is not demonstrated.
