@@ -1,6 +1,6 @@
 # Next local task: Toughbook browser test bundle
 
-Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only. Company authorization is required for the work Toughbook and has not been provided. Arlen completed Edge/Chrome baselines on his personal Windows 11 VR gaming PC (D035) using the existing bundle; the uploaded archive was reviewed. See the handoff for the recorded 30 Hz display finding and next diagnostic step. Higher-refresh Windows capacity and all Toughbook results remain pending.
+Status: bundle prepared November 10, 2026 from commit 7d07732 and initially checked on Linux and under Wine emulation; subsequent personal Windows runs are recorded below. Company authorization is required for the work Toughbook and has not been provided. Arlen completed Edge/Chrome baselines on his personal Windows 11 VR gaming PC (D035) using the existing bundle; the uploaded archive was reviewed. The higher-refresh follow-up was also reviewed: both browsers reach about 60 fps through 250k splats at a recorded 60 Hz display mode and 1280x720 canvas. See the handoff for the next proposed interactive-demo task. Uncapped/larger-scene capacity and all Toughbook results remain pending.
 
 ## Context and target
 

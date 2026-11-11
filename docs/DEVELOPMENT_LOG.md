@@ -334,6 +334,22 @@ Validation:
 - Checked 9 edited/new Markdown files and one compact JSON report: 69 internal links resolve, tables/whitespace and JSON syntax pass, and all 8 baseline hashes match 8f68545. New report text contains no home-folder path or e-mail address. All 22 case/summary pairs and recomputed frame-rate arrays agree; the source archive passes every CRC check.
 - Evidence review only: no new browser, Windows, headset or company-device test was executed by Codex. Archive SHA-256 is 62be2a96730f29f79c8da69c889a6090bbebf3ca0e7babc25af87dc639ca8b2c.
 
+## November 10, 2026 — reviewed 60 Hz repeat; next interaction task queued
+
+Human contribution:
+- Arlen uploaded VRHE-results-20261110-214722.zip with the original two runs plus new Edge and Chrome baselines. Both new native Windows records show 3840x2160 @ 60 Hz.
+
+AI contribution:
+- ChatGPT/Codex checked all archive CRCs, confirmed 108 prior entries remained byte-identical except collect.json, validated all new case/summary pairs and recomputed FPS from the frame arrays.
+- Both new runs hold about 60 fps through 250k splats at the unchanged 1280x720 canvas. At 250k, CPU means are 9.32 ms in Edge and 9.01 ms in Chrome. No page-console errors or >=36 ms intervals occurred; the longest interval is 20 ms in Chrome.
+- Codex recorded the Edge 155-to-157 update as a confound; Chrome stayed at 155.0.8059.82 and doubled its frame rate too. Display pacing is strongly supported as the earlier ceiling, not uncapped maximum performance.
+- Codex preserved the initial report, added the follow-up metrics and queued INTERACTIVE_BROWSER_DEMO_TASK.md as the next proposed local implementation slice. It does not constitute a final engine/renderer or new control-default decision.
+- No benchmark code, bundle, user setting or device was changed. No new run was performed in this workspace.
+
+Validation:
+- Checked 10 edited/new Markdown files and one compact JSON report: 77 internal file links resolve, 16 Markdown tables have consistent columns, whitespace/JSON checks pass and all 10 baseline blob hashes match dfaa549. Follow-up JSON metrics agree with the reviewed frame data. New text has no home path or e-mail address.
+- Input archive SHA-256: 3fc34c692447265edcf24240c6b12bba2dace69e3a0d238a8675c1275674195a. Company Toughbook, phones, standalone Quest, larger scenes and the complete utility remain unqualified.
+
 ## Entry template
 
 For each meaningful change, record:

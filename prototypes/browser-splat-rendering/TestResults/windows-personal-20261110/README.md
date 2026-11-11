@@ -2,7 +2,7 @@
 
 ## Finding
 
-Both completed runs record Windows display mode **3840x2160 @ 30 Hz**. Frame intervals stay near 33.3 ms across 25k, 100k and 250k splats, while measured CPU work rises from about 1 ms to 9 ms. Display-paced browser scheduling is the leading explanation for the flat 30 fps result; these runs do not establish the machine's uncapped rendering capacity. GPU execution time was not measured.
+The initial two runs record **3840x2160 @ 30 Hz** and roughly 30 fps. Two follow-up runs record **3840x2160 @ 60 Hz** and roughly 60 fps through 250k splats, with similar CPU costs. This strongly supports display pacing as the earlier ceiling. Both tests are refresh-limited short synthetic baselines; uncapped capacity and GPU execution time remain unmeasured.
 
 The browser prototype rendered the synthetic scenes in real Windows Edge and Chrome on Arlen's personal gaming PC. This is not Toughbook qualification, a standalone Quest test, or a test of the complete work utility.
 
@@ -35,7 +35,7 @@ The native adapter inventory also lists Virtual Desktop, Meta virtual-monitor an
 
 Unity's browser SystemInfo reports Windows 10, one processor and 128 MB system memory. These do not match the native Windows records; do not use those browser placeholders as the actual PC configuration.
 
-## Frame timings
+## Initial 30 Hz frame timings
 
 CPU is frame start to end of URP rendering on the main thread. The sort stage includes sorting, order upload and draw submission. GPU execution is asynchronous and unmeasured. Times are milliseconds and individual samples have about 1 ms resolution.
 
@@ -52,9 +52,35 @@ Across all 22 cases, the longest recorded interval is approximately 34 ms; no me
 
 The console's `<30` labels compare the unrounded average with 30. Some values are 29.999999999999996 due to floating-point arithmetic; others differ by about 0.003-0.010 fps because of finite sampling and timer steps. Rounded display of 30.0 with a `<30` marker is not evidence of a meaningful drop by itself. Preserve the user floor; clarify reporting rather than changing acceptance silently.
 
+## Follow-up at 60 Hz
+
+Arlen uploaded VRHE-results-20261110-214722.zip (SHA-256 `3fc34c692447265edcf24240c6b12bba2dace69e3a0d238a8675c1275674195a`). It contains the original two runs plus two new baselines, not four new runs. All 108 entries from the earlier archive other than collect.json are byte-identical; the cumulative archive passes every CRC check.
+
+| New run | Browser | Native display mode |
+| --- | --- | --- |
+| tb-20261110-214316-edge-baseline | Edge 157.0.4341.42 | 3840x2160 @ 60 Hz |
+| tb-20261110-214528-chrome-baseline | Chrome 155.0.8059.82 | 3840x2160 @ 60 Hz |
+
+Hardware, bundle source 7d07732, 1280x720 canvas, Mobile quality and scale 1.0 match the original records. Edge changed from 155 to 157, so that comparison is not isolated to display refresh. Chrome stayed at exactly the same version and its frame cadence doubled too. Together these results strongly support display pacing as the earlier limit; they do not measure uncapped capacity or GPU execution time.
+
+| Browser | Splats | Mean fps | CPU mean ms | Sort-stage mean ms | Interval p95 ms | Longest interval ms |
+| --- | --- | --- | --- | --- | --- | --- |
+| edge | 25,000 | 60.000 | 1.09 | 0.97 | 17 | 17 |
+| edge | 100,000 | 60.000 | 3.67 | 3.34 | 17 | 17 |
+| edge | 250,000 | 60.000 | 9.32 | 8.99 | 17 | 17 |
+| chrome | 25,000 | 60.000 | 1.01 | 0.73 | 17 | 20 |
+| chrome | 100,000 | 60.000 | 3.51 | 3.18 | 17 | 17 |
+| chrome | 250,000 | 60.000 | 9.01 | 8.74 | 17 | 17 |
+
+Both new runs complete all 11 cases. Every case JSON matches its summary and all frame arrays reproduce recorded FPS. Each browser matches all eight expected overlap outcomes; the known separate-renderer errors remain. The 11 corresponding new PNG pairs are byte-identical between browsers.
+
+No new page-console error or measured interval >=36 ms occurred. All p95 intervals are about 17 ms; the longest is 20 ms in Chrome's 25k case, while Edge stays near 17 ms. WebAssembly capacity still peaks at 198.75 MiB, and both harness records report clean process/profile cleanup. No 500k or larger follow-up is included.
+
+The native display mode is 4K, but the measured Unity canvas remains 1280x720. These are not 4K-rendering, minimum-Toughbook, real-capture, long-session, phone or standalone Quest results. No benchmark code, bundle, driver setting or user device was changed by Codex during the review.
+
 ## Drawing order
 
-Both runs match all eight expected overlap outcomes. The merged renderer and its preloaded active ranges draw the expected states. Separate renderers still misorder the overlap, and forced draw order still covers the wrong region; 8/8 means reproduced expectations, not that the known defect was fixed.
+All four runs match all eight expected overlap outcomes. The merged renderer and its preloaded active ranges draw the expected states. Separate renderers still misorder the overlap, and forced draw order still covers the wrong region; 8/8 means reproduced expectations, not that the known defect was fixed.
 
 ![One merged renderer: expected overlap](overlap_merged_single_renderer.jpg)
 
@@ -68,14 +94,14 @@ These synthetic switches do not establish cabinet registration, partial-rescan r
 - Each page console records zero errors and one expected CPU-sort warning.
 - Chrome process stdout additionally contains push-registration/authentication and updater-pipe diagnostics. They are separate from page-console errors; the result files provide no evidence that they prevented the test.
 - Each HTTP server log has only a favicon 404 among non-success responses.
-- Both harness records report no leftover test processes and successful deletion of the temporary profile.
+- All four harness records report no leftover test processes and successful deletion of the temporary profile.
 - Arlen's pasted Edge console shows WinError 10054 during browser shutdown. The source closes the browser before stopping the HTTP server, and Python's default request error handler prints peer-reset tracebacks. All case data and completion records are present. This supports a shutdown-logging issue; retain unexpected errors and incomplete-run failures when fixing it.
-- Both runs came from the OneDrive-synced folder identified by the harness. This can add measurement noise but is not evidence that OneDrive caused the flat frame rate.
+- The initial pasted Edge console identifies a OneDrive-synced folder. The sanitized archives do not independently establish every run's working folder. Sync activity can add noise, but it is not recorded evidence of the flat frame-rate cause.
 
 ## Next measured step
 
-On the personal PC, inspect Windows Advanced display for the screen used by the browser. If a supported 60 Hz or higher mode is available, choose it and repeat the two unchanged baselines from a folder outside OneDrive, preserving the original run folders. Collect a new results ZIP. If only 30 Hz is offered, first identify the display and connection/virtual-display setup. No program, driver or security setting should be changed merely to force a result.
+The requested higher-refresh repeat is complete. No further repetition of these small baselines is required before the next browser interaction prototype. Preserve the benchmark as comparison evidence while preparing [the interactive browser demo task](../../../../docs/INTERACTIVE_BROWSER_DEMO_TASK.md). Larger/compact scenes, weakest-device qualification and standalone Quest rendering remain separate measured work.
 
-Browser animation callbacks generally follow display refresh ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame)); Windows exposes supported refresh choices in Advanced display ([Microsoft](https://support.microsoft.com/en-us/windows/hardware/display-graphics/change-the-refresh-rate-on-your-monitor-in-windows)). A higher-refresh repeat can test the pacing explanation; it does not guarantee any particular higher frame rate.
+Browser animation callbacks generally follow display refresh ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame)); Windows exposes supported refresh choices in Advanced display ([Microsoft](https://support.microsoft.com/en-us/windows/hardware/display-graphics/change-the-refresh-rate-on-your-monitor-in-windows)). The observed higher-refresh repeat supports the pacing explanation; it does not establish uncapped throughput.
 
 Company Toughbook execution remains blocked pending company authorization (D035), and its 30 fps qualification remains open. Standalone Quest and phone tests remain open. Benchmark code, the original ZIP, rendering settings and measured values were not changed during this review.
