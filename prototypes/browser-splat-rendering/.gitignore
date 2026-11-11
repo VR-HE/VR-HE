@@ -36,3 +36,6 @@
 # Windows test bundles, their staging folders and downloaded runtime caches
 # (Tools/package_toughbook_bundle.py). Only source, scripts and docs are tracked.
 /Bundles/
+
+# Python bytecode caches (the tools set sys.dont_write_bytecode; this is a safety net)
+/Tools/__pycache__/

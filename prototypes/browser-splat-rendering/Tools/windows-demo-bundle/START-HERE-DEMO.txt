@@ -1,0 +1,132 @@
+VR-HE interactive browser demo (prototype)
+==========================================
+
+What this is
+A small 3D demo of the VR-HE idea in a web browser: walk through a synthetic equipment
+room, select a rack, open its record, edit the description and find the saved text again
+later. Everything is synthetic. The records are LOCAL DEMO DATA: they are kept only in a
+separate demo browser profile on this computer. Nothing is sent to the internet, to a
+spreadsheet or to any company system.
+
+Status: so far tested only on the Linux development laptop, in Chrome. This Windows
+package has not been run on Windows yet, so your run is the first Windows test. The
+earlier benchmark runs on this PC do not show whether the controls, saving or export
+work here.
+
+Nothing is installed and no administrator rights are needed. The demo starts a small web
+server that only this computer can reach (http://127.0.0.1:8791/) and opens it in a
+separate browser window with its own demo profile. Your everyday browser profile, windows,
+bookmarks and passwords are not touched.
+
+Before you start
+- Use your personal Windows PC. Do not use the company Toughbook for this demo.
+- Extract the ZIP first: right-click it and choose "Extract All...". The files do not
+  work from inside the ZIP.
+- Type made-up text only. Exported records are copied into the results you bring back.
+
+Start the demo
+1. Double-click RUN-DEMO-EDGE.cmd.
+   A black window opens (the demo server), then a new Edge window opens the demo.
+   Keep the black window open while you use the demo.
+2. Wait until the progress bar has finished and the top line says "Ready".
+3. Click once on the 3D view. The first click only gives the view your keyboard.
+
+Controls
+  Move               W or Up arrow: forward. S or Down arrow: back.
+                     A / D: step sideways. Left / Right arrow: turn.
+  Faster             Hold Shift while moving.
+  Look around        Hold the left mouse button on the view and drag.
+  Game-style look    M (or "Capture mouse"). Esc gives the pointer back.
+  Camera height      Q raises the camera, E lowers it.
+  Reset view         X: normal camera height and a level view.
+  First/third person V. In third person, drag to circle around the figure and use the
+                     mouse wheel to zoom.
+  Select a rack      Point at it (white outline), then click it (cyan outline and name).
+  Open its record    Right-click the selected rack, press Enter, or click
+                     "Open selected record".
+  Equipment list     L lists every rack, with "Show" and "Open record" (no aiming needed).
+  Save a description "Save" button or Ctrl+Enter. Esc closes the record.
+  Help               H
+While a panel or text box is open, the 3D view ignores the keyboard and mouse, so typing
+never moves you.
+
+Test script (about 15 minutes)
+ 1. Look at the top bar. On the right it shows the 3D view size in pixels and the frames
+    per second (fps). Note both.
+ 2. Walk around with W A S D and the arrow keys, drag to look, and hold Shift. Walk into
+    a rack: it should stop you.
+ 3. Press and hold Q, then E, then press X: the camera should return to normal height and
+    look level.
+ 4. Press V for third person. Drag to circle around the figure, use the mouse wheel,
+    press X, walk a little, then press V again.
+ 5. Click a rack, then right-click it (or press Enter). The record panel shows a name, a
+    Record ID and a description. Write down the rack name.
+ 6. Type a made-up description that includes the letters W, A, S, D, Q, E and X. The view
+    must not move while you type. Press Save (or Ctrl+Enter); the panel says it saved.
+ 7. Press Esc, press L, and choose "Open record" for a different rack. Its description
+    must still be its own text, not yours from step 6. Change it too and save.
+ 8. Press F5 to reload the page. Open both records again: your text should be there.
+ 9. Close the demo browser window. About a minute later the black window says the server
+    has stopped; press any key to close it. Double-click RUN-DEMO-EDGE.cmd again and open
+    both records: the text should still be there.
+10. Click "Saved data & export", then "Download JSON export". Note where Edge saved the
+    file (usually the Downloads folder). A copy also goes into the "results" folder here.
+11. Optional: double-click RUN-DEMO-CHROME.cmd and repeat steps 1 to 8 in Chrome. Chrome
+    has its own demo profile, so text saved in Edge does not appear there. That is
+    expected.
+12. Close all demo windows and wait until the black windows have finished. Then
+    double-click COLLECT-DEMO-RESULTS.cmd. It makes one file named
+    VRHE-demo-results-<date>-<time>.zip next to this file and shows it in File Explorer.
+    Bring that file back.
+
+What to note (a few words each is enough)
+- The fps while standing still, while walking or looking around, and while typing.
+- Any stutter, freeze, black screen or error message, and what you did just before it.
+- Anything confusing: controls, buttons or wording.
+- Whether the saved text came back in steps 8 and 9.
+- If the top bar says "reduced to fit": your screen size and Windows display scaling
+  (Settings > System > Display).
+
+How to stop the demo
+Close the demo browser window. The black window then stops its server by itself about a
+minute later, prints a short summary and waits for a key press. To stop it at once, click
+the black window and press Ctrl+C. If it asks "Terminate batch job (Y/N)?", type N and
+press Enter to see the summary. Stopping the server never closes a browser window; close
+any demo window yourself.
+
+Where things are saved
+- Demo records: in the demo browser profiles, kept between runs on purpose:
+    %LOCALAPPDATA%\VRHE-Interactive-Demo\browser-profiles\edge   (and ...\chrome)
+- Timings, console messages and export copies: the "results" folder next to this file.
+- Exported JSON files: wherever the browser saves downloads.
+To remove the demo records, use "Saved data & export" > "Reset demo data...", or close all
+demo windows and delete the folder %LOCALAPPDATA%\VRHE-Interactive-Demo.
+
+If something goes wrong
+- Windows or security software blocks a file ("Windows protected your PC" or a similar
+  message): stop there. Do not change security settings or work around the block. Note
+  the message and report it.
+- Windows Firewall asks about Python: choose Cancel. The demo only uses this computer's
+  internal address (127.0.0.1).
+- The black window says another demo window or another program is using the port: close
+  the other black demo window (or restart the computer) and try again.
+- The browser shows a welcome or sign-in page instead of the demo, or nothing happens for
+  90 seconds: the black window says so. In that browser window, type
+  http://127.0.0.1:8791/ into the address bar.
+- Edge or Chrome is not found: the black window says so. Use the other browser's file or
+  the manual route below.
+- The page shows a red error message: note it (a photo is fine) and report it.
+
+Manual route (if the automatic start does not work)
+1. Double-click DEMO-SERVER-ONLY.cmd and leave its black window open.
+2. Open Edge or Chrome normally and go to http://127.0.0.1:8791/
+   Do not use an InPrivate or Incognito window: it forgets saved records when closed.
+3. Records are then saved in your everyday browser profile, for that address only. When
+   you have finished, remove them with "Saved data & export" > "Reset demo data...".
+4. Close the tab, then press Ctrl+C in the black window.
+
+Python
+The demo server needs Python 3.8 or newer. An installed Python is used if there is one;
+otherwise the portable Python in the runtime folder is used without installing anything
+(see runtime\README.txt). If neither can start, the black window says so. Report that
+message; there is no need to install anything for this demo.
