@@ -91,7 +91,7 @@ Implementation requirements:
 
 Open: catalog sharing scope, duplicate-label/merge presentation, and the exact storage/mapping transaction design. Rack capacity, numbering, front/rear use and potential occupancy conflicts still need design. The replacement requirement and preservation of existing descriptions are resolved; do not ask that question again. See [the next authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md).
 
-Current implementation boundary: the delivered interactive ZIP contains ten rack records with one description string each. It does not implement equipment placement, RU editing, multiple descriptions or a label catalog. The Y-inversion source update needs a new local build/package; it does not change the delivered ZIP.
+Current implementation boundary: the delivered 294f4b2 ZIP contains ten rack records with one description string each and no Y-inversion option. A later local prototype on branch proto/equipment-descriptions adds the saved Y-inversion option, several equipment items per rack with RU ranges, descriptions with optional reusable names, and name maintenance under D041, in browser-local synthetic demo data with carry-over of the earlier saved rack descriptions as rack notes. It is checked in Chrome and Brave on the Linux laptop only; see [the handoff](HANDOFF.md). Its scope, defaults and storage choices are prototype proposals listed in [the prototype README](../prototypes/browser-splat-rendering/README.md#equipment-descriptions-and-names-branch-protoequipment-descriptions), not production decisions.
 
 ## Proposed architecture principles — not yet approved implementation choices
 

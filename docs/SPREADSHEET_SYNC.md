@@ -33,6 +33,8 @@ A description catalog name cannot be removed without a valid new/updated replace
 
 Carry the agreed mapped name/reference changes through the two-way synchronization contract. Preserve equipment-specific values, existing mapping identities, formulas and unrelated fields; do not infer a destructive column merge solely from equal display names. Handle collisions and failed/partial updates without erasing values or finalizing an orphaning removal. Exact workbook representation, transaction/retry strategy and conflict presentation remain design work.
 
+Demo prototype boundary (branch proto/equipment-descriptions; browser-local synthetic data, no adapter): racks, equipment items, descriptions and description names each have their own prefixed UUID, and a description refers to its name by ID, never by text. A name rename changes only the name's display text, and a replacement reassigns references and keeps the old name as retired; neither is a column rename, merge or delete. Removing an empty description is local to one item and is not a shared column delete. The export lists these IDs, the retired names and a notice that no spreadsheet mapping exists. These shapes are prototype proposals that a mapping design could use, not an agreed workbook representation. See [the prototype README](../prototypes/browser-splat-rendering/README.md#equipment-descriptions-and-names-branch-protoequipment-descriptions).
+
 ## Proposed synchronization contract
 
 Use durable identifiers for records, fields and mappings; do not rely solely on row number, display name or cell address.

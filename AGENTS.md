@@ -14,7 +14,7 @@ Confirmed user decisions take precedence over proposals. Current explicit user i
 
 ## Working state
 
-This repository contains requirements, developer setup and a rendering-only browser prototype with results on one Linux laptop and one personal Windows 11 PC (Edge/Chrome; reviewed 30 Hz and 60 Hz baselines). A first interactive browser demo prototype (branch proto/interactive-browser-demo) is checked in Chrome and Brave on the Linux laptop only; its Windows bundle is untested. The full VR-HE application, capture pipeline, backend, spreadsheet integration and security system are not implemented. Consult docs/HANDOFF.md for tested conditions; the requested device matrix is not a tested support matrix.
+This repository contains requirements, developer setup and a rendering-only browser prototype with results on one Linux laptop and one personal Windows 11 PC (Edge/Chrome; reviewed 30 Hz and 60 Hz baselines). A first interactive browser demo prototype (branch proto/interactive-browser-demo) is checked in Chrome and Brave on the Linux laptop only; its Windows bundle is untested. Branch proto/equipment-descriptions extends it with the built mouse Y-inversion option and local equipment, RU, description and description-name authoring, also checked only in Chrome and Brave on Linux. The full VR-HE application, capture pipeline, backend, spreadsheet integration and security system are not implemented. Consult docs/HANDOFF.md for tested conditions; the requested device matrix is not a tested support matrix.
 
 Ask one primary product question at a time. Explain meaningful consequences in plain language, record the answer and resolve important follow-ups before advancing. Continue independent authorized work while a question is pending.
 
@@ -27,7 +27,7 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - Only designated production editors may change descriptions, equipment records and attachments.
 - New equipment starts from reusable templates; a field change is local to the selected record by default.
 - Reusing a field in a template for future equipment is a separate action.
-- Multiple equipment records may belong to one rack; each rack-mounted item records the RU or RU range it occupies (D037). The first demo has rack records only, not equipment authoring.
+- Multiple equipment records may belong to one rack; each rack-mounted item records the RU or RU range it occupies (D037). The first demo has rack records only; the proto/equipment-descriptions prototype adds local synthetic equipment authoring with RU ranges, and its defaults are proposals, not decisions.
 - Each new equipment record starts with one unnamed description. Add Description may add more descriptions to that item, with optional names selected from a reusable label dropdown (D038/D039).
 - Authorized editors may add or rename description-label choices. A label choice is not another item's description value. Under D041, a catalog name cannot be removed without a valid new/updated replacement name; rename or reassign every affected reference while preserving each description's text and equipment identity. No replacement means removal is blocked. Do not overwrite colliding values, orphan records or delete mapped spreadsheet data; catalog sharing scope remains open.
 - Spreadsheet integration means two-way values AND mapped structural create/delete changes. A hyperlink or one-time import/export does not satisfy it.

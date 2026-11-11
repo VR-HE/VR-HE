@@ -416,6 +416,63 @@ Validation:
 - Checked 9 edited Markdown files: 63 internal file links resolve, 15 tables have consistent columns, whitespace/privacy checks pass and all 9 baseline blob hashes match 839b3e4. D041 is a single contiguous decision-table row; active authoring instructions no longer treat replacement/preservation as unresolved.
 - Documentation-only change. The catalog/editor is still queued; no application build or runtime/device test was performed, and no stored equipment description or spreadsheet cell was altered.
 
+## November 11, 2026 — mouse option build and equipment/description authoring prototype
+
+Human contribution:
+- Arlen asked Claude Code to continue with verified Opus 5.5 at MAX effort, update safely from origin/proto/interactive-browser-demo (6f802b1) and work on a separate prototype branch. The work was both stages of [the authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md):
+  - rebuild and verify the saved mouse Y-inversion option;
+  - several equipment records per rack with RU positions or ranges;
+  - one unnamed description per new item, with Add Description for more;
+  - a reusable description-name list with editing controls under D041;
+  - a data-format migration that keeps saved rack descriptions.
+- Open design details were to use configurable, documented prototype defaults. He asked for real-browser verification of behaviour, persistence, migration, export and frame pacing, extended help, untouched The Veil and benchmark, unchanged demo access exemptions, pushed source and docs, and a newly labelled Windows ZIP.
+
+AI contribution (Claude Code, Opus 5.5):
+- Checked the working tree, remote and disk space (about 19 GB free), fast-forwarded to 6f802b1 and created proto/equipment-descriptions.
+- Stage 1: built Codex's Y-inversion source and added inversion checks to the verifier (commit 4b225f3). The checks cover:
+  - normal and inverted drag and captured mouse in first person, and orbit in third person;
+  - persistence across reload and browser restart, and older or unreadable stored preferences;
+  - unchanged horizontal look, picking, wheel and Q/E/X, and no movement while Help is open.
+  Chrome passed 88 of 88 on that build.
+- Stage 2:
+  - record format 2: the store, the data model, the site's authoring settings and the JsAuthoring bridge command;
+  - the page: the rack panel's equipment list and Add equipment form, the equipment editor, the Description names panel, the list hierarchy and new help sections;
+  - carry-over of format 1 and export format 2;
+  - 47 EditMode tests, authoring and migration parts in the real-browser verifier, and the bundle instructions.
+  The prototype defaults are listed as proposals in the prototype README; nothing was added to DECISIONS.md.
+- Problems found and fixed:
+  - A screenshot review found description text typed into the wrong box. Focus could land on a card hidden under the new sticky Save row; the scripted click then hit the footer, a typed L reached the List shortcut, and the unsaved-changes question appeared. No data was lost. The page now scrolls focused cards clear of the footer, keeps the caret through Ctrl+Enter and returns Keep editing to the field in use. The verifier refuses covered click targets, and three checks pin this behaviour.
+  - Also fixed: a stale State line after saves, an unsaved-changes count triggered by the Add equipment name, a Save row that scrolled away, and the wording of counts of one.
+  - Typed backslash-u escapes in tool input became literal characters in source files. The edited sources are now ASCII-only, with explicit escapes.
+- Left untouched:
+  - The Veil: no Unity CLI or MCP command was sent to its Editor, every Editor operation passed VR-HE's explicit project path, and port 9002 was not used.
+  - The benchmark build (its 5-file hash manifest is unchanged), the 294f4b2 ZIP (SHA-256 8dcebd10...) and the Toughbook ZIP (c934948...).
+  - Access and data: no production login/MFA, Google or company connection was added, and no real data was used.
+
+MAX verification: this session's own process is the 2.1.321 binary started with --effort max, with CLAUDE_CODE_EFFORT_LEVEL=max, on Opus 5.5 (claude-opus-5-5). This was rechecked after the session's context was continued. claude --version reports 2.1.322 because the on-disk client updated itself.
+
+Checks run on the development laptop (Linux Mint 22.3; not Windows evidence):
+- EditMode tests: 47 of 47, with no compiler warnings in the build or test logs.
+- Development builds: Chrome 124 of 124 and Brave 122 of 124 on the full run; carry-over 9 of 9 in Chrome.
+- The final ZIP, extracted and served by its own server, in throwaway profiles:
+  - Chrome 157.0.8103.50: 124 of 124.
+  - Brave 1.99.55: 122 of 124. The two misses are the canvas-size checks: Brave's interface leaves less room in the same window, so the canvas is reduced to 1220x686 and labelled, as before.
+  - Carry-over from the 294f4b2 bundle: 9 of 9 in Chrome and 9 of 9 in Brave.
+- Frame pacing in the new panels: 59.4-60.0 fps in Chrome and Brave on the 60 Hz display, with no frame interval over 50 ms in any activity; the longest in the new panels was 42 ms (Chrome, typing in the equipment editor). Earlier activities stayed at 59-60 fps. These figures are paced to the 60 Hz display, not uncapped capacity.
+- Wine 9.0 emulation with the bundled Windows Python: 18 of 18 checks from a folder named with spaces, parentheses and &. They cover the Edge launcher's portable-Python start and missing-Edge message, and the server-only launcher serving this build to Linux Chrome after checking 54 files against the bundle's checksums: 1280x720, walking and an export copy. The collector wrote one scrubbed results ZIP.
+- Packaging:
+  - 16 compiled-in Editor paths are masked in the wasm, and the 250k fixture was regenerated byte-identical.
+  - The packager's privacy scan and an independent byte scan of every extracted file found no e-mail address, account name or home path. The byte scan's only matches were the engine's generic /home/web_user folder and "arLen" inside .NET identifiers such as charLength.
+- ZIP: VRHE-Interactive-Demo-20261111-4f4f9ac.zip in prototypes/browser-splat-rendering/Bundles (ignored by Git):
+  - 33,134,200 bytes, SHA-256 0be32045b60cfd477f25d95d637f24cb6637c19fadc4b5c62af6698bb08e1b32;
+  - built from commit 4f4f9ac with build label interactive-demo-4f4f9ac2fd78-20261111T144938Z.
+
+Not tested:
+- Everything on Windows, including the carry-over of a real 294f4b2 profile there; Edge; and human use (pointer-lock feel, help clarity, the RU wording).
+- Native drop-down pop-ups (the checks set them by script).
+- A crash or power loss mid-write: the argument rests on one complete-document write per change. A refused write was tested.
+- Two tabs editing in a real browser, very large lists, the Toughbook (D035), and real captures and scale.
+
 ## Entry template
 
 For each meaningful change, record:
