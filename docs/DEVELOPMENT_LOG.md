@@ -402,6 +402,20 @@ Validation:
 - A full-template Chromium attempt could not start because the review workspace denied its process-singleton socket. It produced no browser/runtime result. Unity is unavailable in this workspace; no build, new ZIP, Windows, phone or headset test was performed.
 - Checked 10 edited/new Markdown files: 67 internal file links resolve, 18 tables have consistent columns, whitespace and HTML ID/accessibility-reference checks pass, and all 11 baseline hashes match ad2cc83. Only the listed source/docs/instruction files are changed; generated builds and results are excluded.
 
+## November 11, 2026 — description-name replacement rule confirmed
+
+Human contribution:
+- Arlen confirms existing descriptions must retain their information when a dropdown name changes or is removed. He requires a new/updated replacement name before removal, including spelling corrections and name standardization; otherwise removal is not allowed, to protect descriptions across servers/switches and other equipment.
+
+AI contribution:
+- ChatGPT/Codex recorded D041 and replaced the open in-use-label question in the specification, shared instructions, authoring task, handoff, guide and tests.
+- The updated task requires rename/reference reassignment, preservation of per-item text and identities, no overwrite on target-name collisions, and safe failed/interrupted changes. Spreadsheet mapping notes preserve corresponding data.
+- Catalog sharing scope and exact schema/transaction/mapping design remain open; preservation and replacement-before-removal are resolved. No runtime/editor or live spreadsheet change was made.
+
+Validation:
+- Checked 9 edited Markdown files: 63 internal file links resolve, 15 tables have consistent columns, whitespace/privacy checks pass and all 9 baseline blob hashes match 839b3e4. D041 is a single contiguous decision-table row; active authoring instructions no longer treat replacement/preservation as unresolved.
+- Documentation-only change. The catalog/editor is still queued; no application build or runtime/device test was performed, and no stored equipment description or spreadsheet cell was altered.
+
 ## Entry template
 
 For each meaningful change, record:

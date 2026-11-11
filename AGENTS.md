@@ -29,7 +29,7 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - Reusing a field in a template for future equipment is a separate action.
 - Multiple equipment records may belong to one rack; each rack-mounted item records the RU or RU range it occupies (D037). The first demo has rack records only, not equipment authoring.
 - Each new equipment record starts with one unnamed description. Add Description may add more descriptions to that item, with optional names selected from a reusable label dropdown (D038/D039).
-- Authorized editors may add, rename and remove description-label choices. A label choice is not another item's description value. Removing an in-use label and effects on existing descriptions/sheet mappings remain an open decision; do not silently erase saved values.
+- Authorized editors may add or rename description-label choices. A label choice is not another item's description value. Under D041, a catalog name cannot be removed without a valid new/updated replacement name; rename or reassign every affected reference while preserving each description's text and equipment identity. No replacement means removal is blocked. Do not overwrite colliding values, orphan records or delete mapped spreadsheet data; catalog sharing scope remains open.
 - Spreadsheet integration means two-way values AND mapped structural create/delete changes. A hyperlink or one-time import/export does not satisfy it.
 - A local field removal must not accidentally delete a shared spreadsheet column or another record's data.
 - Google Drive, Google Sheets and Gemini compatibility is required; do not ask again whether Google Sheets is required.

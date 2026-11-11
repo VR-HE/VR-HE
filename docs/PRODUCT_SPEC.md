@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.21; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup, a rendering-only browser prototype and an interactive browser demo prototype (checked on Linux; Windows untested); no VR-HE application yet.
+Status: requirements baseline 0.22; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup, a rendering-only browser prototype and an interactive browser demo prototype (checked on Linux; Windows untested); no VR-HE application yet.
 Updated: November 11, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -39,7 +39,7 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Equipment record setup | Reusable equipment-type templates with fields editors can customize in the app |
 | Rack equipment | Multiple equipment records per rack; each rack-mounted item has an RU position or occupied RU range |
 | Equipment descriptions | One unnamed description initially; Add Description adds further descriptions to the selected item when needed |
-| Description-name catalog | Reusable dropdown of description labels; authorized editors can add, modify and remove choices; names and per-item values remain distinct |
+| Description-name catalog | Reusable editable label dropdown; removal requires a valid new/updated replacement name and preservation/reassignment of all existing descriptions; no replacement means removal is blocked |
 | Field-change scope | Record-local by default, with a separate option to reuse the field in a template for future equipment |
 | Shared spreadsheet | All data-set categories can link to a common ordinary spreadsheet with two-way value and mapped structural create/delete synchronization |
 | Google compatibility | Google Drive, Google Sheets and Google Gemini are required integrations; exact workflows, credentials and AI actions remain open |
@@ -80,7 +80,16 @@ Confirmed additions (D036-D039):
 - A description can be unnamed or use a name selected from a growing reusable dropdown/catalog. Editors can create, rename and remove catalog choices in the running app.
 - Catalog labels and each item's description text are different data. Reusing a label must not copy or share equipment-specific text. Adding a catalog choice does not add a field to every record or change templates automatically.
 
-Open: catalog sharing scope, duplicate-label policy, rename propagation, and what removing a label already used by records does to those labels/values and spreadsheet mappings. Preserve saved data while those deletion semantics are unresolved. Rack capacity, numbering, front/rear use and potential occupancy conflicts need explicit validation/design. See [the next authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md).
+Follow-up confirmed by Arlen (D041): a description-name removal must require a valid new or updated replacement name. Without it the name cannot be removed. Correcting a spelling error may rename the existing label; standardizing names may replace an old label with an existing or newly created name. Every affected equipment description must retain its own text and equipment association under the corrected/replacement name. This is a label-maintenance operation, not permission to delete description values.
+
+Implementation requirements:
+- Validate the replacement before changing/removing the old catalog name; a blank/unnamed value is not a replacement name.
+- Propagate a rename to all references to that label. When replacing with another label, reassign all affected references without losing description entries, IDs or text.
+- Do not overwrite a description if an equipment record already uses the target name. Preserve both entries or block and resolve the collision without data loss; never silently combine/drop values.
+- An interrupted/failed reassignment must leave the old name/references recoverable and must not finalize catalog removal while any affected description is orphaned. Apply the rule at the editing-command/storage boundary as well as the UI.
+- Preserve corresponding spreadsheet identities/values and perform agreed mapped name changes through the synchronization contract; a label replacement is not a request to erase a column or its values.
+
+Open: catalog sharing scope, duplicate-label/merge presentation, and the exact storage/mapping transaction design. Rack capacity, numbering, front/rear use and potential occupancy conflicts still need design. The replacement requirement and preservation of existing descriptions are resolved; do not ask that question again. See [the next authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md).
 
 Current implementation boundary: the delivered interactive ZIP contains ten rack records with one description string each. It does not implement equipment placement, RU editing, multiple descriptions or a label catalog. The Y-inversion source update needs a new local build/package; it does not change the delivered ZIP.
 

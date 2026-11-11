@@ -25,7 +25,13 @@ A new field belongs to the selected equipment record by default. Template reuse 
 | Delete a shared field/column | Determine affected records explicitly; this is broader than a local edit |
 | Save a field into a template | Affects future equipment setup; does not silently rewrite existing records |
 
-These distinctions preserve confirmed requirements. Exact delete/archive/recovery rules must still be decided with Arlen.
+These distinctions preserve confirmed requirements. General delete/archive/recovery rules remain to be decided; D041 resolves description-name maintenance as follows.
+
+## Confirmed description-name preservation (D041)
+
+A description catalog name cannot be removed without a valid new/updated replacement name. Rename the label or reassign every affected description to the replacement while keeping its equipment association, description identity and text. A label change is not an instruction to clear description values or remove a shared spreadsheet column.
+
+Carry the agreed mapped name/reference changes through the two-way synchronization contract. Preserve equipment-specific values, existing mapping identities, formulas and unrelated fields; do not infer a destructive column merge solely from equal display names. Handle collisions and failed/partial updates without erasing values or finalizing an orphaning removal. Exact workbook representation, transaction/retry strategy and conflict presentation remain design work.
 
 ## Proposed synchronization contract
 
