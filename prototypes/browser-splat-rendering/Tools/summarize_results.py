@@ -86,7 +86,7 @@ def condense_run(raw, run):
                     results.append(data)
 
     system = harness.get("system", {})
-    return {
+    record = {
         "run": run,
         "browser": harness.get("browser"),
         "browser_version": harness.get("browser_version"),
@@ -112,6 +112,27 @@ def condense_run(raw, run):
         "results": results,
         "console": console_summary(run_dir),
     }
+    # Facts recorded by the Windows reference-PC bundle (harness version 2). Older Linux records
+    # lack these keys, so their summaries are unchanged.
+    for key in ("windows", "logical_processors", "ram_gb", "gpu_adapters", "power"):
+        if key in system:
+            record["system"][key] = system[key]
+    for key in ("platform", "plan", "mode", "python", "bundle", "cleanup", "handed_off"):
+        if key in harness:
+            record[key] = harness[key]
+    client = load_json(os.path.join(run_dir, "client.json"))
+    if client:
+        record["client"] = {k: client.get(k) for k in ("devicePixelRatio", "screen", "window", "userAgentData",
+                                                      "visibilityAtStart")}
+        # Manual runs: the browser reports its own exact version through User-Agent Client Hints.
+        if str(record["browser_version"] or "").startswith("see client.json"):
+            brands = {b.get("brand"): b.get("version")
+                      for b in ((client.get("userAgentData") or {}).get("fullVersionList") or []) if isinstance(b, dict)}
+            for brand in ("Microsoft Edge", "Google Chrome", "Brave", "Chromium"):
+                if brands.get(brand):
+                    record["browser_version"] = f"{brand} {brands[brand]} (reported by the browser)"
+                    break
+    return record
 
 
 def fmt(value, digits=1):

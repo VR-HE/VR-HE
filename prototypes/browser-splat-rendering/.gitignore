@@ -32,3 +32,7 @@
 # Raw benchmark output (full screenshots, per-frame samples, browser logs and temporary
 # profiles). Curated summaries and small screenshots live in TestResults/ and are tracked.
 /TestResults/raw/
+
+# Windows test bundles, their staging folders and downloaded runtime caches
+# (Tools/package_toughbook_bundle.py). Only source, scripts and docs are tracked.
+/Bundles/

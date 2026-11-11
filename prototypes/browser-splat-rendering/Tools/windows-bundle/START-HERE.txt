@@ -1,0 +1,58 @@
+VR-HE browser test for the Toughbook
+====================================
+
+This folder measures how well this computer's browsers draw the VR-HE 3D test scenes.
+All test scenes are synthetic. Nothing is installed, no administrator rights are needed
+and no settings are changed. Each test opens a separate browser window with a fresh,
+temporary profile and closes it at the end; your normal browser windows and profiles are
+not touched. Results stay in the "results" folder until you collect them.
+
+Before you start
+- Plug in the charger. Close other heavy programs (video calls, large downloads).
+- Leave Windows power settings as they are; the test records them.
+- Run the files from the extracted folder. They do not work from inside the ZIP.
+
+Run the tests (about 15 minutes in total)
+1. Double-click RUN-EDGE.cmd.
+   A black window opens, then a new Edge window shows test scenes for 2-4 minutes.
+   Do not use the computer until the black window prints FINISHED. Then press any key.
+2. Double-click RUN-CHROME.cmd and do the same. If Chrome is not installed, the black
+   window says so. That is a valid result.
+3. Optional, only after steps 1 and 2: OPTIONAL-500K-EDGE.cmd, then OPTIONAL-500K-CHROME.cmd.
+   Each runs one larger scene in a fresh page.
+4. Double-click COLLECT-RESULTS.cmd. It packs all results into one file named
+   VRHE-results-<date>-<time>.zip and shows it in File Explorer. Copy that file to the
+   USB drive.
+
+What the black window shows
+At the end it prints FINISHED (or DID NOT FINISH) and a table: frames per second for each
+test scene compared with the 30 fps browser target, slow frames, stalls, and the folder
+where the results were saved. It describes the results; it is not a pass/fail verdict.
+
+If something goes wrong
+- Windows or company security blocks a file ("Windows protected your PC", or a message
+  from security software): stop there. Do not change security settings or work around the
+  block. Note the message and report it.
+- Windows Firewall asks about Python: choose Cancel. The test only uses this computer's
+  internal address (127.0.0.1).
+- The browser shows a welcome, sign-in or policy page instead of the test, or nothing
+  happens for 90 seconds: the black window reports it. Close the test browser window and
+  use the manual fallback below.
+- To stop a test early, click the black window and press Ctrl+C. If it then asks
+  "Terminate batch job (Y/N)?", type N and press Enter to see the summary.
+- If a test browser window stays open afterwards, close it normally.
+
+Manual fallback (if the automatic start does not work)
+1. Double-click MANUAL-SERVER.cmd. Leave its black window open.
+2. Open Edge yourself and press Ctrl+Shift+N for an InPrivate window
+   (in Chrome, Ctrl+Shift+N opens an Incognito window).
+3. Type the address shown in the black window, for example http://127.0.0.1:8765/
+4. Click "Start the baseline test" and leave the computer alone until the black window
+   prints FINISHED. Repeat in the other browser if you like.
+5. Close the browser window, press Ctrl+C in the black window, then run COLLECT-RESULTS.cmd.
+
+Python
+The test server needs Python 3.8 or newer. An installed Python is used if there is one;
+otherwise the portable Python in the runtime folder is used without installing anything
+(see runtime\README.txt). If neither can start, the black window says so. Report that
+message; do not install software on a work computer just for this test.
