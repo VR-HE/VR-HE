@@ -385,6 +385,23 @@ Checks run on the development laptop (Linux; not Windows evidence):
 
 Not tested: all Windows behavior of this build (cmd and Explorer, Edge and Chrome with the demo profile, SmartScreen, downloaded-file marks, firewall prompt, saving, relaunch and export); Edge, Firefox, macOS, touch, controllers and VR; human pointer-lock feel, help clarity for non-gamers, non-US keyboard layouts and display scaling; two tabs editing one record, long sessions, many records, storage limits, network delivery, weaker hardware including the Toughbook (D035), real captures and physical scale.
 
+## November 11, 2026 — user feedback, mouse option source and production MFA requirement
+
+Human contribution:
+- Arlen reports the core demo mechanics work as he hoped. He requests optional mouse Y inversion, multiple equipment records per rack with RU occupancy, and optional multiple descriptions that start with one unnamed entry, plus editable reusable description-name choices.
+- Arlen adds Google Authenticator compatibility alongside the existing production VPN/password requirements. No enrollment secrets, business data or test archive were supplied in these messages; the test host/browser is not stated.
+
+AI contribution:
+- ChatGPT/Codex read the current interactive branch, specification, decisions, handoff, runtime input/player code and page template. It added the optional saved Y-inversion checkbox at the shared mouse-frame boundary, preserving sensitivity, absolute selection coordinates and zoom/keyboard meanings.
+- Codex recorded D036-D040, updated requirements/help/test/handoff notes and queued a local rebuild followed by rack/equipment/RU and description/catalog authoring with old-record migration. The delivered ZIP and benchmark are unchanged.
+- Google primary guidance confirms authenticator-app verification and code generation without internet; RFC 6238 supplies the TOTP building block. Production identity hosting/provider, enrollment/recovery policy and actual MFA implementation remain open. No authentication backend was added.
+- In-use description-label removal behavior and catalog sharing/rename scope are still open. No existing description, spreadsheet field or live data was deleted or changed.
+
+Validation:
+- JavaScript syntax passed. Twenty isolated checks of the actual preference functions, checkbox change handler and shared mouse-frame function passed in Node VM, covering off/on, motion signs, queued motion, coordinates/zoom, persistence, sensitivity and legacy/malformed/unavailable storage.
+- A full-template Chromium attempt could not start because the review workspace denied its process-singleton socket. It produced no browser/runtime result. Unity is unavailable in this workspace; no build, new ZIP, Windows, phone or headset test was performed.
+- Checked 10 edited/new Markdown files: 67 internal file links resolve, 18 tables have consistent columns, whitespace and HTML ID/accessibility-reference checks pass, and all 11 baseline hashes match ad2cc83. Only the listed source/docs/instruction files are changed; generated builds and results are excluded.
+
 ## Entry template
 
 For each meaningful change, record:

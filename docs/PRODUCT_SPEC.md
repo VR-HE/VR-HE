@@ -1,6 +1,6 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.20; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup, a rendering-only browser prototype and an interactive browser demo prototype (checked on Linux; Windows untested); no VR-HE application yet.
+Status: requirements baseline 0.21; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup, a rendering-only browser prototype and an interactive browser demo prototype (checked on Linux; Windows untested); no VR-HE application yet.
 Updated: November 11, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
@@ -16,6 +16,7 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Nested information | Add further sub-data sets and equipment information flexibly in the running app |
 | Ordinary-user editing | Simple mouse right-click interaction, designed for people who are not technically confident |
 | First-person movement | Familiar WASD/mouse controls, with up/down/left/right arrow-key movement in the desktop browser |
+| Mouse look preference | Optional saved mouse Y-axis inversion, for first-person look and third-person orbit; no inversion of height/reset or tracked head pose |
 | Mobile controls | Familiar mobile FPS/third-person movement/look, first-/third-person switching and camera-view up/down adjustment |
 | Browser camera height/recenter | Q floats the viewpoint up, E lowers it, X restores normal camera height and levels the viewing angle |
 | VR movement | Full six-degree-of-freedom movement; locomotion and comfort details remain open |
@@ -31,10 +32,14 @@ This records requested behavior, proposed design ideas, and unresolved decisions
 | Minimum frame rates | Browser: 30 fps; VR headsets: 60 fps. Phone frame-rate floor remains open |
 | Product character | Practical workplace tool; navigation conventions should feel familiar without adding game-like objectives |
 | Production access | Mandatory intranet/VPN access and mandatory password access |
-| Test-demo access | Neither intranet/VPN access nor password access is required |
+| Authenticator verification | Production sign-in additionally requires authenticator-app verification compatible with Google Authenticator; see the production authentication plan |
+| Test-demo access | Neither intranet/VPN access, password access nor authenticator verification is required |
 | Production connection loss | Lock downloaded tours and attached data until the required company-network/VPN connection is restored |
 | Production editing permissions | Designated editors may change descriptions, equipment records and attachments; other authorized users have view-only access |
 | Equipment record setup | Reusable equipment-type templates with fields editors can customize in the app |
+| Rack equipment | Multiple equipment records per rack; each rack-mounted item has an RU position or occupied RU range |
+| Equipment descriptions | One unnamed description initially; Add Description adds further descriptions to the selected item when needed |
+| Description-name catalog | Reusable dropdown of description labels; authorized editors can add, modify and remove choices; names and per-item values remain distinct |
 | Field-change scope | Record-local by default, with a separate option to reuse the field in a template for future equipment |
 | Shared spreadsheet | All data-set categories can link to a common ordinary spreadsheet with two-way value and mapped structural create/delete synchronization |
 | Google compatibility | Google Drive, Google Sheets and Google Gemini are required integrations; exact workflows, credentials and AI actions remain open |
@@ -58,11 +63,26 @@ The application combines:
 2. Persistent records identifying actual places, equipment and associated data.
 3. In-app tools for creating, editing, finding and sharing those records.
 
-Proposed record organization: site, room/area, rack, RU position or range, equipment, and attached/nested information. The exact hierarchy, cross-links, front/rear rack representation, and handling of equipment spanning several RUs are still open.
+Proposed record organization: site, room/area, rack, RU position or range, equipment, and attached/nested information. Multiple equipment records in a rack and explicit occupied RU ranges are now required (D037). Exact hierarchy/cross-links, front/rear representation, RU numbering and collision rules still need design.
 
 Descriptions and nested information are requested, and reusable templates with editor-customizable fields are now confirmed. Specific field data types and attachment formats, including photos, documents, tables and links, still need selection. Do not silently treat every example as a mandatory first-release feature.
 
 A splat should not be assumed to supply equipment identity, clean object boundaries, collision geometry, readable nameplate text, physical measurements, or live telemetry automatically.
+
+## November 11 feedback: equipment and description authoring
+
+Arlen reports the core demo mechanics work as he hoped. His message does not include a results ZIP or identify the test platform/browser, so this is human usability feedback rather than a completed Windows/device/performance qualification.
+
+Confirmed additions (D036-D039):
+- Offer mouse Y inversion as an option. Prototype implementation defaults to normal look and saves the choice in the browser profile. It changes vertical mouse look/orbit only.
+- A rack can hold many equipment records. Identify the rack and the RU position/range occupied by each item; one 2U item remains one equipment record.
+- A new equipment record starts with one unnamed description, initially empty. Add Description appends another description to that record when needed; multiple descriptions are optional.
+- A description can be unnamed or use a name selected from a growing reusable dropdown/catalog. Editors can create, rename and remove catalog choices in the running app.
+- Catalog labels and each item's description text are different data. Reusing a label must not copy or share equipment-specific text. Adding a catalog choice does not add a field to every record or change templates automatically.
+
+Open: catalog sharing scope, duplicate-label policy, rename propagation, and what removing a label already used by records does to those labels/values and spreadsheet mappings. Preserve saved data while those deletion semantics are unresolved. Rack capacity, numbering, front/rear use and potential occupancy conflicts need explicit validation/design. See [the next authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md).
+
+Current implementation boundary: the delivered interactive ZIP contains ten rack records with one description string each. It does not implement equipment placement, RU editing, multiple descriptions or a label catalog. The Y-inversion source update needs a new local build/package; it does not change the delivered ZIP.
 
 ## Proposed architecture principles — not yet approved implementation choices
 
@@ -109,6 +129,7 @@ Unity application code can be open source. Unity's engine and editor themselves 
 
 Confirmed by Arlen:
 - The official production version must require intranet/VPN access.
+- November 11 addition (D040): production sign-in must also include Google Authenticator-compatible authenticator verification alongside the password. Demo exemptions remain. See [production authentication](PRODUCTION_AUTHENTICATION.md); no authentication backend or identity provider has been selected or implemented.
 - The official production version must require password access.
 - The test demo we are building does not require intranet/VPN access.
 - The test demo does not require password access.

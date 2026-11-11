@@ -69,7 +69,8 @@
     lastExport: null,
     lastError: '',
     messages: 0,
-    lookSpeed: clamp(Number(loadPrefs().lookSpeed) || 1, 0.25, 3)
+    lookSpeed: clamp(Number(loadPrefs().lookSpeed) || 1, 0.25, 3),
+    invertMouseY: loadPrefs().invertMouseY === true
   };
 
   var mouse = {
@@ -185,7 +186,7 @@
 
   function savePrefs() {
     try {
-      window.localStorage.setItem(PREFS_KEY, JSON.stringify({ lookSpeed: page.lookSpeed }));
+      window.localStorage.setItem(PREFS_KEY, JSON.stringify({ lookSpeed: page.lookSpeed, invertMouseY: page.invertMouseY }));
     } catch (e) {
       // preferences are optional
     }
@@ -342,7 +343,10 @@
     var px = page.locked ? canvas.width / 2 : mouse.px;
     var py = page.locked ? canvas.height / 2 : mouse.py;
     var flags = (mouse.over ? 1 : 0) | (page.locked ? 2 : 0) | (mouse.dragging ? 4 : 0);
-    var frame = [mouse.dx, mouse.dy, mouse.wheel, mouse.leftClicks, mouse.leftX, mouse.leftY,
+    // Apply the preference once at the shared look-delta boundary: drag and pointer lock,
+    // first-person pitch and third-person orbit all consume this frame. Absolute pointer/
+    // picking coordinates, wheel zoom and keyboard height/reset inputs keep their meanings.
+    var frame = [mouse.dx, page.invertMouseY ? -mouse.dy : mouse.dy, mouse.wheel, mouse.leftClicks, mouse.leftX, mouse.leftY,
       mouse.rightClicks, mouse.rightX, mouse.rightY, px, py, flags];
     mouse.dx = mouse.dy = mouse.wheel = 0;
     mouse.leftClicks = mouse.rightClicks = 0;
@@ -891,6 +895,13 @@
     pushUiState(true);
   });
 
+  $('invert-mouse-y').checked = page.invertMouseY;
+  $('invert-mouse-y').addEventListener('change', function () {
+    page.invertMouseY = $('invert-mouse-y').checked;
+    mouse.dy = 0;   // discard motion queued before changing the preference
+    savePrefs();
+  });
+
   // ------------------------------------------------------------------ lifecycle
   function setLoading(text, fraction) {
     $('loading-text').textContent = text;
@@ -979,7 +990,7 @@
         statusline: $('statusline').textContent, error: page.lastError, messages: page.messages,
         tagVisible: shown('tag'), crosshairVisible: shown('crosshair'),
         focusHintVisible: shown('focus-hint'), viewCovered: viewCovered(), activeElement: document.activeElement && (document.activeElement.id || document.activeElement.tagName),
-        storageKey: page.site && page.site.storageKey, lookSpeed: page.lookSpeed
+        storageKey: page.site && page.site.storageKey, lookSpeed: page.lookSpeed, invertMouseY: page.invertMouseY
       };
     },
     unity: function (verb, arg) {

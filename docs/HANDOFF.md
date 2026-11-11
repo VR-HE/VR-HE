@@ -27,8 +27,19 @@ There is no VR-HE application yet. The first implementation milestone, browser G
 13. [Supplied spreadsheet examples](SPREADSHEET_EXAMPLES.md)
 14. [Browser splat-rendering prototype](../prototypes/browser-splat-rendering/README.md)
 15. [Interactive browser demo task](INTERACTIVE_BROWSER_DEMO_TASK.md) and [its Linux results](../prototypes/browser-splat-rendering/TestResults/interactive-demo-linux-20261111/README.md)
+16. [November 11 authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md) and [production authenticator requirement](PRODUCTION_AUTHENTICATION.md)
 
 The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The repository specification is now the maintained project source of truth; do not maintain competing copies.
+
+## November 11 user feedback and next changes
+
+Arlen says the core mechanics work as he hoped. He requests optional mouse Y inversion, multiple equipment records per rack with occupied RU ranges, one unnamed description initially per equipment item, optional further descriptions and an editable reusable dropdown of description names (D036-D039). This message contains no new result archive or explicit host/browser facts; do not claim a completed Windows/performance qualification from it.
+
+Codex added a Help > Settings > Invert mouse Y-axis checkbox in the page source. It defaults off, saves in this browser profile alongside sensitivity and flips only the shared vertical mouse-look delta. It covers drag/captured mouse and the input consumed by first/third person; it does not invert picking coordinates, wheel zoom or Q/E/X. Isolated source checks are recorded in the log. No Unity build or new demo ZIP was produced in this workspace: the delivered 294f4b2 bundle is unchanged.
+
+The current data is ten rack records with one description string each, not an equipment/RU editor. The next [local authoring task](EQUIPMENT_DESCRIPTIONS_TASK.md) first rebuilds/verifies the mouse option, then extends rack/equipment/RU records and multiple descriptions with migration of saved demo edits. Catalog scope and what removal of an in-use name does to existing descriptions/sheet mappings remain open. Do not silently erase existing values while resolving those choices.
+
+Arlen additionally requires Google Authenticator-compatible verification for production alongside VPN and password access (D040). See [production authentication](PRODUCTION_AUTHENTICATION.md). This is a recorded security requirement, not an implemented login backend. The demo remains exempt; connection-loss locking and designated-editor rules are unchanged.
 
 ## Next setup work
 

@@ -38,6 +38,14 @@ Exact screens, UI labels and integration workflows remain to be designed. Descri
 
 Arlen confirmed X does both: restore normal camera height and level the viewing angle. Treat it as a camera reset at the current location, not an unrequested return to a site entrance. Define the height reference for each relevant camera mode.
 
+## Mouse preference and equipment descriptions — November 11 additions
+
+Teach Help > Settings > Invert mouse Y-axis as an optional saved preference for looking/orbiting; explain that Q/E still change height and X still restores normal height and a level view. The checkbox is a source update awaiting a new local demo build.
+
+The next equipment editor should distinguish a rack from the many devices it can contain and show each item's occupied RU range. New equipment starts with one unnamed description. Teach Add Description, leaving a note unnamed or choosing/creating a reusable description name, and managing the dropdown names. Explain that reusing a name does not share the equipment text. Catalog removal and deleting an item's description are different actions; the treatment of names already used is still open. These authoring features are not yet implemented.
+
+For the official version, add plain-language Google Authenticator enrollment, verification and approved recovery guidance once the authentication design is selected. Preserve the network/password requirements and demo exemption; do not imply a code permits offline access. See [production authentication](PRODUCTION_AUTHENTICATION.md).
+
 ## Mobile controls and third-person orbit
 
 On iPhone and Android, require familiar mobile FPS/third-person movement and look controls, first-/third-person view switching and a separate camera-height up/down adjustment.

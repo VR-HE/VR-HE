@@ -47,6 +47,9 @@ Controls
   Equipment list     L lists every rack, with "Show" and "Open record" (no aiming needed).
   Save a description "Save" button or Ctrl+Enter. Esc closes the record.
   Help               H
+  Invert mouse Y     In Help > Settings, choose Invert mouse Y-axis. It changes vertical
+                     looking in both views, saves in this demo browser profile and leaves
+                     Q/E height and X reset unchanged. Normal looking is the default.
 While a panel or text box is open, the 3D view ignores the keyboard and mouse, so typing
 never moves you.
 

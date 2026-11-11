@@ -1,6 +1,6 @@
 # Decision record
 
-Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
+Updated November 11, 2026. Confirmed means chosen by Arlen, not implemented.
 
 | ID | Status | Decision | Consequence |
 | --- | --- | --- | --- |
@@ -39,6 +39,11 @@ Updated November 10, 2026. Confirmed means chosen by Arlen, not implemented.
 | D033 | Confirmed browser reference PC | Use Arlen's Panasonic Toughbook FZ-55 work laptop as the weakest browser PC to support | His November 10 photos identify i5-8365U, 32 GB RAM and Intel UHD Graphics 620. Exact OS/browser versions and performance remain to verify; the RTX 4060 laptop results do not qualify this machine |
 | D034 | Confirmed frame-rate floors | Browser: 30 fps minimum; VR headsets: 60 fps minimum | Test these as application-rendered frame rates with frame-pacing evidence; headset display refresh and an engineering target are separate. Mobile-phone fps, test resolution, scene/quality/memory budgets and detailed pass criteria remain open |
 | D035 | Confirmed testing constraint and next host | Company authorization is required to run the benchmark on the work Toughbook; use Arlen's personal Windows 11 VR gaming PC for the next available test | Company authorization has not been supplied. Keep D033/D034 unchanged; personal-PC results establish only that tested configuration and do not qualify the Toughbook or standalone Quest |
+| D036 | Confirmed | Offer optional mouse Y-axis inversion | Apply to first-person vertical look and third-person orbit; preserve horizontal look, Q/E height, X reset and tracked headset pose. Normal look is the prototype default, not a mandated preference |
+| D037 | Confirmed | Multiple equipment records can be placed in one rack, each identifying its occupied RU or RU range | Rack, equipment and occupancy are separate concepts; front/rear allocation, numbering and conflict rules still need design |
+| D038 | Confirmed | Each equipment item starts with one unnamed description and may optionally have many, through Add Description | Additions are record-local; an unnamed description need not create a catalog label |
+| D039 | Confirmed | Description names come from a growing reusable dropdown/catalog that editors can add to, modify or remove from | Share label choices, not equipment text; scope and in-use rename/removal semantics remain open. Do not silently delete existing descriptions or spreadsheet data |
+| D040 | Confirmed production requirement | Add Google Authenticator-compatible authenticator verification alongside company intranet/VPN and password access | Use a compatible TOTP implementation/identity service; production MFA, enrollment and recovery are not implemented, and the demo remains exempt |
 
 D004 does not request automatic deletion of downloaded content. D006 does not establish detailed administrator, site-specific or delete/recovery privileges. D009 does not approve bulk changes to existing records.
 

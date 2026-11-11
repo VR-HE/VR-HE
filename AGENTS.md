@@ -21,12 +21,15 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 ## Preserve requirements
 
 - Unity and open-source application code are requested; no application license is selected. Unity 6.3 LTS 6000.3.15f1 with the plain URP template is approved for the initial prototype only; the long-term Unity version and renderer remain provisional (D031).
-- Production requires the company intranet/VPN and password access.
+- Production requires the company intranet/VPN, password access and authenticator-app verification compatible with Google Authenticator (D040). The demo remains exempt; production MFA is not implemented. See docs/PRODUCTION_AUTHENTICATION.md.
 - Loss of the required company connection must lock both viewing and editing, including downloaded tours and attached data.
 - The test demo is exempt from the production VPN/password/connection-lock requirements.
 - Only designated production editors may change descriptions, equipment records and attachments.
 - New equipment starts from reusable templates; a field change is local to the selected record by default.
 - Reusing a field in a template for future equipment is a separate action.
+- Multiple equipment records may belong to one rack; each rack-mounted item records the RU or RU range it occupies (D037). The first demo has rack records only, not equipment authoring.
+- Each new equipment record starts with one unnamed description. Add Description may add more descriptions to that item, with optional names selected from a reusable label dropdown (D038/D039).
+- Authorized editors may add, rename and remove description-label choices. A label choice is not another item's description value. Removing an in-use label and effects on existing descriptions/sheet mappings remain an open decision; do not silently erase saved values.
 - Spreadsheet integration means two-way values AND mapped structural create/delete changes. A hyperlink or one-time import/export does not satisfy it.
 - A local field removal must not accidentally delete a shared spreadsheet column or another record's data.
 - Google Drive, Google Sheets and Gemini compatibility is required; do not ask again whether Google Sheets is required.
@@ -37,6 +40,7 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - Support site changes and target partial rescanning where feasible. Prove alignment, old-geometry removal and metadata preservation before claiming this works.
 - Include plain-language in-app guidance for scanning, editing, navigation and finding attached information, usable by non-gamers.
 - Desktop browsers support arrow-key movement as well as WASD; use up/down/left/right as forward/back/left/right equivalents unless the user changes that mapping.
+- Mouse Y inversion is an optional saved preference for first-person look and third-person orbit (D036); height/reset, horizontal look and VR head tracking keep their meanings.
 - Browser Q raises and E lowers the camera; X restores both normal camera height and a level viewing angle. The first-/third-person toggle is a separate binding.
 - iPhone/Android require familiar mobile FPS/third-person movement/look controls, view switching and a separate camera-height up/down control.
 - Third-person view requires looking/orbiting around the avatar, not only a fixed behind-avatar camera. Preserve VR 6DoF when designing any VR camera behavior.

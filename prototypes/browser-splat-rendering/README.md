@@ -148,9 +148,14 @@ Prototype defaults (implementation choices, not user decisions; all are fields i
 | Walk / Shift speed | 1.3 / 2.6 m/s |
 | Arrow keys | As W/S/A/D (D022): Up forward, Down back, Left/Right step sideways; turning is by mouse. The unexposed `arrowKeysTurn` option in `DemoApp` makes Left/Right turn at 90 deg/s instead |
 | Mouse look | 0.15 deg per pixel, adjustable 0.25-3x in Help; first-person pitch limit 80 deg |
+| Mouse Y inversion | Source update: optional checkbox in Help > Settings, default off, saved with sensitivity in this profile. Shared drag/captured look/orbit only; delivered 294f4b2 ZIP predates this change |
 | Eye height, Q/E | 1.6 m; Q/E move 0.6 m/s within -0.9 to +1.0 m; X restores 1.6 m and a level view |
 | View switch | V; third person starts 2.6 m behind (wheel 1.2-5 m), orbit pitch -30 to 70 deg, the camera pulls in at walls |
 | Placeholder figure | Plain, non-gendered, about 1.73 m tall; a rough size cue, not a verified scale reference |
 | Canvas | 1280x720 when the window allows, otherwise reduced to fit and labelled; devicePixelRatio 1; no frame cap |
 
-Not in this slice: authentication, Google Drive/Sheets/Gemini, live sync, capture, cabinet states, partial rescanning, touch and VR controls. Physical scale accuracy is not demonstrated.
+November 11 follow-up: Arlen reports the core mechanics work as hoped. The current editor has one description string for each rack record; it is not yet an equipment placement/RU editor. Multiple equipment per rack, occupied RU ranges, one unnamed equipment description initially, optional additional descriptions and an editable reusable description-name catalog are confirmed next requirements. See [the authoring task](../../docs/EQUIPMENT_DESCRIPTIONS_TASK.md). Existing saved rack descriptions need migration/preservation, not reassignment to an arbitrary server.
+
+The Y-inversion page source needs a new local build/package and real-browser application checks. Isolated source checks are in the development log; no updated ZIP was produced by the cloud review.
+
+Not in this slice: production authentication (now including [Google Authenticator-compatible MFA](../../docs/PRODUCTION_AUTHENTICATION.md)), Google Drive/Sheets/Gemini, live sync, capture, cabinet states, partial rescanning, touch and VR controls. Physical scale accuracy is not demonstrated.

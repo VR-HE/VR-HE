@@ -2,6 +2,14 @@
 
 Status: planned checks, November 11, 2026. Only the rendering-only browser prototype and the first interactive demo prototype have run, with synthetic scenes: rendering on one Linux laptop and one personal Windows 11 PC, the interactive demo on the Linux laptop only (see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
 
+## November 11 additions: source checks and planned application tests
+
+- Y inversion: test off/on in first-person look and third-person orbit, drag and captured mouse, reload/restart persistence and older/malformed/unavailable preferences. Check horizontal look, wheel, picking coordinates and Q/E/X remain unchanged; typing in fields must not move the view. Source-only syntax and isolated mouse/preference checks are recorded in the development log; no new Unity build or device test was run by Codex.
+- Rack/equipment authoring: several independent equipment records in one rack, single/multiple-RU ranges, bounds/conflict reporting, stable IDs and retained rack-level notes. Requirements confirmed; not implemented in the delivered demo.
+- Descriptions/catalog: one empty unnamed description for new equipment; Add Description affects only that item; reusable labels have independent per-item text; catalog add/rename/remove, unknown/retired labels and safe migration/export/reload. In-use removal/rename propagation policies need decisions; never pass a test by silently dropping saved values.
+- Production MFA: actual Google Authenticator enrollment and sign-in, invalid/expired/replayed codes, recovery/replacement and sessions; password/MFA alone must not bypass the required company connection or editor roles. See [authentication requirements](PRODUCTION_AUTHENTICATION.md). Not implemented or tested.
+- Human feedback: Arlen reports the demo's core mechanics work as hoped. The feedback does not identify the host/browser or supply a results ZIP; record usability feedback separately from formal Windows/device/performance results.
+
 ## Current foundation
 
 The initial change contains documentation and ignore-rule updates. Validate internal document links, required requirement coverage, consistency of implementation-status labels and preservation of the existing Unity ignore rules. Runtime tests are not applicable to this documentation-only foundation.
