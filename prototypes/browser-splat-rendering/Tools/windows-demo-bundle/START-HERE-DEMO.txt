@@ -3,14 +3,26 @@ VR-HE interactive browser demo (prototype)
 
 What this is
 A small 3D demo of the VR-HE idea in a web browser: walk through a synthetic equipment
-room, select a rack, open its record, edit the description and find the saved text again
-later. Everything is synthetic. The records are LOCAL DEMO DATA: they are kept only in a
-separate demo browser profile on this computer. Nothing is sent to the internet, to a
-spreadsheet or to any company system.
+room, select a rack, write a note about the rack, list the equipment mounted in it with
+the rack units (RU) each item fills, give each item one or more descriptions, and find
+everything again later. Everything is synthetic. The records are LOCAL DEMO DATA: they
+are kept only in a separate demo browser profile on this computer. Nothing is sent to the
+internet, to a spreadsheet or to any company system.
+
+New in this version
+- Help > Settings > Invert mouse Y-axis. It is optional; normal looking is the default.
+- Equipment in each rack, with the rack units it fills. A 2U server is one item.
+- Each new item starts with one empty description that has no name. "+ Add description"
+  adds more. A description can have a name from a shared list, such as "Serial number".
+  Choosing a name never copies another item's text.
+- "Description names" adds, renames and removes names. A name that is in use can only be
+  removed by choosing a replacement name, and every description keeps its text.
+- Rack descriptions saved with the earlier demo version are kept, as each rack's "Rack
+  note". They are not turned into equipment descriptions.
 
 Status: so far tested only on the Linux development laptop, in Chrome and Brave. This
-Windows package has not been run on Windows yet, so your run is the first Windows test.
-The earlier benchmark runs on this PC do not show whether the controls, saving or export
+version has not been run on Windows yet, so your run is its first Windows test. The
+earlier benchmark runs on this PC do not show whether the controls, saving or export
 work here.
 
 Nothing is installed and no administrator rights are needed. The demo starts a small web
@@ -23,6 +35,8 @@ Before you start
 - Extract the ZIP first: right-click it and choose "Extract All...". The files do not
   work from inside the ZIP.
 - Type made-up text only. Exported records are copied into the results you bring back.
+- If you used the earlier demo version on this PC, there is nothing to delete first. This
+  version reads its saved text and leaves the earlier copy unchanged (see step 6).
 
 Start the demo
 1. Double-click RUN-DEMO-EDGE.cmd.
@@ -44,16 +58,23 @@ Controls
   Select a rack      Point at it (white outline), then click it (cyan outline and name).
   Open its record    Right-click the selected rack, press Enter, or click
                      "Open selected record".
-  Equipment list     L lists every rack, with "Show" and "Open record" (no aiming needed).
-  Save a description "Save" button or Ctrl+Enter. Esc closes the record.
+  Equipment list     L lists every rack and the equipment in it, with "Show" and "Open".
+  Rack note          In a rack's panel: type, then "Save note" or Ctrl+Enter.
+  Add equipment      In a rack's panel, under "Add equipment": a name, "From RU" and
+                     "to RU". Leave "to RU" empty for a 1U item. RU 1 is the bottom
+                     position of the 42 RU demo rack.
+  Descriptions       In an item's panel: "+ Add description". The list above each text
+                     box gives it a name; "(no name)" leaves it unnamed. Save or
+                     Ctrl+Enter.
+  Description names  The "Description names" button at the bottom of the window.
   Help               H
   Invert mouse Y     In Help > Settings, choose Invert mouse Y-axis. It changes vertical
                      looking in both views, saves in this demo browser profile and leaves
                      Q/E height and X reset unchanged. Normal looking is the default.
 While a panel or text box is open, the 3D view ignores the keyboard and mouse, so typing
-never moves you.
+never moves you. Esc closes a panel and asks first if something is not saved yet.
 
-Test script (about 15 minutes)
+Test script (about 25 minutes)
  1. Look at the top bar. On the right it shows the 3D view size in pixels and the frames
     per second (fps). Note both.
  2. Walk around with W A S D and the arrow keys, drag to look, and hold Shift. Walk into
@@ -62,31 +83,60 @@ Test script (about 15 minutes)
     look level.
  4. Press V for third person. Drag to circle around the figure, use the mouse wheel,
     press X, walk a little, then press V again.
- 5. Click a rack, then right-click it (or press Enter). The record panel shows a name, a
-    Record ID and a description. Write down the rack name.
- 6. Type a made-up description that includes the letters W, A, S, D, Q, E and X. The view
-    must not move while you type. Press Save (or Ctrl+Enter); the panel says it saved.
- 7. Press Esc, press L, and choose "Open record" for a different rack. Its description
-    must still be its own text, not yours from step 6. Change it too and save.
- 8. Press F5 to reload the page. Open both records again: your text should be there.
- 9. Close the demo browser window. About a minute later the black window says the server
-    has stopped; press any key to close it. Double-click RUN-DEMO-EDGE.cmd again and open
-    both records: the text should still be there.
-10. Click "Saved data & export", then "Download JSON export". Note where Edge saved the
+ 5. Mouse inversion: press H, tick "Invert mouse Y-axis" under Settings, then press Esc.
+    Drag up and down on the view: it now tilts the opposite way, while left and right are
+    unchanged. Press M, move the mouse up and down, then press Esc. Press V, drag up and
+    down around the figure (also reversed), then press V again. Leave the box ticked
+    until step 14, which checks that it is remembered.
+ 6. Only if you saved rack descriptions with the earlier demo version on this PC: press L
+    and click "Open" for one of those racks. Your earlier text should appear as its
+    "Rack note". "Saved data & export" should say it carried over your earlier rack
+    notes and kept that copy unchanged.
+ 7. Click a rack, then right-click it (or press Enter). Write down the rack name. In
+    "Rack note", type made-up text that includes W, A, S, D, Q, E and X. The view must
+    not move. Press "Save note".
+ 8. In the same panel, under "Add equipment", type a made-up name, enter 40 in "From RU",
+    leave "to RU" empty and press "Add equipment". The new item opens with exactly one
+    empty description that has no name.
+ 9. Type made-up text into that description. Click "+ Add description". In the new
+    description's list choose "Serial number", then type made-up text. Add a third
+    description, choose "New name..." in its list, type a made-up name, press "Add name",
+    then type some text. Press Save.
+10. Click the rack name at the top of the item's panel to go back to the rack. Add a
+    second item from RU 20 to RU 21 (a 2U item). Choose "Serial number" for its first
+    description and type different text. Save, then go back to the rack: both items are
+    listed, the top of the rack first. Open the first item: its "Serial number" text has
+    not changed.
+11. Click "Description names" at the bottom. Click "Rename" next to "Serial number",
+    change the spelling (for example to "Serial no.") and press "Rename everywhere".
+    Open both items: the name changed on both, the text did not.
+12. In "Description names", click "Remove..." next to the name you just renamed. The
+    "Replace and remove" button stays unavailable until you choose a replacement name.
+    Choose another name (or type a new one) and confirm. Open both items: every
+    description is still there with its text, now under the replacement name.
+13. Press F5 to reload the page. Check the rack note, both items, their descriptions and
+    names, and that the mouse is still inverted.
+14. Close the demo browser window. About a minute later the black window says the server
+    has stopped; press any key to close it. Double-click RUN-DEMO-EDGE.cmd again and check
+    the same things again. Afterwards untick "Invert mouse Y-axis" if you prefer.
+15. Click "Saved data & export", then "Download JSON export". Note where Edge saved the
     file (usually the Downloads folder). A copy also goes into the "results" folder here.
-11. Optional: double-click RUN-DEMO-CHROME.cmd and repeat steps 1 to 8 in Chrome. Chrome
+16. Optional: double-click RUN-DEMO-CHROME.cmd and repeat steps 1 to 13 in Chrome. Chrome
     has its own demo profile, so text saved in Edge does not appear there. That is
     expected.
-12. Close all demo windows and wait until the black windows have finished. Then
+17. Close all demo windows and wait until the black windows have finished. Then
     double-click COLLECT-DEMO-RESULTS.cmd. It makes one file named
     VRHE-demo-results-<date>-<time>.zip next to this file and shows it in File Explorer.
     Bring that file back.
 
 What to note (a few words each is enough)
-- The fps while standing still, while walking or looking around, and while typing.
+- The fps while standing still, while walking or looking around, while typing and while
+  the equipment or "Description names" panels are open.
 - Any stutter, freeze, black screen or error message, and what you did just before it.
-- Anything confusing: controls, buttons or wording.
-- Whether the saved text came back in steps 8 and 9.
+- Anything confusing: controls, buttons or wording, including the rack-unit numbering.
+- Whether the inverted mouse felt right in both views, and whether it was remembered.
+- Whether the equipment, descriptions and names behaved as described in steps 8 to 12.
+- Whether everything came back in steps 13 and 14, and in step 6 if it applied.
 - If the top bar says "reduced to fit": your screen size and Windows display scaling
   (Settings > System > Display).
 
@@ -98,12 +148,15 @@ press Enter to see the summary. Stopping the server never closes a browser windo
 any demo window yourself.
 
 Where things are saved
-- Demo records: in the demo browser profiles, kept between runs on purpose:
+- Demo records (rack notes, equipment, descriptions and the name list) and the mouse
+  settings: in the demo browser profiles, kept between runs on purpose:
     %LOCALAPPDATA%\VRHE-Interactive-Demo\browser-profiles\edge   (and ...\chrome)
 - Timings, console messages and export copies: the "results" folder next to this file.
 - Exported JSON files: wherever the browser saves downloads.
-To remove the demo records, use "Saved data & export" > "Reset demo data...", or close all
-demo windows and delete the folder %LOCALAPPDATA%\VRHE-Interactive-Demo.
+To start the demo records over, use "Saved data & export" > "Reset demo data...". A copy
+saved by the earlier demo version stays in the profile unchanged, as a backup. To remove
+everything, close all demo windows and delete the folder
+%LOCALAPPDATA%\VRHE-Interactive-Demo.
 
 If something goes wrong
 - Windows or security software blocks a file ("Windows protected your PC" or a similar

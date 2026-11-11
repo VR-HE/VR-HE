@@ -54,7 +54,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 PROTO = os.path.dirname(TOOLS)
 BUNDLES = os.path.join(PROTO, "Bundles")
 BUNDLE_NAME = "VRHE-Interactive-Demo"
-BUNDLE_VERSION = "1"
+BUNDLE_VERSION = "2"  # 2: rack equipment, descriptions and names; record format 2 with carry-over of format 1
 FIXTURE = "scene_250000.ply"
 FIXTURE_COUNT = "250000"
 BUILD_RELEVANT = ["Assets", "Packages", "ProjectSettings"]
@@ -301,10 +301,10 @@ def main():
         "created": created.isoformat(),
         "source_commit": commit,
         "source_dirty": bool(dirty),
-        "status": ("PROTOTYPE. Behaviour was checked in Chrome on the Linux development laptop "
+        "status": ("PROTOTYPE. Behaviour was checked in Chrome and Brave on the Linux development laptop "
                    "(Tools/verify_interactive_demo.py). Running this bundle on Windows, including its controls, "
-                   "saving, relaunch and export, is untested until a recorded run on the Windows PC; the earlier "
-                   "benchmark runs do not validate it."),
+                   "saving, relaunch, export and the carry-over of earlier demo data, is untested until a "
+                   "recorded run on the Windows PC; the earlier benchmark runs do not validate it."),
         "data_notice": "LOCAL DEMO DATA: a synthetic room and synthetic records, saved only in the demo browser "
                        "profile on the computer that runs it. No backend, spreadsheet or company system.",
         "target": {"pc": "personal Windows 10 or 11 PC; company Toughbook execution is deferred (D035)",
