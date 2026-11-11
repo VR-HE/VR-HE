@@ -517,6 +517,22 @@ Preservation gaps (details in the handoff):
 - The raw Windows results ZIPs were not found on this laptop.
 - Rebuilding depends on Unity 6000.3.15f1 and two packages downloaded from the internet. Local copies of the packages are in Library/PackageCache.
 
+## November 11, 2026 — GitHub pause housekeeping and NetBox comparison notes
+
+Human contribution:
+- Arlen asked for any needed GitHub updates or closures while the project is on hold. This authorizes preservation/documentation housekeeping, not renewed implementation.
+
+AI contribution:
+- ChatGPT/Codex checked the private repository through the authenticated VR-HE connection: five branches, two open pull requests, no open issues and no GitHub Actions runs. The preserved tree has no workflow files.
+- It closed PR #1 and draft PR #2 without merging, added On hold titles and prefixed each original description with the pause reason and restart link. Original descriptions and source branches are retained.
+- It replaced main's starter README with a pause landing page and added AGENTS.md/CLAUDE.md entry notices in commit c8627d6. The original .gitignore is unchanged; no prototype code was merged.
+- It updated docs/HANDOFF.md and the branch README, and recorded [a public-documentation NetBox comparison](NETBOX_EVALUATION.md). The comparison distinguishes substantial inventory overlap from unverified company configuration and unbuilt VR-HE capabilities. NetBox as a backend remains a proposal.
+- All branches/history remain. No app code, build, ZIP, saved browser data or user device changed; The Veil and company systems were not accessed. Ignored artifacts and exports still require the separate preservation actions in the handoff.
+
+Validation:
+- Checked 28 Markdown files: 180 internal file links and 21 heading anchors resolve; 50 tables have consistent columns. Added-line whitespace/privacy checks pass. No build or runtime tests were run for documentation-only housekeeping.
+- All 27 baseline Markdown blob hashes match pause commit 705de4e. The main tree was verified to contain exactly the three intended documentation files plus the unchanged .gitignore. Branch updates use the expected old head without force.
+
 ## Entry template
 
 For each meaningful change, record:

@@ -12,7 +12,7 @@ The sections after this one describe the project as it stood at the pause. Their
 
 1. Run `cd ~/Projects/VR-HE`, `git fetch origin`, `git switch proto/equipment-descriptions` and `git status`. If the tree is clean, update with `git merge --ff-only origin/proto/equipment-descriptions`. If there are local changes or the fast-forward fails, stop and ask; do not reset or discard anything.
 2. Read [AGENTS.md](../AGENTS.md), then this handoff, starting with this section.
-3. Review the NetBox findings with Arlen. None are recorded in this repository at the pause. Ask him for them and record them in the docs before comparing options; see [the questions below](#netbox-questions-for-the-restart).
+3. Read [the initial public-documentation NetBox comparison](NETBOX_EVALUATION.md), then review it with Arlen against the company's actual version, plugins and workflows; these remain unknown. See [the questions below](#netbox-questions-for-the-restart). No backend or integration direction has been approved.
 4. Get Arlen's explicit renewed direction before any implementation, build or packaging. Record it in [DECISIONS.md](DECISIONS.md) and the [development log](DEVELOPMENT_LOG.md). Then update or remove the ON HOLD notices here and in AGENTS.md, CLAUDE.md and README.md.
 5. Before build work:
    - Start Claude with MAX effort and verify it ([MAX effort](#max-effort-for-claude-build-work)).
@@ -21,13 +21,23 @@ The sections after this one describe the project as it stood at the pause. Their
 
 ### Where the code stands
 
-- The working branch is **proto/equipment-descriptions**, pushed to origin. It contains every earlier branch: main (d731a36), docs/project-foundation (ff1e070), proto/browser-splat-rendering (f993dd6) and proto/interactive-browser-demo (6f802b1).
-- The last commit before the pause is e997112, "Record partial manual Windows authoring evidence and user feedback". The pause checkpoint is the documentation-only commit directly after it.
+- The preserved development branch is **proto/equipment-descriptions**, pushed to origin. It contains the original main baseline (d731a36), docs/project-foundation (ff1e070), proto/browser-splat-rendering (f993dd6) and proto/interactive-browser-demo (6f802b1). Later pause notices on main are separate documentation housekeeping, not a merge of prototype code.
+- The last commit before the pause is e997112, "Record partial manual Windows authoring evidence and user feedback". Claude's original documentation-only pause checkpoint is [705de4e](https://github.com/VR-HE/VR-HE/commit/705de4e189180174f228cdccc8c6e377e60cc540); subsequent housekeeping does not change the delivered build.
 - State at the pause:
-  - All four local branches match origin.
+  - All existing local branches matched origin at Claude's checkpoint. Later remote-only housekeeping has not updated Arlen's laptop checkout; follow the fast-forward restart step rather than assuming it is current.
   - No uncommitted changes, stashes, extra worktrees or unfinished code.
-  - Nothing is merged into main. Pull request #1 (docs/project-foundation) is open and #2 (proto/browser-splat-rendering) is a draft; the two later branches have none.
+  - No prototype code was merged into main. Pull requests #1 and #2 were still open at Claude's checkpoint; both are now closed without merging, as recorded below. The two later branches have no pull requests.
   - No demo server, test browser or VR-HE Unity Editor was left running, and The Veil was not touched.
+
+### GitHub pause housekeeping — November 11, 2026
+
+Arlen explicitly requested any needed GitHub updates and closures after receiving Claude's pause report.
+
+- [PR #1](https://github.com/VR-HE/VR-HE/pull/1) and [PR #2](https://github.com/VR-HE/VR-HE/pull/2) are **closed without merging**, with On hold titles and a pause/restart notice above each original description. Their original proposals remain historical context, not active instructions.
+- Main now provides a pause landing page and AGENTS.md/CLAUDE.md guard notices, in [commit c8627d6](https://github.com/VR-HE/VR-HE/commit/c8627d64dfb4e5e5d8ca248f149e7545692cef57). Its original ignore rules are unchanged. Main is not the Unity prototype.
+- All five branches and all existing history are preserved. The private repository remains available for future work; it has not been archived. No open issues or GitHub Actions runs were found, and the preserved tree has no workflow files.
+- The [NetBox comparison](NETBOX_EVALUATION.md) preserves a bounded public-documentation review for a future restart. It is not a company installation assessment or an approved plan.
+- ChatGPT/Codex made these remote documentation/PR changes. It did not update Arlen's local checkout, run Unity, rebuild/repackage the demo, alter browser records or contact any company system.
 
 ### What exists (prototypes on synthetic data only)
 
@@ -82,7 +92,7 @@ Arlen's feedback is that the core mechanics work as he hoped, and the overall di
 
 ### NetBox questions for the restart
 
-No NetBox evaluation is recorded here. No assistant has contacted NetBox or any company system, and nothing in this repository describes NetBox's capabilities. To compare the findings with the confirmed requirements, they should establish:
+[The initial comparison](NETBOX_EVALUATION.md) records documented NetBox functionality and the limits of that evidence. No assistant has accessed the company's NetBox instance or another company system. Before choosing any direction, establish:
 - The company's NetBox version and the plugins or extensions actually installed.
 - Which confirmed VR-HE requirements it already covers, and how:
   - racks, RU ranges and equipment records (D037);
@@ -133,7 +143,7 @@ If disk space is needed during the pause, `Library/`, `Fixtures/Generated/` and 
 
 ## Current state
 
-VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated as VR-HE with read and write permissions. Initial documentation is prepared on docs/project-foundation; check the pull request for whether it has been merged.
+VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated as VR-HE with read and write permissions. Development is on hold. The latest preserved work is on proto/equipment-descriptions; main is a pause landing page. The original foundation and rendering pull requests (#1 and #2) are closed without merging, with their branches retained.
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 

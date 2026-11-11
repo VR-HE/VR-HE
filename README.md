@@ -13,6 +13,7 @@ The repository is private. Open-source application code is the intended directio
 - [Product specification](docs/PRODUCT_SPEC.md): confirmed behavior, proposals and open questions.
 - [Decision record](docs/DECISIONS.md): what Arlen has actually chosen.
 - [Developer handoff](docs/HANDOFF.md): the pause checkpoint, restart steps and current state.
+- [NetBox comparison notes](docs/NETBOX_EVALUATION.md): documented overlap, unknown company configuration and questions for a future restart.
 - [Proposed architecture](docs/ARCHITECTURE.md): module boundaries and unresolved choices.
 - [Spreadsheet synchronization](docs/SPREADSHEET_SYNC.md): required two-way behavior and mapping questions.
 - [Integration controls](docs/INTEGRATIONS.md): Google requirements and approved AI/spreadsheet connections.
