@@ -1,0 +1,209 @@
+{
+  "schema": "vrhe.demo.site",
+  "schemaVersion": 1,
+  "siteId": "site-bfaaec37-26c3-4ca9-99f2-b1fb9de68f5a",
+  "siteName": "Synthetic equipment room (demo)",
+  "dataNotice": "Synthetic demo data. No real site, equipment, capture or company information.",
+  "coordinateFrame": "Unity world space in metres: x right, y up, z forward. Matches Tools/generate_synthetic_splats.py (its PLY files are written in the RUB frame and loaded with SourceCoordinates.RUB).",
+  "splat": {
+    "file": "scene_250000.ply",
+    "splats": 250000,
+    "source": "Tools/generate_synthetic_splats.py generator v2, seed 20261110 (synthetic)"
+  },
+  "spawn": {
+    "feet": [2.8, 0.0, -2.35],
+    "yawDegrees": -60.0
+  },
+  "obstacles": [
+    {
+      "name": "floor",
+      "center": [0.0, -0.05, 0.0],
+      "size": [8.0, 0.1, 6.0],
+      "visibleInSplat": true
+    },
+    {
+      "name": "back wall",
+      "center": [0.0, 1.5, 3.05],
+      "size": [8.0, 3.0, 0.1],
+      "visibleInSplat": true
+    },
+    {
+      "name": "left wall",
+      "center": [-4.05, 1.5, 0.0],
+      "size": [0.1, 3.0, 6.0],
+      "visibleInSplat": true
+    },
+    {
+      "name": "open right side (invisible boundary)",
+      "center": [3.95, 1.5, 0.0],
+      "size": [0.1, 3.0, 6.0],
+      "visibleInSplat": false
+    },
+    {
+      "name": "open front side (invisible boundary)",
+      "center": [0.0, 1.5, -3.0],
+      "size": [8.0, 3.0, 0.1],
+      "visibleInSplat": false
+    },
+    {
+      "name": "wall cabinet (not selectable in this demo)",
+      "center": [1.9, 1.4, 2.875],
+      "size": [0.8, 1.2, 0.25],
+      "visibleInSplat": true
+    }
+  ],
+  "anchors": [
+    {
+      "anchorId": "anc-836007b1-09cd-41f9-82e8-52da9a18fe75",
+      "recordId": "rec-9040bad6-d264-4969-b923-a7df2cba2e93",
+      "kind": "rack-proxy",
+      "center": [-1.6, 1.0, -1.2],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "-z"
+    },
+    {
+      "anchorId": "anc-f6127e89-7d2f-44c7-b307-49f447927232",
+      "recordId": "rec-a9955c73-733d-4e06-8b70-e03eead46856",
+      "kind": "rack-proxy",
+      "center": [-0.98, 1.0, -1.2],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "-z"
+    },
+    {
+      "anchorId": "anc-f1c18d67-b997-462c-9d21-364b66dc83f3",
+      "recordId": "rec-76a51e49-e03c-42aa-82c7-b7907a9141f1",
+      "kind": "rack-proxy",
+      "center": [-0.36, 1.0, -1.2],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "-z"
+    },
+    {
+      "anchorId": "anc-52879233-2898-4036-a5af-608c49cb6d74",
+      "recordId": "rec-e85376c8-3f24-4000-8f38-a61f4c54af69",
+      "kind": "rack-proxy",
+      "center": [0.26, 1.0, -1.2],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "-z"
+    },
+    {
+      "anchorId": "anc-d3c3e625-7423-4e27-be3f-107d90052533",
+      "recordId": "rec-ae2ab7c1-17ad-45c4-b489-dc4ce16a81a4",
+      "kind": "rack-proxy",
+      "center": [0.88, 1.0, -1.2],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "-z"
+    },
+    {
+      "anchorId": "anc-a0692d7d-66b6-4d67-a32a-d51aef6fc14e",
+      "recordId": "rec-62b57a22-6b57-4c37-9bc4-f478eb821332",
+      "kind": "rack-proxy",
+      "center": [-1.6, 1.0, 1.0],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "+z"
+    },
+    {
+      "anchorId": "anc-7dab14dc-6a68-48e9-b766-85804ef53787",
+      "recordId": "rec-c815133f-78fc-49bf-98bd-d7fd88d18480",
+      "kind": "rack-proxy",
+      "center": [-0.98, 1.0, 1.0],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "+z"
+    },
+    {
+      "anchorId": "anc-8d804a9f-66da-4a97-b39f-8dc34dd6bc4f",
+      "recordId": "rec-fa8af085-c0d9-4959-ac4c-c6ad8bb44ac9",
+      "kind": "rack-proxy",
+      "center": [-0.36, 1.0, 1.0],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "+z"
+    },
+    {
+      "anchorId": "anc-786522d3-36b8-48fc-9cc2-0fbcdb84ade9",
+      "recordId": "rec-8692fb2d-a267-4e90-8166-3ec287a1b076",
+      "kind": "rack-proxy",
+      "center": [0.26, 1.0, 1.0],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "+z"
+    },
+    {
+      "anchorId": "anc-1c7aaaf4-2d7e-4f27-a706-d6099d4501a8",
+      "recordId": "rec-ea78d667-20bd-42c9-a2a3-b8e47fa4d778",
+      "kind": "rack-proxy",
+      "center": [0.88, 1.0, 1.0],
+      "size": [0.6, 2.0, 1.0],
+      "frontFacing": "+z"
+    }
+  ],
+  "records": [
+    {
+      "recordId": "rec-9040bad6-d264-4969-b923-a7df2cba2e93",
+      "kind": "rack",
+      "name": "Rack A1",
+      "location": "Row A, position 1 of 5; front faces the open front of the room",
+      "description": "Synthetic demo rack A1. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-a9955c73-733d-4e06-8b70-e03eead46856",
+      "kind": "rack",
+      "name": "Rack A2",
+      "location": "Row A, position 2 of 5; front faces the open front of the room",
+      "description": "Synthetic demo rack A2. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-76a51e49-e03c-42aa-82c7-b7907a9141f1",
+      "kind": "rack",
+      "name": "Rack A3",
+      "location": "Row A, position 3 of 5; front faces the open front of the room",
+      "description": "Synthetic demo rack A3. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-e85376c8-3f24-4000-8f38-a61f4c54af69",
+      "kind": "rack",
+      "name": "Rack A4",
+      "location": "Row A, position 4 of 5; front faces the open front of the room",
+      "description": "Synthetic demo rack A4. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-ae2ab7c1-17ad-45c4-b489-dc4ce16a81a4",
+      "kind": "rack",
+      "name": "Rack A5",
+      "location": "Row A, position 5 of 5; front faces the open front of the room",
+      "description": "Synthetic demo rack A5. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-62b57a22-6b57-4c37-9bc4-f478eb821332",
+      "kind": "rack",
+      "name": "Rack B1",
+      "location": "Row B, position 1 of 5; front faces the back wall",
+      "description": "Synthetic demo rack B1. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-c815133f-78fc-49bf-98bd-d7fd88d18480",
+      "kind": "rack",
+      "name": "Rack B2",
+      "location": "Row B, position 2 of 5; front faces the back wall",
+      "description": "Synthetic demo rack B2. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-fa8af085-c0d9-4959-ac4c-c6ad8bb44ac9",
+      "kind": "rack",
+      "name": "Rack B3",
+      "location": "Row B, position 3 of 5; front faces the back wall",
+      "description": "Synthetic demo rack B3. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-8692fb2d-a267-4e90-8166-3ec287a1b076",
+      "kind": "rack",
+      "name": "Rack B4",
+      "location": "Row B, position 4 of 5; front faces the back wall",
+      "description": "Synthetic demo rack B4. Placeholder text: replace it with any made-up note to test saving."
+    },
+    {
+      "recordId": "rec-ea78d667-20bd-42c9-a2a3-b8e47fa4d778",
+      "kind": "rack",
+      "name": "Rack B5",
+      "location": "Row B, position 5 of 5; front faces the back wall",
+      "description": "Synthetic demo rack B5. Placeholder text: replace it with any made-up note to test saving."
+    }
+  ]
+}
