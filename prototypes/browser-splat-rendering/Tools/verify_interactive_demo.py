@@ -365,8 +365,22 @@ def select_via_list(driver, page, name):
     time.sleep(0.4)
 
 
+LOOK_DEG_PER_PX = 0.15  # DemoPlayer's mouse look at the page's default 1.00x look speed
+
+
+def turn_by_drag(driver, page, degrees):
+    """Turn the first-person view with real horizontal drags on the canvas. The arrow keys step sideways
+    (D022), so turning is by mouse. Every segment moves at least 60 px, far past the page's 5 px
+    click-versus-drag slop, so a small correction can never count as a click and select a rack."""
+    cx, cy = canvas_center(page)
+    px = max(-400.0, min(400.0, degrees / LOOK_DEG_PER_PX))
+    segments = [px] if abs(px) >= 60 else [math.copysign(100, px), px - math.copysign(100, px)]
+    for seg in segments:
+        driver.drag(cx - seg / 2, cy, seg, 0, max(4, int(abs(seg) / 20)), max(0.12, abs(seg) / 1500))
+
+
 def walk_to(driver, page, waypoints, tolerance=0.12):
-    """Closed-loop walking with real key presses: turn with the arrow keys, step with W."""
+    """Closed-loop walking with real input in first person: turn with mouse drags, step with W."""
     for tx, tz in waypoints:
         for _ in range(80):
             st = state(page)
@@ -376,7 +390,7 @@ def walk_to(driver, page, waypoints, tolerance=0.12):
                 break
             turn = angle_delta(st["viewYaw"], math.degrees(math.atan2(dx, dz)))
             if abs(turn) > 4:
-                driver.hold(["ArrowRight" if turn > 0 else "ArrowLeft"], max(0.03, abs(turn) / 90.0 - 0.02))
+                turn_by_drag(driver, page, turn)
             else:
                 driver.hold(["w"], min(0.6, max(0.05, d / 1.3 - 0.02)))
         else:
@@ -388,7 +402,7 @@ def face(driver, page, yaw, tolerance=1.5):
         turn = angle_delta(state(page)["viewYaw"], yaw)
         if abs(turn) < tolerance:
             return
-        driver.hold(["ArrowRight" if turn > 0 else "ArrowLeft"], max(0.02, abs(turn) / 90.0 - 0.015))
+        turn_by_drag(driver, page, turn)
     raise RuntimeError(f"could not face yaw {yaw}")
 
 
@@ -462,14 +476,17 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     driver.hold(["ArrowDown"], 0.6)
     st8 = state(page)
     checks.check("Down arrow moves back", along(st7, st8, fwd) < -0.6, f"{along(st7, st8, fwd):.2f} m")
-    driver.hold(["ArrowLeft"], 1.0)
+    # D022: Left/Right arrows match A/D (step sideways, no turning). Same 0.6 s excursions as D/A above.
+    driver.hold(["ArrowRight"], 0.6)
     st9 = state(page)
-    turn = angle_delta(st8["viewYaw"], st9["viewYaw"])
-    checks.check("Left arrow turns left (about 90 deg/s)", -110 < turn < -70, f"{turn:.1f} deg in 1 s")
-    driver.hold(["ArrowRight"], 1.0)
+    side, turned = along(st8, st9, right), angle_delta(st8["viewYaw"], st9["viewYaw"])
+    checks.check("Right arrow steps right like D, without turning", side > 0.6 and abs(turned) < 1.0,
+                 f"{side:.2f} m, yaw change {turned:.1f} deg")
+    driver.hold(["ArrowLeft"], 0.6)
     st10 = state(page)
-    checks.check("Right arrow turns right", 70 < angle_delta(st9["viewYaw"], st10["viewYaw"]) < 110,
-                 f"{angle_delta(st9['viewYaw'], st10['viewYaw']):.1f} deg")
+    side, turned = along(st9, st10, right), angle_delta(st9["viewYaw"], st10["viewYaw"])
+    checks.check("Left arrow steps left like A, without turning", side < -0.6 and abs(turned) < 1.0,
+                 f"{side:.2f} m, yaw change {turned:.1f} deg")
     pace_move = pacing(page, "first.moving (W held 2.5 s, sliding along a rack)", lambda: driver.hold(["w"], 2.5))
     st11 = state(page)
     # Hollow if nothing moved: require a real walk that ends outside rack A4's footprint.

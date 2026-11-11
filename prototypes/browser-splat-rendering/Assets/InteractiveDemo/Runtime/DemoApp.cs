@@ -47,7 +47,9 @@ namespace VRHE.InteractiveDemo
         public Camera viewCamera;
 
         [Header("Prototype choices (not user decisions)")]
-        public bool arrowKeysTurn = true;  // Left/Right arrows turn; A/D step sideways
+        // D022: Left/Right arrows step sideways like A/D (turning is by mouse). True makes them turn at
+        // DemoPlayer.keyTurnDegreesPerSecond instead; not exposed in the page, kept for later comfort tests.
+        public bool arrowKeysTurn = false;
         public float hudInterval = 0.5f;
         public float reportInterval = 30f;
         public float uploadTimeoutSeconds = 120f;

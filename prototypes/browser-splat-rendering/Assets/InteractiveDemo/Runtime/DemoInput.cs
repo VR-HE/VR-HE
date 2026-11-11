@@ -188,7 +188,7 @@ namespace VRHE.InteractiveDemo
 
         public string SourceName => m_source.Name;
         public bool Allowed { get; private set; } = true;
-        public bool ArrowKeysTurn { get; set; } = true;
+        public bool ArrowKeysTurn { get; set; } = false;  // D022: arrows step like W/S/A/D by default
 
         public void SetAllowed(bool allowed)
         {

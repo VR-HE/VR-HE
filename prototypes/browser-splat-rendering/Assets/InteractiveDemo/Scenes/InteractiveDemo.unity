@@ -1340,7 +1340,7 @@ MonoBehaviour:
   player: {fileID: 1864109413}
   selection: {fileID: 897995353}
   viewCamera: {fileID: 1935148933}
-  arrowKeysTurn: 1
+  arrowKeysTurn: 0
   hudInterval: 0.5
   reportInterval: 30
   uploadTimeoutSeconds: 120

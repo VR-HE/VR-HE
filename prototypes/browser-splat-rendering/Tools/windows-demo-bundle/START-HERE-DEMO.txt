@@ -8,9 +8,9 @@ later. Everything is synthetic. The records are LOCAL DEMO DATA: they are kept o
 separate demo browser profile on this computer. Nothing is sent to the internet, to a
 spreadsheet or to any company system.
 
-Status: so far tested only on the Linux development laptop, in Chrome. This Windows
-package has not been run on Windows yet, so your run is the first Windows test. The
-earlier benchmark runs on this PC do not show whether the controls, saving or export
+Status: so far tested only on the Linux development laptop, in Chrome and Brave. This
+Windows package has not been run on Windows yet, so your run is the first Windows test.
+The earlier benchmark runs on this PC do not show whether the controls, saving or export
 work here.
 
 Nothing is installed and no administrator rights are needed. The demo starts a small web
@@ -33,9 +33,9 @@ Start the demo
 
 Controls
   Move               W or Up arrow: forward. S or Down arrow: back.
-                     A / D: step sideways. Left / Right arrow: turn.
+                     A or Left arrow: step left. D or Right arrow: step right.
   Faster             Hold Shift while moving.
-  Look around        Hold the left mouse button on the view and drag.
+  Look around / turn Hold the left mouse button on the view and drag.
   Game-style look    M (or "Capture mouse"). Esc gives the pointer back.
   Camera height      Q raises the camera, E lowers it.
   Reset view         X: normal camera height and a level view.
