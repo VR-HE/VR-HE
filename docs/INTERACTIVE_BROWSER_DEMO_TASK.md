@@ -1,6 +1,6 @@
-# Proposed next local task: interactive browser demo
+# Local task: interactive browser demo
 
-Status: queued implementation task after the reviewed 60 Hz baseline. This is not an implemented feature or a final production engine/renderer decision.
+Status: implemented as a prototype on branch proto/interactive-browser-demo, November 11, 2026. Checked in Chrome and Brave on the Linux development laptop; the Windows demo bundle is untested until Arlen runs it. Results, the bundle and the next user test are in [the handoff](HANDOFF.md#interactive-browser-demo--november-11). This is not a final production engine/renderer decision.
 
 ## Goal and scope
 

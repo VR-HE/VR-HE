@@ -1,7 +1,7 @@
 # VR-HE — Product Specification
 
-Status: requirements baseline 0.20; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup and a rendering-only browser prototype; no VR-HE application yet.
-Updated: November 10, 2026.
+Status: requirements baseline 0.20; personal Windows Edge/Chrome 30 Hz and 60 Hz baselines reviewed; company-device testing awaits authorization. Requirements/development setup, a rendering-only browser prototype and an interactive browser demo prototype (checked on Linux; Windows untested); no VR-HE application yet.
+Updated: November 11, 2026.
 Owner/requester: Arlen.
 Purpose: a work utility for virtually touring ISP hubsites and headends and maintaining information attached to places and equipment.
 
@@ -99,7 +99,7 @@ The first tested candidate is arloopa/UnitySplats (MIT; pinned revision 689e0a7)
 
 Arlen selected his Panasonic Toughbook FZ-55 work laptop as the minimum browser reference PC (D033), with 30 fps as the browser floor and 60 fps as the VR headset floor (D034). His November 10 Task Manager photos identify an Intel Core i5-8365U (4 cores, 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. Exact OS/browser versions and browser-backend behavior are unverified. Hardware identification does not establish performance; no Toughbook benchmark or headset run has occurred. Report application-rendered fps separately from headset display refresh. See [the test plan](TEST_PLAN.md) for the proposed Quest operating target and validation details.
 
-Testing availability (D035): Arlen cannot execute the benchmark on his company Toughbook without company authorization, which has not been provided. His personal Windows 11 VR gaming PC completed the first Edge/Chrome baselines; the higher-refresh repeat now also completes at about 60 fps through 250k splats. A small interactive browser demo is the next proposed implementation step. The Toughbook remains the requested minimum reference; its performance and all standalone Quest behavior remain unverified. Record personal-PC results under that machine's actual configuration rather than presenting them as minimum-hardware qualification.
+Testing availability (D035): Arlen cannot execute the benchmark on his company Toughbook without company authorization, which has not been provided. His personal Windows 11 VR gaming PC completed the first Edge/Chrome baselines; the higher-refresh repeat now also completes at about 60 fps through 250k splats. A small interactive browser demo is now implemented as a prototype and checked in Chrome and Brave on the Linux development laptop; its Windows bundle awaits a first run on the personal PC. The Toughbook remains the requested minimum reference; its performance and all standalone Quest behavior remain unverified. Record personal-PC results under that machine's actual configuration rather than presenting them as minimum-hardware qualification.
 
 Early rendering work should therefore test the weakest required devices and browser path using a representative small headend scene before building a large editing system around a specific renderer.
 
@@ -257,7 +257,7 @@ Verified November 10, 2026:
 - Read and write permissions are available to this project's connection.
 - Existing main branch contains a starter README and Unity .gitignore.
 - Initial documentation is prepared on docs/project-foundation for review; consult the repository's pull requests for integration status.
-- No VR-HE application, capture system, spreadsheet adapter or production security implementation exists yet. A rendering-only browser prototype is in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; no renderer has been selected.
+- No VR-HE application, capture system, spreadsheet adapter or production security implementation exists yet. A rendering-only browser prototype is in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; no renderer has been selected. An interactive browser demo prototype with local demo records is in the same folder on branch proto/interactive-browser-demo.
 - Arlen's laptop output reports Git 2.43.0 and successful GitHub CLI 2.45.0 installation. His screenshot confirms browser authorization completed and the local account lookup returned VR-HE. A subsequent screenshot confirms cloning to /home/arlen/Projects/VR-HE, the docs/project-foundation branch and a clean working tree. Claude Code v2.1.321 is shown running Opus 5.5 with max effort in ~/Projects/VR-HE. The local Unity inventory was verified on November 10 (installed tools, not tested functionality), and local push access is verified by commit ff1e070 on origin/docs/project-foundation.
 
 Canonical project records:

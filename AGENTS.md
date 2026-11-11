@@ -14,7 +14,7 @@ Confirmed user decisions take precedence over proposals. Current explicit user i
 
 ## Working state
 
-This repository contains requirements, developer setup and a rendering-only browser prototype with results on one Linux laptop and one personal Windows 11 PC (Edge/Chrome; reviewed 30 Hz and 60 Hz baselines). The full VR-HE application, capture pipeline, backend, spreadsheet integration and security system are not implemented. Consult docs/HANDOFF.md for tested conditions; the requested device matrix is not a tested support matrix.
+This repository contains requirements, developer setup and a rendering-only browser prototype with results on one Linux laptop and one personal Windows 11 PC (Edge/Chrome; reviewed 30 Hz and 60 Hz baselines). A first interactive browser demo prototype (branch proto/interactive-browser-demo) is checked in Chrome and Brave on the Linux laptop only; its Windows bundle is untested. The full VR-HE application, capture pipeline, backend, spreadsheet integration and security system are not implemented. Consult docs/HANDOFF.md for tested conditions; the requested device matrix is not a tested support matrix.
 
 Ask one primary product question at a time. Explain meaningful consequences in plain language, record the answer and resolve important follow-ups before advancing. Continue independent authorized work while a question is pending.
 

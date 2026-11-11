@@ -1,6 +1,6 @@
 # Developer and assistant handoff
 
-Updated November 10, 2026.
+Updated November 11, 2026.
 
 ## Current state
 
@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone or Quest test has run. The prepared Windows bundle completed Edge/Chrome baselines on the personal Windows 11 PC; its recorded 30 Hz display mode limits performance interpretation (see the reviewed Windows results below). Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
+There is no VR-HE application yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. The same Unity project now also holds a first interactive browser demo prototype on branch proto/interactive-browser-demo. It is checked in Chrome and Brave on the Linux laptop, and its Windows bundle awaits Arlen's first run (see the interactive demo section below). Navigation and editing exist only in that demo's local synthetic slice. No capture, backend, sync or security implementation exists, and no phone or Quest test has run. The prepared Windows bundle completed Edge/Chrome baselines on the personal Windows 11 PC; its recorded 30 Hz display mode limits performance interpretation (see the reviewed Windows results below). Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
 
 ## Read in this order
 
@@ -26,16 +26,17 @@ There is no VR-HE application or runnable demo yet. The first implementation mil
 12. [AI-assisted capture inventory](AI_CAPTURE_INVENTORY.md)
 13. [Supplied spreadsheet examples](SPREADSHEET_EXAMPLES.md)
 14. [Browser splat-rendering prototype](../prototypes/browser-splat-rendering/README.md)
+15. [Interactive browser demo task](INTERACTIVE_BROWSER_DEMO_TASK.md) and [its Linux results](../prototypes/browser-splat-rendering/TestResults/interactive-demo-linux-20261111/README.md)
 
 The earlier ISP_Virtual_Tour_Product_Brief.md informed this baseline. The repository specification is now the maintained project source of truth; do not maintain competing copies.
 
 ## Next setup work
 
-Local VR-HE sign-in, clone, the Claude session configuration and the local Unity inventory are complete. Arlen approved Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for the initial prototype (D031). The prototype branch is **proto/browser-splat-rendering**, created from docs/project-foundation at ff1e070. It holds the prototype and this milestone's documentation updates; docs/project-foundation does not have them. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
+Local VR-HE sign-in, clone, the Claude session configuration and the local Unity inventory are complete. Arlen approved Unity 6.3 LTS 6000.3.15f1 with the plain URP 3D template for the initial prototype (D031). The prototype branch is **proto/browser-splat-rendering**, created from docs/project-foundation at ff1e070. It holds the prototype and this milestone's documentation updates; docs/project-foundation does not have them. The interactive demo branch, **proto/interactive-browser-demo**, was created from proto/browser-splat-rendering at f993dd6 and holds the demo and its documentation updates. He answered Yes to Git credential configuration during login; do not repeat authentication solely to change that answer. Do not assume commands in a cloud workspace ran on his laptop.
 
 Authentication and repository read access are confirmed. Local push access is verified: the inspection commit ff1e070 is on origin/docs/project-foundation. Local commits use the repository-local Git identity VR-HE with the account's GitHub noreply address, as Arlen chose on November 10. Do not paste passwords, tokens or login codes into chat.
 
-If these branches are still unmerged, check out proto/browser-splat-rendering when continuing; do not mistake the starter README on main for the full project.
+If these branches are still unmerged, check out proto/interactive-browser-demo, which contains proto/browser-splat-rendering, when continuing; do not mistake the starter README on main for the full project.
 
 ## MAX effort for Claude build work
 
@@ -258,9 +259,64 @@ Arlen supplied a collected ZIP containing completed Edge 155.0.4283.45 and Chrom
 - The pasted Edge WinError 10054 tracebacks occurred while closing the browser. Complete saved data supports a cleanup-logging issue; fix it narrowly in future tooling without masking failed runs or unrelated errors.
 - Chrome process stdout includes background push/updater diagnostics. Unity's browser hardware placeholders differ from native Windows facts; use the latter. The initial pasted Edge console identifies a OneDrive-synced folder; the sanitized archives do not establish every run's folder. Short run duration limits generalization.
 
-The higher-refresh diagnostic repeat is complete. Next proposed local implementation task: [the first interactive browser demo](INTERACTIVE_BROWSER_DEMO_TASK.md), with movement/view switching, proxy selection and browser-local editable descriptions. Use the tested renderer/version provisionally; long-term selection and other-platform qualification remain open. Preserve the benchmark for comparisons. No benchmark, bundle or user device was changed during this review.
+The higher-refresh diagnostic repeat is complete. The local task it queued, [the first interactive browser demo](INTERACTIVE_BROWSER_DEMO_TASK.md), is now implemented as a prototype; see the next section. The renderer and Unity version stay provisional; long-term selection and other-platform qualification remain open. No benchmark, bundle or user device was changed during this review.
 
 The company Toughbook stays deferred until company authorization is explicitly confirmed (D035); do not suggest a launcher or transfer workaround. Personal-PC results do not qualify it or standalone Quest. Detailed acceptance criteria and partial-rescan streaming remain open.
+
+## Interactive browser demo — November 11
+
+Claude Code carried out [the interactive demo task](INTERACTIVE_BROWSER_DEMO_TASK.md) on the Linux development laptop, on branch proto/interactive-browser-demo. The demo is a new scene and source folder (Assets/InteractiveDemo) in the existing Unity project, with its own page template and build output (Builds/InteractiveDemo). The benchmark scene, its build in Builds/WebGL, its fixtures and the Toughbook bundle are unchanged. File map, commands, record contract and defaults: [the prototype README](../prototypes/browser-splat-rendering/README.md#interactive-browser-demo-prototype). Check and pacing tables: [the Linux results](../prototypes/browser-splat-rendering/TestResults/interactive-demo-linux-20261111/README.md).
+
+Implemented (prototype; synthetic room and records):
+- The 250k synthetic room with a fixed spawn point. Walking and picking use invisible proxy boxes from demo-site.json, never the splat.
+- Desktop controls: WASD, and arrows as D022 maps them (Up forward, Down back, Left/Right step sideways). Drag to look, or M for pointer lock; Shift goes faster; Q/E change camera height; X restores the 1.6 m eye height and a level view. V switches to third person behind a plain, non-gendered placeholder figure, with drag orbit and wheel zoom; there X also puts the camera back behind the figure. Keyboard and mouse pause while a panel or text field is active.
+- Ten rack anchors with stable record IDs (prefixed UUIDs). Pointing outlines a rack and a click selects it. Right-click, Enter, the Open selected record button or the L equipment list opens its record: name, record ID, anchor ID and an editable description. Save or Ctrl+Enter saves; Esc asks before discarding unsaved text.
+- Records are saved in the demo browser profile's localStorage under a versioned prototype schema (vrhe.demo.local-records, version 1), keyed by record ID only. JSON export (a browser download plus a copy in the local server's results folder) and a reset are included. Everything is labelled LOCAL DEMO DATA.
+- Plain-language help (H) and a HUD with the actual canvas size and fps; no frame cap. The canvas is 1280x720 when the window allows, otherwise reduced to fit and labelled.
+- A local server at the fixed address http://127.0.0.1:8791/ opens Edge, Chrome or Brave with a persistent demo profile and stops by itself after that browser closes.
+- Defaults are implementation choices listed in the README, not user decisions. Physical scale accuracy is not demonstrated.
+
+Checks on the development laptop (Linux; not Windows evidence):
+- 23 of 23 EditMode tests (record identity, persistence, revision conflicts, damaged or newer data, export and the URL rule). The site check matches the proxies to the generated room.
+- Automated real-browser checks with trusted DevTools keyboard and mouse input, on the final ZIP extracted and served by its own server:
+  - Google Chrome 157.0.8103.50: 69 of 69 checks.
+  - Brave 1.99.55 (Chromium 157): 67 of 69. Brave's interface leaves less room in the same 1400x960 window, so the page reduced the canvas to 1220x686 and labelled it, as designed; only the two checks that expect 1280x720 failed.
+  - They cover movement and collision, Q/E/X in both views, orbit and zoom, selecting two different racks, typing without movement, separate saved text per record, reload, browser relaunch with the same profile, export and reset.
+- Frame pacing during standing, walking, height change, drag look, orbit, third-person walking, typing and the open help panel: 59.5-60.0 fps in every activity in both browsers on the 60 Hz display, with no interval over 50 ms. The longest intervals were 34 ms in Chrome and 42 ms in Brave, both while typing. Main-thread CPU averaged 8.0-9.7 ms per frame, mostly the splat sort. The browser paces frames to the display, so these are not uncapped capacity.
+- Wine 9.0 emulation with the bundled Windows Python: 18 of 18 checks, from a folder named with spaces, parentheses and &. The Edge launcher used the portable Python and reported the missing Edge plainly. DEMO-SERVER-ONLY.cmd served this exact build on 127.0.0.1:8791 to Linux Chrome, which loaded it at 1280x720, walked and saved an export copy in results. The collector wrote one results ZIP with the account name removed. Wine is emulation, not Windows.
+- A scan of every bundled file found no home path, account name or e-mail address. The 16 compiled-in Editor paths in the wasm are masked as in the Toughbook bundle.
+
+Problems found and fixed before the final build:
+- Unity's web request read the relative file name site.json as the host http://site.json/ and refused it, so the first build stalled while loading. Runtime files now sit under data/, an EditMode test pins the rule, and an unexpected startup error now shows a message instead of a stall.
+- Hidden loading and error overlays still covered and blocked the view, because a CSS display rule overrode the hidden attribute. Fixed; the checks confirm nothing covers the view.
+- The status line shrank Chrome's canvas below 1280x720; it moved into the top bar.
+- The help text said nothing goes to a server; it now says the local test server keeps export copies in its results folder.
+- The first ZIP turned the view with Left/Right arrows, against D022's mapping. Fixed in e16aaa0; that ZIP was deleted before delivery.
+- Unity rewrites one URP bookkeeping line in Assets/Settings/PC_RPAsset.asset on every exit; the demo's Unity script restores exactly that line.
+
+The ZIP (ignored by Git, on the development laptop):
+- Path: ~/Projects/VR-HE/prototypes/browser-splat-rendering/Bundles/VRHE-Interactive-Demo-20261111-294f4b2.zip
+- Size: 33,056,190 bytes (31.5 MiB); 64 files and 102,698,620 bytes (97.9 MiB) unpacked
+- SHA-256: 8dcebd10b6af8f8089028898da6c91d9e0abf366ca655ee9fd24ee7889af6486 (also in the .sha256 file beside it)
+- Built by Tools/package_demo_bundle.py from commit 294f4b2 on a clean tree, build label interactive-demo-294f4b21e6b1-20261111T061111Z. Rebuilding gives a new label and ZIP hash.
+- Contents: the demo build (wasm paths masked), the regenerated 250k fixture (byte-identical to the development fixture), the demo server, Edge and Chrome launchers, a server-only fallback, a results collector, START-HERE-DEMO.txt and the same pinned portable Python 3.14.10.
+- Needs: Windows 10 or 11, Edge and/or Chrome, no administrator rights and nothing installed. The ZIP and its extracted folder take about 136 MB; on Linux each demo browser profile grew to 10-66 MB. Windows profile sizes are unmeasured.
+
+Arlen's next test, on the personal Windows 11 PC (not the company Toughbook, D035):
+1. Copy the ZIP to Downloads on the personal PC by an ordinary permitted method, such as USB. Leave Windows protections on.
+2. Right-click it, choose Extract All, and open START-HERE-DEMO.txt in the extracted folder.
+3. Double-click RUN-DEMO-EDGE.cmd and follow its 12-step test script (about 15 minutes). Optionally repeat in Chrome with RUN-DEMO-CHROME.cmd.
+4. Close the demo windows, double-click COLLECT-DEMO-RESULTS.cmd and bring back the VRHE-demo-results-<date>-<time>.zip it shows. Add short notes on fps, stutter, confusing controls or wording, and whether saved text returned after reload and relaunch.
+
+To stop the demo, close its browser window; the black server window stops by itself about a minute later, or at once with Ctrl+C. If Windows or security software blocks a file, stop and report the message; do not work around it.
+
+Still untested:
+- Everything on Windows: cmd and Explorer, Edge and Chrome with the demo profile, SmartScreen and downloaded-file marks, the firewall prompt, and saving, relaunch and export there.
+- Edge (not installed on the laptop), Firefox, macOS, touch, controllers and VR.
+- Human use: pointer-lock feel (the automated check used synthetic events), whether help and controls are clear to non-gamers, non-US keyboard layouts, and Windows display scaling or high-DPI screens (the canvas renders at device-pixel-ratio 1).
+- Two tabs editing the same record (the store's revision check is unit-tested only), long sessions, many records, storage limits, network delivery, weaker hardware including the Toughbook (deferred, D035), real captures and physical scale.
+
+After Arlen's run: review the collected ZIP, then settle which record fields, templates and storage adapter come next before extending the demo.
 
 ## Next mapping work
 
@@ -275,7 +331,7 @@ Also confirmed: desktop arrow-key movement in addition to WASD, mobile FPS/third
 After the necessary choices are made:
 - Select/pin a long-term Unity version and establish the application project layout; 6.3 LTS is approved for the initial prototype only (D031).
 - Continue renderer feasibility. The browser path has first results on one laptop (above); test the weakest required computers, Edge and then phones and Quest.
-- Build a small synthetic runtime-editing example with durable record identity.
+- Extend the interactive demo's synthetic runtime-editing example (durable record IDs, browser-local storage only) toward nested data, templates and placement checks.
 - Prototype Google Sheets synchronization against synthetic audit-form and rack/RU layouts using the confirmed AI approval gate. Preserve formula/validation/format semantics.
 - Prove partial-rescan alignment/replacement using a small changed section.
 - Design provider approval enforcement and Gemini capabilities before connecting real data.
@@ -294,14 +350,14 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 
 - Application license and third-party dependencies are undecided.
 - No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
-- Browser rendering is tested with synthetic scenes on one Linux laptop (Chrome/Firefox/Brave) and one personal Windows 11 PC (Edge/Chrome, reviewed 30 Hz and 60 Hz baselines through 250k at a 1280x720 canvas). Capacity beyond the measured refresh-limited cases, macOS, weaker hardware and real captures remain untested. The bundle now has the recorded personal Windows runs in addition to the earlier Linux/Wine checks.
+- Browser rendering is tested with synthetic scenes on one Linux laptop (Chrome/Firefox/Brave) and one personal Windows 11 PC (Edge/Chrome, reviewed 30 Hz and 60 Hz baselines through 250k at a 1280x720 canvas). Capacity beyond the measured refresh-limited cases, macOS, weaker hardware and real captures remain untested. The bundle now has the recorded personal Windows runs in addition to the earlier Linux/Wine checks. The interactive demo prototype is checked only in Chrome and Brave on the Linux laptop, plus Wine emulation of its launchers; its Windows behavior is untested.
 - The Toughbook FZ-55 browser reference (i5-8365U, 32 GB RAM, UHD Graphics 620) and 30 fps browser / 60 fps VR floors are selected (D033/D034). Exact OS/browser versions and performance remain unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
-- Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
+- Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open. The demo prototype implements the desktop keyboard and mouse controls with provisional defaults listed in its README.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.
 - Spreadsheet videos establish visible layouts only. Exact formulas, validation, protection, merged ranges and cell mappings have not been inspected in native workbooks.
 - Cabinet states require a registration/segmentation/visibility prototype; local state persistence and setup/inspection permissions still need design.
 - Partial rescanning is a required feasibility target, not a tested feature.
-- Data types, attachment formats, conflicts, deletion recovery and detailed permissions need decisions.
+- Data types, attachment formats, conflicts, deletion recovery and detailed permissions need decisions. The demo's browser-local record store is a provisional prototype, not the backend or a spreadsheet adapter.
 - No production integration, real workbook modification or scan upload has occurred.
 
 Keep user-facing explanations plain and concise. Arlen prefers a step-by-step interview and practical instructions he can follow without being an experienced developer.

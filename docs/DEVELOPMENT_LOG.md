@@ -350,6 +350,41 @@ Validation:
 - Checked 10 edited/new Markdown files and one compact JSON report: 77 internal file links resolve, 16 Markdown tables have consistent columns, whitespace/JSON checks pass and all 10 baseline blob hashes match dfaa549. Follow-up JSON metrics agree with the reviewed frame data. New text has no home path or e-mail address.
 - Input archive SHA-256: 3fc34c692447265edcf24240c6b12bba2dace69e3a0d238a8675c1275674195a. Company Toughbook, phones, standalone Quest, larger scenes and the complete utility remain unqualified.
 
+## November 11, 2026 — interactive browser demo prototype
+
+Human contribution:
+- Arlen asked Claude Code to carry out INTERACTIVE_BROWSER_DEMO_TASK.md on a separate prototype branch: an interactive browser demo with movement, camera switching, rack selection, editable descriptions and saved local records. His constraints: verify model and MAX effort, preserve existing work and the benchmark, leave The Veil untouched, commit and push, report the Windows bundle's location and testing steps, and separate verified from untested behavior.
+
+AI contribution:
+- Claude Code (Opus 5.5, max effort) created proto/interactive-browser-demo from proto/browser-splat-rendering at f993dd6, the remote head. No helper agents were used and nothing was installed.
+- It added the demo to the existing Unity project without new packages or Packages/ProjectSettings changes:
+  - Assets/InteractiveDemo: synthetic site data with frozen IDs, the versioned local record store, the runtime (walking, camera height, first/third person, orbit, input gate, selection, outlines, frame pacing), Editor setup and EditMode tests.
+  - The VRHEInteractiveDemo page template: panels, help, record editor, input gate, pointer lock, HUD and local results reporting.
+  - Tools: interactive_demo_unity.sh (explicit project path only), demo_server.py, check_demo_site.py, verify_interactive_demo.py, package_demo_bundle.py and the Windows launchers with START-HERE-DEMO.txt.
+- Every Unity run was a batch-mode run with this project's explicit path. The Veil's Editor and its relay on port 9002 were not contacted.
+- Problems found and fixed before the final build:
+  - Unity's web request read the relative name site.json as the host http://site.json/ and refused it, so the first build stalled while loading. Runtime files moved under data/ (DemoPaths), an EditMode test pins the rule, and an unexpected startup error now shows an error message.
+  - Hidden loading and error overlays still covered and blocked the view: a CSS display rule overrode the hidden attribute. A [hidden] rule fixes it, and the verifier now checks that nothing covers the view.
+  - The status line reduced Chrome's canvas to 1248x702; it moved into the top bar.
+  - The help text said nothing goes to a server; it now says the local test server keeps export copies in its results folder.
+  - Unity rewrites k_AssetPreviousVersion in Assets/Settings/PC_RPAsset.asset on every exit; the demo's Unity script restores exactly that one-line change.
+  - The verifier had hollow passes (collision and X checks that could pass without movement or without an off-normal state), a JavaScript quoting error and browser-leftover handling; all fixed before the recorded runs.
+  - A self-review against D022 found that Left/Right arrows turned the view instead of stepping sideways like A/D. Fixed in e16aaa0, with verifier checks; the first ZIP (from 9f58af7) was deleted before delivery.
+
+MAX verification: the session process runs as claude --effort max from the 2.1.321 binary, with CLAUDE_CODE_EFFORT_LEVEL=max, and it is this shell's ancestor; rechecked after the session's context was continued. claude --version reports 2.1.322 because Claude Code updated itself on disk. The model is Opus 5.5 (claude-opus-5-5).
+
+Checks run on the development laptop (Linux; not Windows evidence):
+- EditMode tests: 23 of 23. Tools/check_demo_site.py: the proxies match the generated room.
+- The final ZIP, extracted and served by its own server, with trusted DevTools keyboard and mouse input in throwaway persistent profiles:
+  - Google Chrome 157.0.8103.50: 69 of 69 checks.
+  - Brave 1.99.55 (Chromium 157): 67 of 69. Its interface leaves less room in the same 1400x960 window, so the page reduced the canvas to 1220x686 and labelled it; only the two checks expecting 1280x720 failed.
+- Frame pacing during standing, walking, height change, drag look, orbit, third-person walking, typing and the open help panel: 59.5-60.0 fps in both browsers on the 60 Hz display, with no interval over 50 ms. The longest were 34 ms (Chrome) and 42 ms (Brave), both while typing. Main-thread CPU averaged 8.0-9.7 ms per frame. Display-paced, so not uncapped capacity.
+- Wine 9.0 emulation with the bundled Windows Python: 18 of 18 checks from a folder named with spaces, parentheses and &: the Edge launcher's portable-Python fallback and missing-Edge message, the server-only launcher serving this build to Linux Chrome (ready, view clear, walking, export copy saved), and one scrubbed results ZIP from the collector. Two earlier Wine attempts failed because of the test harness, not the bundle. Plain cmd /c dropped the quotes around a path with & and parentheses; the harness now runs launchers through call, keeping the quotes as Explorer's double-click does. A regular file as stdout stopped the bundled Python from starting under Wine, so the harness reads a pipe instead.
+- Packaging: 16 compiled-in Editor paths masked in the wasm; the 250k fixture regenerated byte-identical; a scan of every bundled file found no home path, account name or e-mail address. The Toughbook ZIP (SHA-256 c934948…) and the benchmark build are unchanged.
+- The ZIP is VRHE-Interactive-Demo-20261111-294f4b2.zip in prototypes/browser-splat-rendering/Bundles (ignored by Git): 33,056,190 bytes, SHA-256 8dcebd10b6af8f8089028898da6c91d9e0abf366ca655ee9fd24ee7889af6486. The handoff lists its contents and Arlen's steps.
+
+Not tested: all Windows behavior of this build (cmd and Explorer, Edge and Chrome with the demo profile, SmartScreen, downloaded-file marks, firewall prompt, saving, relaunch and export); Edge, Firefox, macOS, touch, controllers and VR; human pointer-lock feel, help clarity for non-gamers, non-US keyboard layouts and display scaling; two tabs editing one record, long sessions, many records, storage limits, network delivery, weaker hardware including the Toughbook (D035), real captures and physical scale.
+
 ## Entry template
 
 For each meaningful change, record:

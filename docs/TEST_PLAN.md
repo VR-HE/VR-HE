@@ -1,6 +1,6 @@
 # Test and acceptance plan
 
-Status: planned checks, November 10, 2026. Only the rendering-only browser prototype has run (synthetic scenes on one Linux laptop and one personal Windows 11 PC; see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
+Status: planned checks, November 11, 2026. Only the rendering-only browser prototype and the first interactive demo prototype have run, with synthetic scenes: rendering on one Linux laptop and one personal Windows 11 PC, the interactive demo on the Linux laptop only (see [the handoff](HANDOFF.md)). No VR-HE application tests or device builds have run.
 
 ## Current foundation
 
@@ -47,7 +47,7 @@ Engineering recommendation: start Quest tests at 72 Hz and aim for 72 applicatio
 
 ### Next browser hardware gate
 
-The hardware inventory above is available. [The local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) is done: a Windows Edge/Chrome test bundle of the same synthetic benchmark is prepared, as described in the handoff's bundle section. It was initially checked on Linux and under Wine, followed by the reviewed personal Windows 11 Edge/Chrome baselines. Under D035, execution on the company Toughbook is blocked pending company authorization. Arlen has completed those personal Windows Edge/Chrome baselines. The first runs recorded 30 Hz / about 30 fps; two reviewed repeats record 60 Hz / about 60 fps through 250k splats at the same 1280x720 canvas, with 250k CPU work still near 9 ms. Chrome kept its version while Edge updated. This supports the display-pacing explanation; uncapped capacity remains unmeasured. The next proposed implementation step is [the small interactive browser demo](INTERACTIVE_BROWSER_DEMO_TASK.md). These results do not qualify the Toughbook or standalone Quest. Preserve the 30 fps browser floor, record actual hardware/OS/browser facts, and keep the Toughbook result pending. The bundle's name or run prefix may mention Toughbook; classify results by the actual test machine. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
+The hardware inventory above is available. [The local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) is done: a Windows Edge/Chrome test bundle of the same synthetic benchmark is prepared, as described in the handoff's bundle section. It was initially checked on Linux and under Wine, followed by the reviewed personal Windows 11 Edge/Chrome baselines. Under D035, execution on the company Toughbook is blocked pending company authorization. Arlen has completed those personal Windows Edge/Chrome baselines. The first runs recorded 30 Hz / about 30 fps; two reviewed repeats record 60 Hz / about 60 fps through 250k splats at the same 1280x720 canvas, with 250k CPU work still near 9 ms. Chrome kept its version while Edge updated. This supports the display-pacing explanation; uncapped capacity remains unmeasured. [The small interactive browser demo](INTERACTIVE_BROWSER_DEMO_TASK.md) is now implemented as a prototype and checked in Chrome and Brave on the Linux laptop; its Windows bundle has not run on Windows yet. These results do not qualify the Toughbook or standalone Quest. Preserve the 30 fps browser floor, record actual hardware/OS/browser facts, and keep the Toughbook result pending. The bundle's name or run prefix may mention Toughbook; classify results by the actual test machine. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
 
 | Target | Requested capability | Current evidence |
 | --- | --- | --- |
@@ -56,10 +56,10 @@ The hardware inventory above is available. [The local packaging task](TOUGHBOOK_
 | Quest 3 | Capture/view/edit | Not tested |
 | Quest 3S | Capture/view/edit | Not tested |
 | Quest 2 | View/edit | Not tested |
-| Chrome | Browser view/edit | Rendering only: Chrome 157 on the Linux laptop and Chrome 155.0.8059.82 on the personal Windows 11 PC. Windows 30 Hz / 60 Hz baselines are reviewed; view/edit not implemented |
-| Firefox | Browser view/edit | Rendering only: Firefox 159 on the same laptop. View/edit not tested |
-| Edge | Browser view/edit | Edge 155.0.4283.45 at 30 Hz and 157.0.4341.42 at 60 Hz rendered the personal Windows 11 baselines. View/edit and company Toughbook qualification remain open |
-| Brave | Browser view/edit | Rendering only: Brave 1.99.55 (Chromium 157) on the same laptop. View/edit not tested |
+| Chrome | Browser view/edit | Rendering: Chrome 157 on the Linux laptop and Chrome 155.0.8059.82 on the personal Windows 11 PC; Windows 30 Hz / 60 Hz baselines are reviewed. Interactive demo prototype: 69 of 69 automated checks in Chrome 157 on the Linux laptop; untested on Windows |
+| Firefox | Browser view/edit | Rendering only: Firefox 159 on the same laptop. Interactive demo not tested |
+| Edge | Browser view/edit | Edge 155.0.4283.45 at 30 Hz and 157.0.4341.42 at 60 Hz rendered the personal Windows 11 baselines. Interactive demo untested (Edge is not installed on the Linux laptop); company Toughbook qualification remains open |
+| Brave | Browser view/edit | Rendering: Brave 1.99.55 (Chromium 157) on the same laptop. Interactive demo prototype: 67 of 69 automated checks there; the two failures were the expected reduced-to-fit canvas (1220x686) |
 
 The role/capability for each test user still determines who can edit. The table does not grant editing to all viewers.
 
@@ -74,6 +74,8 @@ The role/capability for each test user still determines who can edit. The table 
 - Verify ordinary editing requires neither Unity nor recompilation.
 
 Selection geometry, relocation/rescan behavior, undo and concurrent-edit rules need design before their acceptance checks can be finalized.
+
+First prototype evidence (November 11, interactive demo; synthetic local records, automated checks in Chrome and Brave on the Linux laptop): a description attached to a rack anchor saved and reopened; editing one record left another unchanged; reload and browser relaunch kept the saved text; record IDs are independent of display names and splat indexes; editing needed neither Unity nor recompilation. Templates, nested data, field types, attachments, placement after rescans, undo and concurrent edits in two tabs are not tested.
 
 ## Desktop, mobile and VR navigation
 
@@ -90,6 +92,8 @@ Selection geometry, relocation/rescan behavior, undo and concurrent-edit rules n
 - Verify predictable mouse cursor/menu behavior when editing.
 - Verify agreed touch and controller equivalents when designed.
 - Assess VR comfort separately; a desktop third-person camera is not automatically suitable for a headset.
+
+First prototype evidence (November 11, interactive demo; automated trusted input in Chrome and Brave on the Linux laptop): WASD and arrows with D022's mapping, Shift, Q/E, X in first and third person, the V toggle starting behind the avatar, orbit and zoom, typing without movement and mouse capture passed. Defaults are provisional; manual feel, Windows, touch, controllers and VR are untested, and the placeholder figure is not a scale reference.
 
 ## Production access and roles
 
