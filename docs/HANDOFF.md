@@ -211,8 +211,10 @@ Privacy:
 
 Toughbook requirements: Windows 10 or 11, Microsoft Edge and/or Google Chrome, at least 0.3 GB free disk space (1 GB recommended), no administrator rights and nothing to install. An installed Python 3.8 or newer is used if present, otherwise the bundled one.
 
-Arlen's steps:
-1. Copy the ZIP to a USB drive and from there into Downloads on the Toughbook. A USB copy avoids the browser-download mark.
+Current test-host constraint (D035): Arlen needs company authorization before executing the benchmark on his work Toughbook and does not have it. Use his personal Windows 11 VR gaming PC for the next run. Keep the Toughbook minimum reference and 30 fps floor unchanged; this run can establish only the personal PC's Windows/browser behavior and performance.
+
+Arlen's steps on his personal Windows 11 PC:
+1. Transfer the existing ZIP from the Linux development laptop into Downloads on the personal PC using an ordinary permitted method, such as USB. Leave Windows security protections enabled.
 2. Right-click the ZIP and choose Extract All.
 3. In the extracted folder, read START-HERE.txt.
 4. Double-click RUN-EDGE.cmd and leave the computer alone until the black window prints FINISHED (2-4 minutes). Then do the same with RUN-CHROME.cmd.
@@ -244,7 +246,7 @@ Still needs the Toughbook:
 
 Wine is emulation, and the mock browser is not a browser.
 
-Next step: Arlen runs the bundle on the Toughbook and brings back the results ZIP. Copy its runs into TestResults/raw, summarize them with Tools/summarize_results.py, and describe them against the 30 fps floor (D034) together with frame pacing and stalls; detailed pass criteria remain open. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files or preloaded range switches as proof of low-memory partial-rescan streaming.
+Next step: Arlen runs the existing bundle on his personal Windows 11 VR gaming PC and brings back the results ZIP. The bundle filename and run prefix may still say Toughbook; label the evidence by the actual Windows PC and recorded hardware. Copy runs into TestResults/raw, summarize them with Tools/summarize_results.py, and describe them against the 30 fps browser floor together with frame pacing and stalls. The company Toughbook run is deferred until company authorization is explicitly confirmed; do not suggest a different launcher or transfer route as a workaround. Personal-PC results do not qualify the Toughbook or standalone Quest. Detailed pass criteria remain open, and compact files or preloaded range switches do not prove low-memory partial-rescan streaming.
 
 ## Next mapping work
 

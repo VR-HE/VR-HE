@@ -303,6 +303,21 @@ Known issues:
 
 Not tested: real Windows (cmd, Explorer, Edge, Chrome, Chromium process trees, SmartScreen, downloaded-file marks, company policies, registry and powercfg facts) and every Toughbook performance and memory result. Wine is emulation, and the mock browser is not a browser.
 
+## November 10, 2026 — personal Windows test host; company-device authorization pending
+
+Human contribution:
+- Arlen clarified that he cannot execute the test on his work Toughbook without company authorization. He can instead run it on his personal Windows 11 VR gaming PC (D035).
+- He did not withdraw the Toughbook minimum reference or change the 30 fps browser / 60 fps VR floors.
+
+AI contribution:
+- ChatGPT/Codex recorded the company-device execution gate and the personal PC as the next host across the shared instructions, requirements, decision record, test plan, handoff and entry points.
+- The existing prepared Windows ZIP remains the test artifact. Instructions now identify personal-PC results by actual hardware, without claiming minimum-Toughbook or standalone-Quest qualification.
+- Codex removed the handoff's transfer wording about avoiding downloaded-file marking. Transfer is an ordinary file-copy step and does not authorize bypassing company restrictions or Windows protections.
+
+Validation:
+- Checked 9 edited Markdown files: 64 internal links resolve, tables/whitespace pass, and all 9 baseline file hashes match commit 023951f. Existing benchmark code, generated bundle and measurements are unchanged.
+- Documentation only. No benchmark code, bundle, launcher or recorded measurement changed, and no test or device access was performed.
+
 ## Entry template
 
 For each meaningful change, record:

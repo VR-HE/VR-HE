@@ -1,6 +1,6 @@
 # Next local task: Toughbook browser test bundle
 
-Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only; the Toughbook run is pending. The ZIP, its checks and Arlen's steps are in the handoff's Toughbook bundle section. No Toughbook benchmark is claimed complete by this document.
+Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only. Company authorization is required for the work Toughbook and has not been provided. The next available execution host is Arlen's personal Windows 11 VR gaming PC (D035), using the existing bundle. See the handoff for current steps; all real Windows and Toughbook results remain pending.
 
 ## Context and target
 
@@ -9,6 +9,8 @@ Work in ~/Projects/VR-HE on proto/browser-splat-rendering. Follow [AGENTS.md](..
 Arlen's reference Toughbook FZ-55 has an Intel Core i5-8365U (4 cores / 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. Task Manager shows graphics driver 31.0.101.2141 and a Samsung SATA SSD with 477 GB capacity. These are screenshot observations; exact Windows/browser versions, free disk space, browser WebGL backend and runtime performance are unverified.
 
 The browser floor is 30 application-rendered fps (D034). Do not infer a splat budget or a pass from the RTX 4060 laptop runs. The separate VR floor remains 60 fps; this task does not test VR.
+
+Execution update (D035): do not run or propose a workaround on the company Toughbook before company authorization. Test the existing ZIP on the personal Windows 11 PC and report its actual hardware, OS/browser behavior and performance. The original packaging specification below remains as the completed-task record; the bundle name is not evidence that the Toughbook was tested.
 
 ## Session and scope
 
@@ -32,7 +34,7 @@ Prepare one ZIP that Arlen can transfer to the Toughbook, extract and use withou
 
 ## Verification and handoff
 
-Verify the packaged files and local server/browser behavior on the available Linux laptop. Check the Windows launchers and process-cleanup code, preserving Linux behavior. Clearly label Windows execution untested until an actual Toughbook run occurs; syntax checks or mocks do not constitute that run.
+Verify the packaged files and local server/browser behavior on the available Linux laptop. Check the Windows launchers and process-cleanup code, preserving Linux behavior. Keep real Windows execution untested until an actual Windows run occurs, and identify the host. A personal Windows 11 run can establish that PC's behavior; it does not qualify the company Toughbook. Syntax checks or mocks do not constitute either device test.
 
 Commit and push source, scripts and documentation. Keep ZIPs, builds, caches, generated fixture binaries and raw results ignored; retain the established synthetic-summary policy.
 

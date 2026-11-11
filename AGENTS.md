@@ -42,6 +42,7 @@ Ask one primary product question at a time. Explain meaningful consequences in p
 - Third-person view requires looking/orbiting around the avatar, not only a fixed behind-avatar camera. Preserve VR 6DoF when designing any VR camera behavior.
 - VR must support full 6DoF; browser camera commands do not authorize overriding tracked headset pose.
 - The browser reference PC is Arlen's Panasonic Toughbook FZ-55 work laptop: i5-8365U (4 cores / 8 logical processors), 32 GB RAM and Intel UHD Graphics 620, identified in his November 10 Task Manager photos (D033). Exact OS/browser versions, browser graphics backend and performance remain unverified; see docs/TEST_PLAN.md.
+- Company authorization is required before running this benchmark on Arlen's work Toughbook; that authorization has not been provided. The next available test host is his personal Windows 11 VR gaming PC. Keep the Toughbook as the minimum browser reference and leave its qualification pending (D035).
 - Arlen's minimum frame rates are 30 fps for the browser and 60 fps for VR headsets (D034). Report application-rendered fps separately from headset display Hz and synthesized/reprojected frames. The initial 72 fps / 72 Hz Quest engineering target is a recommendation, not a replacement for his floor; see docs/TEST_PLAN.md.
 
 ## Claude build effort
