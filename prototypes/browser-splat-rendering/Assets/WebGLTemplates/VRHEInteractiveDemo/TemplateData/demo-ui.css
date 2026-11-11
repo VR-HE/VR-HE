@@ -138,6 +138,9 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   }
   .panel.wide { width: 520px; }
+  /* Rack, equipment and description-name editors need room for the RU row and name lists. */
+  #panel-record { width: 430px; }
+  .panel.editor { width: 460px; }
   .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .panel h2 { margin: 4px 0 6px; font-size: 18px; }
   .panel h3 { margin: 12px 0 2px; font-size: 14px; color: var(--accent); }
@@ -166,6 +169,83 @@
     font: inherit;
   }
   textarea:focus { border-color: var(--accent); outline: none; }
+  input[type="text"], input[type="number"], select {
+    background: #0f1116;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font: inherit;
+    box-sizing: border-box;
+  }
+  input[type="text"] { width: 100%; }
+  input[type="number"] { width: 72px; }
+  input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--accent); outline: none; }
+  input[readonly], textarea[readonly] { opacity: 0.7; }
+  .row input[type="text"] { flex: 1; width: auto; min-width: 0; }
+  fieldset { min-width: 0; }
+  .add-form { border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px 10px; margin: 10px 0 0; }
+  .add-form legend { color: var(--accent); padding: 0 4px; }
+  .ru-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .panel .ru-row label { display: inline; margin: 0; }
+  .ru-check { min-height: 16px; margin: 4px 0; }
+  .ru-check.good { color: var(--good); }
+  .ru-check.warn { color: var(--warn); }
+  .ru-check.bad { color: var(--bad); }
+  .ru { font: 12px ui-monospace, Consolas, monospace; color: var(--accent); margin-right: 6px; white-space: nowrap; }
+  .eq-name { font-weight: 600; }
+  .overlap { display: block; color: var(--warn); font-size: 12px; }
+  .overlap-mark { color: var(--warn); font-weight: 400; font-size: 12px; }
+  .eq-rows, .desc-list, .names-list, .warnings { list-style: none; margin: 6px 0 0; padding: 0; }
+  .eq-rows li { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .eq-rows .grow { flex: 1; min-width: 0; }
+  .eq-rows .meta { display: block; }
+  .crumbs { margin: 4px 0; }
+  /* The equipment editor's Save row, messages and questions stay in view while descriptions scroll. */
+  .panel-foot {
+    position: sticky;
+    bottom: -14px;
+    margin: 0 -14px -14px;
+    padding: 2px 14px 10px;
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+  }
+  .panel-foot .status:empty { min-height: 0; margin: 0; }
+  button.link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    padding: 0;
+    text-decoration: underline;
+    font-size: inherit;
+  }
+  .desc {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .desc-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .desc-num { color: var(--dim); font-size: 12px; min-width: 14px; }
+  .desc-head select { max-width: 250px; min-width: 0; }
+  .desc-new { display: flex; gap: 6px; margin: 4px 0; }
+  .desc-new input { flex: 1; min-width: 0; }
+  .desc-meta { display: block; color: var(--warn); }
+  #eq-dirty { color: var(--warn); }
+  .warnings li { color: var(--warn); font-size: 13px; margin-top: 4px; }
+  .names-list li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .name-row { display: flex; align-items: center; gap: 6px; }
+  .name-row .grow { flex: 1; min-width: 0; }
+  .names-list .name { font-weight: 600; }
+  .names-list .uses, .names-list .prev { display: block; }
+  .names-list.retired li { color: var(--dim); }
+  .name-form { margin: 6px 0 2px; padding: 8px; border: 1px solid #1690aa; border-radius: 6px; }
+  .name-form p { margin: 0 0 4px; }
+  .panel .name-form label.choice { display: flex; align-items: center; gap: 6px; color: var(--text); margin: 8px 0 4px; }
+  .name-form select { width: 100%; }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; color: var(--dim); }
   .row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
   button {
     background: #1b1f27;
@@ -206,18 +286,15 @@
     flex-wrap: wrap;
   }
   #list-items { list-style: none; margin: 8px 0 0; padding: 0; }
-  #list-items li {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  #list-items li.selected .name { color: var(--accent); }
+  #list-items > li { padding: 5px 0; border-bottom: 1px solid var(--line); }
+  #list-items .rack-row { display: flex; align-items: center; gap: 6px; }
+  #list-items li.selected > .rack-row .name { color: var(--accent); }
   #list-items .name { font-weight: 600; }
   #list-items .edited { color: var(--good); font-size: 12px; }
   #list-items .grow { flex: 1; min-width: 0; }
   #list-items .loc { font-size: 12px; color: var(--dim); display: block; }
+  #list-items .eq-sub { list-style: none; margin: 4px 0 2px 10px; padding: 0 0 0 8px; border-left: 2px solid var(--line); }
+  #list-items .eq-sub li { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 13px; }
   pre#data-json {
     max-height: 260px;
     overflow: auto;

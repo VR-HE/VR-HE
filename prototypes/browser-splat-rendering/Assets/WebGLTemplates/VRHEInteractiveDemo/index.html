@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VR-HE interactive demo (local demo data)</title>
     <!-- VR-HE interactive browser demo, PROTOTYPE. Synthetic room and synthetic records only.
-         The page owns the HTML interface (panels, help, record editor), mouse handling and the
-         local results reporting; Unity owns the 3D view, walking, picking and the record store.
-         See TemplateData/demo-ui.js for the bridge contract. -->
+         The page owns the HTML interface (panels, help, rack, equipment and description-name
+         editors), mouse handling and the local results reporting; Unity owns the 3D view, walking,
+         picking and the record store, which enforces every data rule. See
+         TemplateData/demo-ui.js for the bridge contract. -->
     <link rel="stylesheet" href="TemplateData/demo-ui.css">
   </head>
   <body>
@@ -23,7 +24,7 @@
         <div id="stage">
           <canvas id="unity-canvas" width="1280" height="720" tabindex="0" aria-label="3D view of the synthetic room. Click it to use the keyboard and mouse controls."></canvas>
           <div id="crosshair" hidden></div>
-          <div id="tag" hidden><strong id="tag-name"></strong><span>Right-click or Enter: open record</span></div>
+          <div id="tag" hidden><strong id="tag-name"></strong><span id="tag-hint">Right-click or Enter: open rack</span></div>
           <div id="focus-hint" hidden>Click the view to control it. Press H for help.</div>
           <div id="loading">
             <div id="loading-text">Loading the demo...</div>
@@ -44,14 +45,15 @@
               <dt>Type</dt><dd id="rec-kind"></dd>
               <dt>Location</dt><dd id="rec-location"></dd>
               <dt>Placed anchor</dt><dd><code id="rec-anchor"></code></dd>
-              <dt>Saved version</dt><dd id="rec-revision"></dd>
+              <dt>Rack size</dt><dd id="rec-units"></dd>
+              <dt>Note version</dt><dd id="rec-revision"></dd>
             </dl>
-            <label for="rec-description">Description (editable)</label>
-            <textarea id="rec-description" maxlength="4000" rows="7" spellcheck="true"></textarea>
+            <label for="rec-description">Rack note (about the whole rack, not one device)</label>
+            <textarea id="rec-description" maxlength="4000" rows="4" spellcheck="true"></textarea>
             <div class="row">
               <span id="rec-count" class="small">0 / 4000</span>
               <span class="spacer"></span>
-              <button type="button" id="rec-save" class="primary">Save <kbd>Ctrl+Enter</kbd></button>
+              <button type="button" id="rec-save" class="primary">Save note <kbd>Ctrl+Enter</kbd></button>
               <button type="button" data-close>Close <kbd>Esc</kbd></button>
             </div>
             <div id="rec-status" class="status" aria-live="polite"></div>
@@ -60,6 +62,95 @@
               <button type="button" id="rec-discard-yes">Discard changes</button>
               <button type="button" id="rec-discard-no" class="primary">Keep editing</button>
             </div>
+
+            <h3 id="rec-eq-title">Equipment in this rack</h3>
+            <p class="small" id="rec-eq-help"></p>
+            <ul id="rec-equipment" class="eq-rows"></ul>
+            <fieldset id="eq-add" class="add-form">
+              <legend>Add equipment</legend>
+              <label for="eq-new-name">Name</label>
+              <input type="text" id="eq-new-name" maxlength="80" placeholder="for example: Core switch SW-01" autocomplete="off" spellcheck="false">
+              <div class="ru-row">
+                <label for="eq-new-start">From RU</label>
+                <input type="number" id="eq-new-start" min="1" max="42" step="1" inputmode="numeric">
+                <label for="eq-new-end">to RU</label>
+                <input type="number" id="eq-new-end" min="1" max="42" step="1" inputmode="numeric" placeholder="same">
+                <span id="eq-new-size" class="small"></span>
+              </div>
+              <p id="eq-new-check" class="small ru-check"></p>
+              <div class="row">
+                <button type="button" id="eq-add-btn">Add equipment <kbd>Enter</kbd></button>
+              </div>
+              <div id="eq-add-status" class="status" aria-live="polite"></div>
+            </fieldset>
+          </aside>
+
+          <aside id="panel-equipment" class="panel editor" hidden role="dialog" aria-labelledby="equipment-title">
+            <div class="panel-head">
+              <h2 id="equipment-title">Equipment</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <p class="notice">LOCAL DEMO DATA. Synthetic equipment record, saved only in this browser profile on this computer. Type made-up text only.</p>
+            <p class="crumbs"><button type="button" id="eq-back" class="small" title="Back to the rack and its equipment list">&larr; <span id="eq-rack-name">Rack</span></button></p>
+            <dl class="fields">
+              <dt>Equipment ID</dt><dd><code id="eq-id"></code></dd>
+              <dt>Saved version</dt><dd id="eq-revision"></dd>
+            </dl>
+            <label for="eq-name">Equipment name</label>
+            <input type="text" id="eq-name" maxlength="80" autocomplete="off" spellcheck="false">
+            <div class="ru-row">
+              <label for="eq-start">From RU</label>
+              <input type="number" id="eq-start" min="1" max="42" step="1" inputmode="numeric">
+              <label for="eq-end">to RU</label>
+              <input type="number" id="eq-end" min="1" max="42" step="1" inputmode="numeric">
+              <span id="eq-size" class="small"></span>
+            </div>
+            <p id="eq-ru-check" class="small ru-check"></p>
+            <h3>Descriptions</h3>
+            <p class="small">Each description belongs to this item only. Give it a name from the list, or leave it unnamed. Choosing a name never copies another item's text. <button type="button" id="eq-manage" class="link">Manage names&hellip;</button></p>
+            <ol id="eq-descriptions" class="desc-list"></ol>
+            <div class="panel-foot">
+              <div class="row">
+                <button type="button" id="eq-add-desc">+ Add description</button>
+                <span id="eq-dirty" class="small"></span>
+                <span class="spacer"></span>
+                <button type="button" id="eq-save" class="primary">Save <kbd>Ctrl+Enter</kbd></button>
+                <button type="button" data-close>Close <kbd>Esc</kbd></button>
+              </div>
+              <div id="eq-status" class="status" aria-live="polite"></div>
+              <ul id="eq-warnings" class="warnings"></ul>
+              <div id="eq-confirm" class="confirm" hidden>
+                <span id="eq-confirm-text">You have unsaved changes.</span>
+                <button type="button" id="eq-confirm-yes">Discard changes</button>
+                <button type="button" id="eq-confirm-no" class="primary">Keep editing</button>
+              </div>
+            </div>
+          </aside>
+
+          <aside id="panel-names" class="panel editor" hidden role="dialog" aria-labelledby="names-title">
+            <div class="panel-head">
+              <h2 id="names-title">Description names</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <p class="notice">LOCAL DEMO DATA. One shared list of names for this demo site, in this browser profile only.</p>
+            <p class="small">These are the names offered for descriptions, such as &ldquo;Serial number&rdquo;. A name is only a label: choosing it never copies another item's text, and adding, renaming or replacing a name changes no description text.</p>
+            <div class="row">
+              <input type="text" id="names-new" maxlength="60" placeholder="New name, for example: Firmware version" autocomplete="off" spellcheck="false" aria-label="New description name">
+              <button type="button" id="names-add">Add name</button>
+            </div>
+            <div id="names-status" class="status" aria-live="polite"></div>
+            <ul id="names-warnings" class="warnings"></ul>
+            <ul id="names-list" class="names-list"></ul>
+            <details id="names-retired-box">
+              <summary>Replaced names (<span id="names-retired-count">0</span>)</summary>
+              <ul id="names-retired" class="names-list retired"></ul>
+            </details>
+            <p class="small">There is no plain Delete. <b>Remove&hellip;</b> asks which name replaces the old one, then gives every description that used it the replacement and keeps its text. Use <b>Rename</b> to fix a spelling everywhere. Nothing here changes a spreadsheet: this demo has no spreadsheet connection.</p>
+            <div class="row">
+              <span class="spacer"></span>
+              <button type="button" id="names-back" hidden>Back to the equipment item</button>
+              <button type="button" data-close>Close <kbd>Esc</kbd></button>
+            </div>
           </aside>
 
           <aside id="panel-list" class="panel" hidden role="dialog" aria-labelledby="list-title">
@@ -67,7 +158,7 @@
               <h2 id="list-title">Equipment list</h2>
               <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
             </div>
-            <p class="small">Every selectable item in this synthetic room. <b>Show</b> selects it and turns the view toward it; <b>Open record</b> opens its record.</p>
+            <p class="small">Every rack in this synthetic room, with the equipment recorded in it (top of the rack first). <b>Show</b> selects a rack and turns the view toward it; <b>Open rack</b> opens its note and equipment; <b>Open</b> opens one equipment item.</p>
             <ul id="list-items"></ul>
           </aside>
 
@@ -86,12 +177,20 @@
             <p><kbd>Q</kbd> raises the camera, <kbd>E</kbd> lowers it. <kbd>X</kbd> (or <b>Reset view</b>) restores the normal height and a level view; in third person it also puts the camera back behind the figure.</p>
             <h3>5. First or third person</h3>
             <p><kbd>V</kbd> switches views. Third person shows a plain placeholder figure about 1.73 m tall as a rough size cue; drag to circle around it and use the mouse wheel to zoom.</p>
-            <h3>6. Select and open a record</h3>
-            <p>Point at a rack: a white outline appears. Click it: the outline turns cyan and its name shows above it. Then <b>right-click</b> it, press <kbd>Enter</kbd>, or press <b>Open selected record</b>. No mouse aiming needed: open <b>Equipment list</b> (<kbd>L</kbd>).</p>
-            <h3>7. Edit, save and reopen</h3>
-            <p>Type in <b>Description</b> and press <b>Save</b> (or <kbd>Ctrl+Enter</kbd>). Close the record and open it again, reload the page, or close the browser and start the demo again with the same launcher: the saved text returns. Each rack keeps its own text.</p>
-            <h3>8. What is saved, and where</h3>
-            <p>LOCAL DEMO DATA only: synthetic records in this browser profile on this computer. Nothing leaves this computer, and nothing goes to a spreadsheet or company system. <b>Saved data &amp; export</b> downloads a JSON copy or resets the demo text. The demo's own test server on this computer keeps a copy of each export, with timings and console messages, in its results folder.</p>
+            <h3>6. Select and open a rack</h3>
+            <p>Point at a rack: a white outline appears. Click it: the outline turns cyan and its name shows above it. Then <b>right-click</b> it, press <kbd>Enter</kbd>, or press <b>Open selected record</b>. No mouse aiming needed: open <b>Equipment list</b> (<kbd>L</kbd>), which lists every rack and the equipment in it.</p>
+            <h3>7. Rack note</h3>
+            <p>The <b>Rack note</b> is about the whole rack, not one device. Type, then press <b>Save note</b> (or <kbd>Ctrl+Enter</kbd>). Each rack keeps its own note.</p>
+            <h3>8. Equipment in a rack</h3>
+            <p>A rack can hold many pieces of equipment. Under <b>Add equipment</b>, type a name and the rack units (RU) it fills, then press <b>Add equipment</b>. RU 1 is the bottom position. A device that fills two units, for example RU 20 and 21, is <i>one</i> item: enter From RU 20 to RU 21. If two items share a unit you see a warning; this demo does not record front or rear mounting, so check the numbers. Rack sizes here are a demo assumption (42 RU), not measured from the 3D picture. Open an item from the rack or from the Equipment list; its rack is selected in the view.</p>
+            <h3>9. Descriptions of one item</h3>
+            <p>A new item starts with one empty description with no name. <b>+ Add description</b> adds another, to that item only. Give each description a name from its list (such as <i>Serial number</i>) or leave it unnamed. Two items can both use <i>Serial number</i>, each with its own text. The arrows change the order. <b>Remove</b> only works on an empty description: text is never deleted here. Press <b>Save</b> (or <kbd>Ctrl+Enter</kbd>) to keep your changes.</p>
+            <h3>10. Description names: add, rename, remove</h3>
+            <p>Open <b>Description names</b> in the toolbar, or choose <b>Manage names&hellip;</b> in an item. <b>Add name</b> puts a name in every item's list but changes no item. <b>Rename</b> fixes a spelling everywhere the name is used; the text stays the same. <b>Remove&hellip;</b> always asks for a replacement (an existing name or a new one): every description with the old name gets the replacement and keeps its text, then the old name leaves the list. If an item already has a description with the replacement name, both are kept. A name can't be removed without a replacement.</p>
+            <h3>11. Save, reopen and restart</h3>
+            <p>Close a panel and open it again, reload the page, or close the browser and start the demo again with the same launcher: everything you saved returns. Rack notes saved with the earlier demo version are carried over, and the earlier copy is kept unchanged.</p>
+            <h3>12. What is saved, and where</h3>
+            <p>LOCAL DEMO DATA only: synthetic racks, equipment and names in this browser profile on this computer. Nothing leaves this computer, and nothing goes to a spreadsheet or company system; renaming or removing a name never touches a spreadsheet column. <b>Saved data &amp; export</b> downloads a JSON copy or resets the demo data. The demo's own test server on this computer keeps a copy of each export, with timings and console messages, in its results folder.</p>
             <h3>Settings</h3>
             <p><label for="look-speed">Mouse look speed</label> <input type="range" id="look-speed" min="0.25" max="3" step="0.05" value="1"> <span id="look-speed-value">1.00x</span></p>
             <p><label><input type="checkbox" id="invert-mouse-y" aria-describedby="invert-mouse-y-help"> Invert mouse Y-axis</label></p>
@@ -108,6 +207,8 @@
             <dl class="fields">
               <dt>Stored in</dt><dd id="data-where"></dd>
               <dt>Storage key</dt><dd><code id="data-key"></code></dd>
+              <dt>Contents</dt><dd id="data-contents"></dd>
+              <dt>Earlier version</dt><dd id="data-migration"></dd>
               <dt>State</dt><dd id="data-state"></dd>
               <dt>Build</dt><dd id="data-build"></dd>
               <dt>Session</dt><dd><code id="data-session"></code></dd>
@@ -117,8 +218,8 @@
               <button type="button" id="data-reset">Reset demo data...</button>
             </div>
             <div id="data-reset-confirm" class="confirm" hidden>
-              <span>Remove all saved demo descriptions from this browser profile?</span>
-              <button type="button" id="data-reset-yes">Remove saved edits</button>
+              <span>Start over: remove all saved rack notes, equipment and added names from this browser profile? The earlier demo version's saved copy is kept.</span>
+              <button type="button" id="data-reset-yes">Remove saved demo data</button>
               <button type="button" id="data-reset-no" class="primary">Cancel</button>
             </div>
             <div id="data-status" class="status" aria-live="polite"></div>
@@ -130,6 +231,7 @@
       <nav id="toolbar" aria-label="Demo controls">
         <button type="button" data-action="help">Help <kbd>H</kbd></button>
         <button type="button" data-action="list">Equipment list <kbd>L</kbd></button>
+        <button type="button" data-action="names">Description names</button>
         <button type="button" data-action="inspect" id="btn-inspect" disabled>Open selected record <kbd>Enter</kbd></button>
         <button type="button" data-action="view" id="btn-view">Third person <kbd>V</kbd></button>
         <button type="button" data-action="reset">Reset view <kbd>X</kbd></button>
