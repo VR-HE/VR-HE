@@ -1,6 +1,6 @@
 # Next local task: Toughbook browser test bundle
 
-Status: prepared task, November 10, 2026. No Windows bundle or Toughbook benchmark is claimed complete by this document.
+Status: bundle prepared November 10, 2026 from commit 7d07732 and checked on Linux and under Wine emulation only; the Toughbook run is pending. The ZIP, its checks and Arlen's steps are in the handoff's Toughbook bundle section. No Toughbook benchmark is claimed complete by this document.
 
 ## Context and target
 

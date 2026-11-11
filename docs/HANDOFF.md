@@ -8,7 +8,7 @@ VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated a
 
 The baseline main commit before this documentation change is d731a368d7121f31d248446f7feac04ddb6e6e06. Consult GitHub history for the current head; a document cannot reliably name its own final commit in advance.
 
-There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone, Quest or Edge test has run. Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
+There is no VR-HE application or runnable demo yet. The first implementation milestone, browser Gaussian-splat rendering (D032), has a rendering-only Unity prototype in prototypes/browser-splat-rendering on branch proto/browser-splat-rendering; its results are in the browser milestone section below. No capture, navigation, editing, backend, sync or security implementation exists, and no phone, Quest or Edge test has run. A Windows Edge/Chrome test bundle for the Toughbook reference PC is prepared but has not run on Windows (see the bundle section below). Arlen's supplied laptop output confirms Git 2.43.0 and successful installation of the gh 2.45.0 Ubuntu package. Arlen supplied a screenshot confirming completed local authorization and account lookup as VR-HE. His subsequent screenshot confirms a successful clone into /home/arlen/Projects/VR-HE, docs/project-foundation tracking origin/docs/project-foundation, and no working-tree changes. Arlen's screenshot shows Claude Code v2.1.321, Opus 5.5 with max effort, and ~/Projects/VR-HE. This confirms the displayed session configuration. Claude Code's November 10 local inspection recorded the installed Unity tooling below; the inspection itself created or changed no Unity project.
 
 ## Read in this order
 
@@ -186,7 +186,65 @@ Confirmed after the prototype review (D033/D034):
 - Arlen's November 10 Task Manager photos identify an i5-8365U (4 cores / 8 logical processors), 32 GB RAM and Intel UHD Graphics 620. GPU driver 31.0.101.2141 and a Samsung SATA SSD with 477 GB capacity are shown. Exact OS/browser versions, active browser backend and performance remain unverified. Phone fps, representative content, resolution, memory/quality budgets and detailed pass criteria remain open.
 - For Quest, keep application-rendered fps separate from display refresh and synthesized frames. The initial 72 fps at 72 Hz operating target is an engineering recommendation; it does not replace the user floor. Sources and checks are in [the test plan](TEST_PLAN.md).
 
-Next step: carry out [the Toughbook browser-test packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) on Arlen's Linux development laptop, where the existing build and generated synthetic fixtures are available. Prepare a transferable Windows test bundle with clear Edge/Chrome launch steps, then have Arlen run it on the Toughbook. The existing auto-launcher uses Linux paths and POSIX cleanup and has no Edge option; both automated and manual Windows paths still need verification. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files/preloaded range switches as proof of low-memory partial-rescan streaming.
+The Toughbook browser-test bundle requested next is prepared; see the following section.
+
+## Toughbook browser test bundle — November 10
+
+Claude Code carried out [the packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) on Arlen's development laptop. The ZIP has not run on Windows, so nothing in this section is a Toughbook result.
+
+The ZIP (ignored by Git, on the development laptop):
+- Path: ~/Projects/VR-HE/prototypes/browser-splat-rendering/Bundles/VRHE-Toughbook-Browser-Test-20261110-7d07732.zip
+- Size: 39,641,682 bytes (37.8 MiB); 68 files and 148,954,133 bytes (142 MiB) unpacked
+- SHA-256: c934948138f8c3be35b966a82e64f698c9b2d3f5dbec22bc09d0b0fbe759f526 (also in the .sha256 file beside it)
+- Built by Tools/package_toughbook_bundle.py from tooling commit 7d07732 on a clean tree. Rebuilding gives a new creation time in bundle.json and so a different ZIP hash.
+
+Contents:
+- The existing November 10 WebGL build, not rebuilt.
+- Regenerated synthetic fixtures (25k-500k scenes and the overlap sections), byte-identical to those behind the November 10 results.
+- The harness, Edge and Chrome launchers, optional 500k launchers, a manual-server fallback, a results collector and START-HERE.txt.
+- A portable Python 3.14.10 fallback: the python.org Windows embeddable package, PSF License, with a pinned SHA-256. OpenSSL verified its Sigstore signature against the signing certificate; the certificate chain and transparency-log entry were not verified.
+
+Privacy:
+- IL2CPP had compiled the Unity Editor's install path, which contains the developer's account name, into 16 error-message strings in WebGL.wasm. The bundle's copy replaces that folder name with x characters of the same length. Only data bytes change, and bundle.json records both hashes; the Linux runs below used the masked build.
+- A scan of every bundled file found no home path, account name or e-mail address.
+- Result ZIPs made by COLLECT-RESULTS.cmd replace user-folder, user, domain and computer names with placeholders.
+
+Toughbook requirements: Windows 10 or 11, Microsoft Edge and/or Google Chrome, at least 0.3 GB free disk space (1 GB recommended), no administrator rights and nothing to install. An installed Python 3.8 or newer is used if present, otherwise the bundled one.
+
+Arlen's steps:
+1. Copy the ZIP to a USB drive and from there into Downloads on the Toughbook. A USB copy avoids the browser-download mark.
+2. Right-click the ZIP and choose Extract All.
+3. In the extracted folder, read START-HERE.txt.
+4. Double-click RUN-EDGE.cmd and leave the computer alone until the black window prints FINISHED (2-4 minutes). Then do the same with RUN-CHROME.cmd.
+5. Optionally, after both, run OPTIONAL-500K-EDGE.cmd and OPTIONAL-500K-CHROME.cmd.
+6. Double-click COLLECT-RESULTS.cmd and copy the VRHE-results-<date>-<time>.zip it shows back to the development laptop. It holds the Edge and Chrome runs.
+
+If the automatic start fails, START-HERE.txt describes the manual fallback (MANUAL-SERVER.cmd and an InPrivate or Incognito window). If Windows or company security blocks a file, stop and report the message; do not work around it.
+
+Checks that ran, on the development laptop only:
+- Linux with real browsers, from extracted ZIPs in a folder named with spaces, parentheses and &:
+  - Five baselines completed: four in Chrome 157 (automatic and manual, one of each from the final ZIP) and one in Firefox 159. A Chrome 500k follow-up also completed. Every baseline matched 8 of 8 overlap cases, with no console errors.
+  - Edge, which is not installed here, was reported untested, and a follow-up without a baseline was refused.
+- Manual mode with real Chrome, plus server probes, on the final ZIP's files: 48 of 48 checks. They covered loopback-only binding, port fallback, refusal of 9002, path traversal, Windows device and stream names, upload limits, the POST-only start page and refusal of a second concurrent test.
+- Results collection and name scrubbing on the final ZIP's files: 19 of 19 checks.
+- Wine 9.0 emulation with the bundled Windows Python. The launchers tested are byte-identical to the final ZIP's.
+  - The .cmd launchers: the portable-Python fallback and the not-extracted, incomplete and no-Python messages.
+  - 30 of 30 checks of the Windows-only code. They covered process-tree tracking and cleanup with real child processes, recycled-PID guards, version resources, Program Files and App Paths discovery, system facts and exclusive port binding.
+  - A Windows run-mode pass with a mock browser that replayed recorded results.
+  - The Windows-hosted manual server serving the real benchmark to Linux Chrome.
+- Every automatic run, including the Wine runs, recorded no leftover processes and a deleted temporary profile. After the final manual-mode test, no test browser or server process remained.
+- These runs measured 52-60 fps, below the earlier November 10 results. The original harness measured the same range on the same cases at the same time, so the new tooling is not the cause; background load (load average 2.4-3.3) is the likely one. These runs check the bundle, not performance.
+
+Still needs the Toughbook:
+- Real Windows cmd and Explorer behavior.
+- Edge and Chrome launching with fresh profiles, and cleanup of real Chromium process trees.
+- SmartScreen, downloaded-file marks and company policies.
+- Real registry, powercfg and display facts.
+- All Toughbook performance and memory results.
+
+Wine is emulation, and the mock browser is not a browser.
+
+Next step: Arlen runs the bundle on the Toughbook and brings back the results ZIP. Copy its runs into TestResults/raw, summarize them with Tools/summarize_results.py, and describe them against the 30 fps floor (D034) together with frame pacing and stalls; detailed pass criteria remain open. Do not transfer the RTX 4060 splat budget to the Toughbook, or treat compact files or preloaded range switches as proof of low-memory partial-rescan streaming.
 
 ## Next mapping work
 
@@ -220,7 +278,7 @@ Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. R
 
 - Application license and third-party dependencies are undecided.
 - No long-term Unity version, renderer, backend or capture processing location is selected. Unity 6.3 LTS with the URP blank 3D template is approved for the initial prototype only (D031). UnitySplats leads for the browser on one laptop's evidence; it is not a selection.
-- Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested.
+- Browser rendering is tested only with synthetic scenes on one Linux laptop in Chrome, Firefox and Brave. Edge, Windows, macOS, weaker hardware and real captures are untested. The Windows test bundle was checked on Linux and under Wine emulation only.
 - The Toughbook FZ-55 browser reference (i5-8365U, 32 GB RAM, UHD Graphics 620) and 30 fps browser / 60 fps VR floors are selected (D033/D034). Exact OS/browser versions and performance remain unverified. A named Android reference, phone fps, memory/image-quality budgets and detailed acceptance criteria remain open.
 - Arrow/WASD movement, Q/E/X reset, mobile movement/look/view/height controls, third-person orbit and VR 6DoF are confirmed. Exact touch/controller layout, camera-height reference, orbit/follow rules, comfort, avatar dimensions and scale verification remain open.
 - Gemini drafts and designated editors approve before live writes. Field scope, review UI, Google contracts, additional provider scope and integration-administration roles remain open.

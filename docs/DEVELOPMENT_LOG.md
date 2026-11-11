@@ -251,6 +251,58 @@ Validation:
 - Checked 7 Markdown files: 35 internal links resolve against the tracked tree and new task file, tables/whitespace pass, and all 6 existing-file baseline hashes match e40f668.
 - Documentation and task preparation only: no bundle was built, no Windows launcher executed, no Toughbook/browser/headset test run and no Unity project changed for this update.
 
+## November 10, 2026 — Toughbook browser test bundle
+
+Human contribution:
+- Arlen asked Claude Code to carry out TOUGHBOOK_BROWSER_TEST_TASK.md on the development laptop. The task: one Windows Edge/Chrome test ZIP from the existing benchmark build and synthetic fixtures, for the i5-8365U / 32 GB / UHD Graphics 620 Toughbook, with 30 fps as the browser floor.
+- His constraints: preserve uncommitted work, fast-forward only when safe, follow the task's portability and prerequisite checks, and keep The Veil untouched.
+
+AI contribution:
+- Claude Code (Opus 5.5, max effort) found a clean tree on proto/browser-splat-rendering at 3257f73 and fast-forwarded it to 4e0e0ad.
+- Claude extended Tools/browser_test_harness.py for Windows:
+  - Edge and Chrome discovery (Program Files, per-user installs and App Paths) and a fresh temporary profile per run.
+  - A process-tree tracker that stops only the browser the test started, with recycled-PID guards.
+  - Exclusive loopback binding with port fallback; port 9002 is refused.
+  - A manual-server fallback and a plain completion report.
+  - Windows facts without names or serial numbers.
+  - A results collector that replaces user, computer and domain names.
+- It added Tools/package_toughbook_bundle.py, the Windows launchers and START-HERE.txt (Tools/windows-bundle), and Windows fields in Tools/summarize_results.py. The summary output for the committed Linux runs is unchanged.
+- It downloaded the Python 3.14.10 Windows embeddable package from python.org into the ignored Bundles/cache:
+  - Its SHA-256 matches python.org's listing.
+  - OpenSSL verified its Sigstore signature against the signing certificate. The certificate chain and transparency-log entry were not verified.
+- It built the ZIP from commit 7d07732 on a clean tree and tested it as listed below. No helper agents were used, and nothing was installed on the laptop; Wine 9.0 was already present.
+
+MAX verification: the session process runs as claude --effort max from the 2.1.321 binary, with CLAUDE_CODE_EFFORT_LEVEL=max, and it is this shell's ancestor. The model is Opus 5.5 (claude-opus-5-5).
+
+Packaging:
+- The bundled copy of WebGL.wasm has 16 compiled-in Editor paths masked. They held the developer's account name. bundle.json records the original and masked hashes.
+- The 7 fixture files were regenerated with seed 20261110 and are byte-identical to Fixtures/Generated.
+- A privacy scan of every bundled file found no account name, home path or e-mail address.
+- The ZIP self-check (CRC, file hashes, CRLF in the converted Windows files) passed.
+- The ZIP is VRHE-Toughbook-Browser-Test-20261110-7d07732.zip in prototypes/browser-splat-rendering/Bundles (ignored by Git): 39,641,682 bytes, SHA-256 c934948138f8c3be35b966a82e64f698c9b2d3f5dbec22bc09d0b0fbe759f526. The handoff lists its full path, contents and Arlen's steps.
+
+Checks run on the development laptop:
+- Linux real-browser runs, from extracted ZIPs in a folder named with spaces, parentheses and &:
+  - Five baselines: four in Chrome 157 (automatic and manual, one of each from the final ZIP) and one in Firefox 159.
+  - A Chrome 500k follow-up.
+  - Every baseline matched 8 of 8 overlap cases, with 0 console errors.
+  - Edge, which is not installed here, was reported untested, and a follow-up without a baseline was refused.
+- Manual mode with real Chrome, plus server probes, on the final ZIP's files: 48 of 48 checks.
+- Results collection and name scrubbing on the final ZIP's files: 19 of 19 checks.
+- Wine 9.0, an emulation, with the bundled Windows Python and launchers byte-identical to the final ZIP's:
+  - The portable-Python fallback.
+  - The not-extracted, incomplete-folder and no-Python messages.
+  - 30 of 30 Windows-only checks.
+  - A run-mode pass with a mock browser.
+  - The Windows-hosted manual server, used by Linux Chrome.
+- Every automatic run recorded no leftover processes and a deleted temporary profile.
+- The runs measured 52-60 fps, against 59.8-60.0 fps at 250k in the earlier November 10 results. The original harness from 3257f73, run at the same time, measured the same range, so background load (load average 2.4-3.3) is the likely cause, not the tooling. These runs check the bundle; they are not new baselines.
+
+Known issues:
+- ZIP entry times are the commit time in UTC, so extracted files show November 11, 01:20. This is cosmetic: verification uses hashes, not dates.
+
+Not tested: real Windows (cmd, Explorer, Edge, Chrome, Chromium process trees, SmartScreen, downloaded-file marks, company policies, registry and powercfg facts) and every Toughbook performance and memory result. Wine is emulation, and the mock browser is not a browser.
+
 ## Entry template
 
 For each meaningful change, record:

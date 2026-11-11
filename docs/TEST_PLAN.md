@@ -47,7 +47,7 @@ Engineering recommendation: start Quest tests at 72 Hz and aim for 72 applicatio
 
 ### Next browser hardware gate
 
-The hardware inventory above is available. Follow [the local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md), then test the same synthetic benchmark on this Toughbook, starting with Edge and Chrome if available. The automatic launcher currently uses Linux executable paths and POSIX cleanup and has no Edge option; adapt/package it and verify Windows behavior before presenting it as a tested Windows launcher. A manual local-server route is a separate path that also needs a real Windows check. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
+The hardware inventory above is available. [The local packaging task](TOUGHBOOK_BROWSER_TEST_TASK.md) is done: a Windows Edge/Chrome test bundle of the same synthetic benchmark is prepared, as described in the handoff's Toughbook bundle section. It was checked on Linux and under Wine emulation only. Its automatic launchers, process cleanup and manual local-server route are not tested Windows behavior until they run on the Toughbook. Next, run it on this Toughbook, Edge first, then Chrome. Retain results for every required browser and mark unavailable browsers untested. Compact-format and sort-refresh experiments remain proposed; smaller files or fewer sorts alone do not prove acceptable memory, motion quality or worst-frame latency.
 
 | Target | Requested capability | Current evidence |
 | --- | --- | --- |
@@ -58,7 +58,7 @@ The hardware inventory above is available. Follow [the local packaging task](TOU
 | Quest 2 | View/edit | Not tested |
 | Chrome | Browser view/edit | Rendering only: Chrome 157 rendered synthetic splats on one Linux laptop (RTX 4060 Laptop GPU). View/edit not tested |
 | Firefox | Browser view/edit | Rendering only: Firefox 159 on the same laptop. View/edit not tested |
-| Edge | Browser view/edit | Not installed on the test laptop; not tested |
+| Edge | Browser view/edit | Not installed on the development laptop; not tested. The Toughbook bundle includes an Edge run that has not been performed |
 | Brave | Browser view/edit | Rendering only: Brave 1.99.55 (Chromium 157) on the same laptop. View/edit not tested |
 
 The role/capability for each test user still determines who can edit. The table does not grant editing to all viewers.
