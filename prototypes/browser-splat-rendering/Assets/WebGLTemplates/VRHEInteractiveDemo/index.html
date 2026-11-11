@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VR-HE interactive demo (local demo data)</title>
+    <!-- VR-HE interactive browser demo, PROTOTYPE. Synthetic room and synthetic records only.
+         The page owns the HTML interface (panels, help, record editor), mouse handling and the
+         local results reporting; Unity owns the 3D view, walking, picking and the record store.
+         See TemplateData/demo-ui.js for the bridge contract. -->
+    <link rel="stylesheet" href="TemplateData/demo-ui.css">
+  </head>
+  <body>
+    <div id="app">
+      <header id="topbar">
+        <span class="badge" title="Records here are synthetic and saved only in this browser profile on this computer.">LOCAL DEMO DATA</span>
+        <span id="site-name">Synthetic equipment room (demo)</span>
+        <span id="statusline" aria-live="polite"></span>
+        <span id="hud" title="Canvas pixels being rendered and the frame rate Unity is delivering (no frame cap is set).">-- x -- px | -- fps</span>
+      </header>
+
+      <main id="stage-wrap">
+        <div id="stage">
+          <canvas id="unity-canvas" width="1280" height="720" tabindex="0" aria-label="3D view of the synthetic room. Click it to use the keyboard and mouse controls."></canvas>
+          <div id="crosshair" hidden></div>
+          <div id="tag" hidden><strong id="tag-name"></strong><span>Right-click or Enter: open record</span></div>
+          <div id="focus-hint" hidden>Click the view to control it. Press H for help.</div>
+          <div id="loading">
+            <div id="loading-text">Loading the demo...</div>
+            <div class="bar"><div id="loading-bar"></div></div>
+            <div class="small">Synthetic room, about 16 MB. The first load can take a few seconds.</div>
+          </div>
+          <div id="error" hidden></div>
+
+          <aside id="panel-record" class="panel" hidden role="dialog" aria-labelledby="record-title">
+            <div class="panel-head">
+              <h2 id="record-title">Record</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <p class="notice">LOCAL DEMO DATA. Synthetic record, saved only in this browser profile on this computer. Type made-up text only.</p>
+            <dl class="fields">
+              <dt>Name</dt><dd id="rec-name"></dd>
+              <dt>Record ID</dt><dd><code id="rec-id"></code> <button type="button" id="rec-copy" class="small">Copy</button></dd>
+              <dt>Type</dt><dd id="rec-kind"></dd>
+              <dt>Location</dt><dd id="rec-location"></dd>
+              <dt>Placed anchor</dt><dd><code id="rec-anchor"></code></dd>
+              <dt>Saved version</dt><dd id="rec-revision"></dd>
+            </dl>
+            <label for="rec-description">Description (editable)</label>
+            <textarea id="rec-description" maxlength="4000" rows="7" spellcheck="true"></textarea>
+            <div class="row">
+              <span id="rec-count" class="small">0 / 4000</span>
+              <span class="spacer"></span>
+              <button type="button" id="rec-save" class="primary">Save <kbd>Ctrl+Enter</kbd></button>
+              <button type="button" data-close>Close <kbd>Esc</kbd></button>
+            </div>
+            <div id="rec-status" class="status" aria-live="polite"></div>
+            <div id="rec-discard" class="confirm" hidden>
+              <span>You have unsaved changes.</span>
+              <button type="button" id="rec-discard-yes">Discard changes</button>
+              <button type="button" id="rec-discard-no" class="primary">Keep editing</button>
+            </div>
+          </aside>
+
+          <aside id="panel-list" class="panel" hidden role="dialog" aria-labelledby="list-title">
+            <div class="panel-head">
+              <h2 id="list-title">Equipment list</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <p class="small">Every selectable item in this synthetic room. <b>Show</b> selects it and turns the view toward it; <b>Open record</b> opens its record.</p>
+            <ul id="list-items"></ul>
+          </aside>
+
+          <aside id="panel-help" class="panel wide" hidden role="dialog" aria-labelledby="help-title">
+            <div class="panel-head">
+              <h2 id="help-title">How to use this demo</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <h3>1. Give the view your keyboard</h3>
+            <p>Click once on the 3D view. While a panel or text box is open, the view ignores the keyboard and mouse, so typing never moves you.</p>
+            <h3>2. Move</h3>
+            <p><kbd>W</kbd> / <kbd>&uarr;</kbd> forward, <kbd>S</kbd> / <kbd>&darr;</kbd> back, <kbd>A</kbd> / <kbd>D</kbd> step sideways, <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> turn. Hold <kbd>Shift</kbd> to go faster. Racks and walls stop you.</p>
+            <h3>3. Look around</h3>
+            <p>Hold the left mouse button on the view and drag. For game-style looking press <kbd>M</kbd> (or <b>Capture mouse</b>): the pointer disappears and a small cross marks the centre. Press <kbd>Esc</kbd> to get the pointer back.</p>
+            <h3>4. Camera height and reset</h3>
+            <p><kbd>Q</kbd> raises the camera, <kbd>E</kbd> lowers it. <kbd>X</kbd> (or <b>Reset view</b>) restores the normal height and a level view; in third person it also puts the camera back behind the figure.</p>
+            <h3>5. First or third person</h3>
+            <p><kbd>V</kbd> switches views. Third person shows a plain placeholder figure about 1.73 m tall as a rough size cue; drag to circle around it and use the mouse wheel to zoom.</p>
+            <h3>6. Select and open a record</h3>
+            <p>Point at a rack: a white outline appears. Click it: the outline turns cyan and its name shows above it. Then <b>right-click</b> it, press <kbd>Enter</kbd>, or press <b>Open selected record</b>. No mouse aiming needed: open <b>Equipment list</b> (<kbd>L</kbd>).</p>
+            <h3>7. Edit, save and reopen</h3>
+            <p>Type in <b>Description</b> and press <b>Save</b> (or <kbd>Ctrl+Enter</kbd>). Close the record and open it again, reload the page, or close the browser and start the demo again with the same launcher: the saved text returns. Each rack keeps its own text.</p>
+            <h3>8. What is saved, and where</h3>
+            <p>LOCAL DEMO DATA only: synthetic records in this browser profile on this computer. Nothing leaves this computer, and nothing goes to a spreadsheet or company system. <b>Saved data &amp; export</b> downloads a JSON copy or resets the demo text. The demo's own test server on this computer keeps a copy of each export, with timings and console messages, in its results folder.</p>
+            <h3>Settings</h3>
+            <p><label for="look-speed">Mouse look speed</label> <input type="range" id="look-speed" min="0.25" max="3" step="0.05" value="1"> <span id="look-speed-value">1.00x</span></p>
+            <p class="small">Prototype notes: the room is synthetic; physical scale accuracy is not demonstrated. The frame rate shown is what the browser delivers at your display's refresh rate; no frame cap is set.</p>
+          </aside>
+
+          <aside id="panel-data" class="panel" hidden role="dialog" aria-labelledby="data-title">
+            <div class="panel-head">
+              <h2 id="data-title">Saved data &amp; export</h2>
+              <button type="button" class="close" data-close title="Close (Esc)">&times;</button>
+            </div>
+            <p class="notice" id="data-notice">LOCAL DEMO DATA.</p>
+            <dl class="fields">
+              <dt>Stored in</dt><dd id="data-where"></dd>
+              <dt>Storage key</dt><dd><code id="data-key"></code></dd>
+              <dt>State</dt><dd id="data-state"></dd>
+              <dt>Build</dt><dd id="data-build"></dd>
+              <dt>Session</dt><dd><code id="data-session"></code></dd>
+            </dl>
+            <div class="row">
+              <button type="button" id="data-export" class="primary">Download JSON export</button>
+              <button type="button" id="data-reset">Reset demo data...</button>
+            </div>
+            <div id="data-reset-confirm" class="confirm" hidden>
+              <span>Remove all saved demo descriptions from this browser profile?</span>
+              <button type="button" id="data-reset-yes">Remove saved edits</button>
+              <button type="button" id="data-reset-no" class="primary">Cancel</button>
+            </div>
+            <div id="data-status" class="status" aria-live="polite"></div>
+            <pre id="data-json" hidden></pre>
+          </aside>
+        </div>
+      </main>
+
+      <nav id="toolbar" aria-label="Demo controls">
+        <button type="button" data-action="help">Help <kbd>H</kbd></button>
+        <button type="button" data-action="list">Equipment list <kbd>L</kbd></button>
+        <button type="button" data-action="inspect" id="btn-inspect" disabled>Open selected record <kbd>Enter</kbd></button>
+        <button type="button" data-action="view" id="btn-view">Third person <kbd>V</kbd></button>
+        <button type="button" data-action="reset">Reset view <kbd>X</kbd></button>
+        <button type="button" data-action="capture" id="btn-capture">Capture mouse <kbd>M</kbd></button>
+        <button type="button" data-action="data">Saved data &amp; export</button>
+        <button type="button" data-action="size" id="btn-size">Larger view</button>
+      </nav>
+    </div>
+
+    <script>
+      window.VRHEDemoUnityConfig = {
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+        workerUrl: "Build/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        devicePixelRatio: 1
+      };
+    </script>
+    <script src="TemplateData/demo-ui.js"></script>
+    <script src="Build/{{{ LOADER_FILENAME }}}" onload="VRHEDemoPage.start()" onerror="VRHEDemoPage.fatal('The Unity loader script could not be loaded.')"></script>
+  </body>
+</html>
