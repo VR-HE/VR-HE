@@ -5,8 +5,16 @@ Starts the demo through Tools/demo_server.py exactly as a tester would (persiste
 fixed address), then drives the page through the Chrome DevTools Protocol with trusted keyboard
 and mouse input events, so Unity sees the same events as from a person. It checks controls,
 pointer and panel transitions, typing without movement, selection of two racks, stable IDs,
-save, reload, relaunch with the same profile, export, view orbit and the X reset, and records
+save, reload, relaunch with the same profile, export, view orbit and the X reset, the optional
+mouse Y inversion, equipment records with RU ranges, descriptions and the description-name list
+(including D041's replacement rules, a refused browser write and store-level refusals), and records
 frame pacing during idle, movement, looking, orbiting and panel typing.
+
+  --part all         everything above (default; two browser sessions)
+  --part authoring   only the equipment/description/name checks, with reload, restart and reset
+  --part migration   needs --old-bundle <extracted first-demo bundle>: that build saves version 1
+                     rack notes in a fresh profile, this build reads and carries them, then the
+                     first build runs again on the same profile. Use a new --profile-dir.
 
 Linux development laptop only. Uses a throwaway profile folder you name (never your normal
 profile) and the browser's local debugging port, which this tool alone opens. Writes results to
@@ -26,6 +34,7 @@ import json
 import math
 import os
 import random
+import re
 import socket
 import struct
 import subprocess
@@ -155,7 +164,7 @@ KEYS = {
     "e": ("KeyE", 69), "x": ("KeyX", 88), "v": ("KeyV", 86), "h": ("KeyH", 72), "l": ("KeyL", 76),
     "m": ("KeyM", 77), "Enter": ("Enter", 13), "Escape": ("Escape", 27), "Shift": ("ShiftLeft", 16),
     "ArrowUp": ("ArrowUp", 38), "ArrowDown": ("ArrowDown", 40), "ArrowLeft": ("ArrowLeft", 37),
-    "ArrowRight": ("ArrowRight", 39), "Control": ("ControlLeft", 17),
+    "ArrowRight": ("ArrowRight", 39), "Control": ("ControlLeft", 17), "Backspace": ("Backspace", 8),
 }
 
 
@@ -234,11 +243,17 @@ class Driver:
 
     def click_selector(self, selector):
         # Panels scroll; bring the control into view first, as a person would, then click its centre.
+        # A control that something else covers (a sticky footer, say) is an error, not a silent misclick.
         rect = self.cdp.eval(f"(() => {{ const e = document.querySelector({json.dumps(selector)}); if (!e) return null;"
                              " e.scrollIntoView({block: 'nearest'});"
-                             " const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2, r.width]; })()")
+                             " const r = e.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2;"
+                             " const hit = document.elementFromPoint(x, y);"
+                             " const covered = hit && hit !== e && !e.contains(hit) ? (hit.id || hit.className || hit.tagName) : '';"
+                             " return [x, y, r.width, covered]; })()")
         if not rect or rect[2] == 0:
             raise RuntimeError(f"element {selector} is not visible")
+        if rect[3]:
+            raise RuntimeError(f"element {selector} is covered by '{rect[3]}' at its centre")
         self.click(rect[0], rect[1])
 
 
@@ -357,8 +372,8 @@ def focus_view(driver, page):
 def select_via_list(driver, page, name):
     driver.press("l")
     wait(lambda: snap(page)["panel"] == "list", 5, what="list panel")
-    index = page.eval(f"Array.from(document.querySelectorAll('#list-items li .name')).findIndex(n => n.textContent === {json.dumps(name)})")
-    driver.click_selector(f"#list-items li:nth-child({index + 1}) button:nth-of-type(1)")
+    record_id = page.eval(f"VRHEDemoPage.test.snapshot().records.find(r => r.name === {json.dumps(name)}).recordId")
+    driver.click_selector(f'#list-items > li[data-record="{record_id}"] button[data-act=show]')
     wait(lambda: snap(page)["panel"] == "" and snap(page)["selectedName"] == name, 5, what=f"{name} shown")
     time.sleep(0.4)
 
@@ -583,7 +598,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     checks.check("served data/site.json is the committed site definition",
                  http_json(DEMO_URL + "data/site.json") == site)
     checks.check("site.json IDs unchanged in the running build",
-                 page.eval("VRHEDemoPage.test.snapshot().storageKey") == "vrhe.demo.records.v1." + site["siteId"])
+                 page.eval("VRHEDemoPage.test.snapshot().storageKey") == "vrhe.demo.records.v2." + site["siteId"])
     checks.check("build-info.json is served and labelled", bool(http_json(DEMO_URL + "data/build-info.json").get("label")))
     covered = snap(page)["viewCovered"]
     checks.check("nothing covers the 3D view once ready (clicks reach the canvas)", covered == "", covered or "clear")
@@ -730,7 +745,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     checks.check("Ctrl+Enter saves A1 (version 1)", s["lastSave"] and s["lastSave"]["status"] == "Saved" and
                  s["record"]["revision"] == 1, f"{s['lastSave']}")
     raw = json.loads(page.eval("VRHEDemoPage.test.storedRaw()"))
-    entries = {e["recordId"]: e for e in raw["entries"]}
+    entries = {e["recordId"]: e for e in raw["rackNotes"]}
     checks.check("storage holds A1's text under its recordId only",
                  entries.get(a1["recordId"], {}).get("description") == note_a and b1["recordId"] not in entries,
                  f"keys {sorted(entries)}")
@@ -771,8 +786,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     driver.press("Escape")
     driver.press("l")
     wait(lambda: snap(page)["panel"] == "list", 5, what="list")
-    index = page.eval("Array.from(document.querySelectorAll('#list-items li .name')).findIndex(n => n.textContent === 'Rack A1')")
-    driver.click_selector(f"#list-items li:nth-child({index + 1}) button:nth-of-type(2)")
+    driver.click_selector(f'#list-items > li[data-record="{a1["recordId"]}"] button[data-act=open]')
     s = wait(lambda: (lambda x: x if x["panel"] == "record" else None)(snap(page)), 5, what="A1 record")
     checks.check("reopening A1 shows A1's saved text, not B1's", s["record"]["description"] == note_a and
                  s["record"]["recordId"] == a1["recordId"])
@@ -789,7 +803,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     driver.click_element("rec-discard-yes")
     s = snap(page)
     stored = json.loads(page.eval("VRHEDemoPage.test.storedRaw()"))
-    a_text = {e["recordId"]: e for e in stored["entries"]}[a1["recordId"]]["description"]
+    a_text = {e["recordId"]: e for e in stored["rackNotes"]}[a1["recordId"]]["description"]
     checks.check("discarding closes without saving", s["panel"] == "" and a_text == note_a)
 
     # Equipment list route for non-gamers: "Show" selects an item and turns the view to it.
@@ -798,6 +812,9 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     checks.check("Equipment list 'Show' selects B3 and turns the view toward it",
                  snap(page)["selected"] == rec["Rack B3"]["recordId"] and p["visible"] and abs(p["unityX"] - 640) < 60,
                  f"projected x {p['unityX']:.0f} of 1280")
+
+    # Stage 2: equipment records, descriptions and description names (D037-D039, D041).
+    authoring = run_authoring_checks(page, driver, checks, site)
 
     # Reload keeps both edits.
     page.call("Page.reload", {"ignoreCache": True})
@@ -810,6 +827,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
         s = wait(lambda: (lambda x: x if x["panel"] == "record" else None)(snap(page)), 5, what=f"{name} after reload")
         checks.check(f"page reload keeps {name}'s saved text", s["record"]["description"] == note and s["record"]["revision"] == 1)
         driver.press("Escape")
+    check_authoring_persisted(page, driver, checks, authoring, "a page reload")
 
     # Export.
     driver.click_selector("button[data-action=data]")
@@ -829,6 +847,7 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
         checks.check("browser download contains the same JSON", json.load(f) == export, downloaded)
     session_dir = os.path.join(results, snap(page)["session"])
     checks.check("export copy reached the local results folder", os.path.isfile(os.path.join(session_dir, name)))
+    check_authoring_export(export, authoring, checks)
     driver.press("Escape")
 
     # Third person, orbit, zoom and X, on the open floor right of the racks facing the front.
@@ -905,9 +924,9 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
     run_inversion_checks(page, driver, checks, site)
     reload_page(page)
     check_inversion_persists(page, driver, checks, "a page reload")
-    return {"notes": {"A1": note_a, "B1": note_b},
+    return {"notes": {"A1": note_a, "B1": note_b}, "authoring": authoring,
             "pacing": [x for x in (pace_idle, pace_move, pace_height, pace_look, pace_orbit, pace_third_move,
-                                   pace_typing, pace_panel) if x]}
+                                   pace_typing, pace_panel) if x] + authoring["pacing"]}
 
 
 def run_inversion_session_two(page, driver, checks):
@@ -936,8 +955,9 @@ def run_inversion_session_two(page, driver, checks):
                  f"invert {s['invertMouseY']}, speed {s['lookSpeed']}, error {s['error']!r}")
 
 
-def run_session_two(page, driver, checks, site, notes):
+def run_session_two(page, driver, checks, site, notes, authoring):
     run_inversion_session_two(page, driver, checks)
+    check_authoring_persisted(page, driver, checks, authoring, "closing and restarting the browser")
     rec = {r["name"]: r for r in site["records"]}
     for name, key in (("Rack A1", "A1"), ("Rack B1", "B1")):
         r = rec[name]
@@ -956,8 +976,610 @@ def run_session_two(page, driver, checks, site, notes):
     driver.click_element("data-reset")
     driver.click_element("data-reset-yes")
     time.sleep(0.3)
-    checks.check("Reset demo data removes the saved edits", page.eval("VRHEDemoPage.test.storedRaw()") is None)
+    check_reset_v2(page, checks, site)
     driver.press("Escape")
+
+
+# ------------------------------------------------------------------------------- stage 2: equipment and names
+# Racks hold equipment records with RU ranges (D037); each item starts with one empty, unnamed
+# description and gains more through Add description (D038); description names come from one shared,
+# editable list (D039); a name leaves the list only through a replacement that keeps every
+# description's identity and text (D041). Everything below goes through the page with real clicks
+# and keys, except: choosing an entry in a native drop-down (CDP cannot drive the browser's own
+# pop-up list, so the value is set and a change event sent), placing the caret, and the checks that
+# deliberately bypass the page to prove the store enforces a rule by itself.
+V2_PREFIX = "vrhe.demo.records.v2."
+V1_PREFIX = "vrhe.demo.records.v1."
+FILLER_PREFIX = "vrhe.check.filler."
+UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+
+
+def is_id(value, prefix):
+    return bool(re.fullmatch(prefix + "-" + UUID, value or ""))
+
+
+def visible(page, element_id):
+    return page.eval(f"(() => {{ const n = document.getElementById({json.dumps(element_id)});"
+                     " return !!n && n.getClientRects().length > 0; })()")
+
+
+def wait_panel(page, name, what=None):
+    return wait(lambda: (lambda s: s if s["panel"] == name else None)(snap(page)), 5, what=what or f"{name} panel")
+
+
+def stored_doc(page):
+    raw = page.eval("VRHEDemoPage.test.storedRaw()")
+    return json.loads(raw) if raw else None
+
+
+def stored_item(doc, equipment_id):
+    return next((e for e in (doc or {}).get("equipment", []) if e["equipmentId"] == equipment_id), None)
+
+
+def stored_label(doc, label_id):
+    return next((l for l in (doc or {}).get("labels", []) if l["labelId"] == label_id), None)
+
+
+def triples(descriptions):
+    return [(d["descriptionId"], d["labelId"], d["text"]) for d in descriptions]
+
+
+def catalog_label(page, label_id):
+    return next((l for l in (snap(page)["catalog"] or {}).get("labels", []) if l["labelId"] == label_id), None)
+
+
+def same_pose(a, b):
+    return (dist(a["feet"], b["feet"]) < 1e-4 and a["viewYaw"] == b["viewYaw"] and a["pitch"] == b["pitch"] and
+            a["heightOffset"] == b["heightOffset"] and a["view"] == b["view"])
+
+
+def set_field(driver, page, element_id, text):
+    """Real click into a text or number field, select its content, then type (Backspace for empty)."""
+    driver.click_element(element_id)
+    page.eval(f"document.getElementById({json.dumps(element_id)}).select()")
+    if text:
+        driver.type_text(text, 0.02)
+    else:
+        driver.press("Backspace")
+
+
+def open_list(driver, page):
+    if snap(page)["panel"] != "list":
+        driver.click_selector("button[data-action=list]")
+    wait_panel(page, "list")
+
+
+def open_rack(driver, page, rack):
+    """Equipment list > Open rack (real clicks); returns the snapshot with the rack panel open."""
+    open_list(driver, page)
+    driver.click_selector(f'#list-items > li[data-record="{rack["recordId"]}"] button[data-act=open]')
+    return wait(lambda: (lambda s: s if s["panel"] == "record" and s["record"] and
+                         s["record"]["recordId"] == rack["recordId"] else None)(snap(page)), 5, what=rack["name"])
+
+
+def open_item_from_list(driver, page, equipment_id):
+    open_list(driver, page)
+    driver.click_selector(f'#list-items li[data-equipment="{equipment_id}"] button[data-act=open-eq]')
+    return wait(lambda: (lambda s: s if s["panel"] == "equipment" and s["equipment"] and
+                         s["equipment"]["equipmentId"] == equipment_id else None)(snap(page)), 5, what="equipment item")
+
+
+def open_names(driver, page):
+    if snap(page)["panel"] != "names":
+        driver.click_selector("button[data-action=names]")
+    return wait_panel(page, "names")
+
+
+def add_equipment(driver, page, name, start, end=""):
+    set_field(driver, page, "eq-new-name", name)
+    set_field(driver, page, "eq-new-start", start)
+    set_field(driver, page, "eq-new-end", end)
+    driver.click_element("eq-add-btn")
+    return snap(page)
+
+
+def card(i, what=""):
+    return f"#eq-descriptions > li:nth-child({i + 1}) {what}".strip()
+
+
+def choose_name(page, i, value):
+    """Pick an entry in description i's name list (set programmatically; see the section comment)."""
+    page.eval(f"(() => {{ const s = document.querySelector({json.dumps(card(i, 'select'))});"
+              f" s.value = {json.dumps(value)}; s.dispatchEvent(new Event('change', {{bubbles: true}})); }})()")
+
+
+def in_clear_view(page, selector):
+    """Whether the element lies inside its panel's visible area, above any sticky footer, and is
+    what a click at its centre would reach; also whether it has focus."""
+    return page.eval(f"""(() => {{
+      const e = document.querySelector({json.dumps(selector)}); if (!e) return {{ok: false, focused: false, why: 'missing'}};
+      const panel = e.closest('.panel'), r = e.getBoundingClientRect(), p = panel.getBoundingClientRect();
+      const foot = panel.querySelector('.panel-foot'), limit = foot ? foot.getBoundingClientRect().top : p.bottom;
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return {{ok: r.top >= p.top && r.bottom <= limit + 0.5 && !!hit && (hit === e || e.contains(hit)),
+               focused: document.activeElement === e, why: `top ${{Math.round(r.top)}} bottom ${{Math.round(r.bottom)}}`
+               + ` footer ${{Math.round(limit)}} hit ${{hit ? (hit.id || hit.className || hit.tagName) : 'none'}}`}};
+    }})()""")
+
+
+def focus_spot(page):
+    """[description index, element, caret start, caret end] for focus inside a description card, else None."""
+    return page.eval("(() => { const a = document.activeElement; const li = a && a.closest && a.closest('#eq-descriptions > li');"
+                     " return li ? [Array.prototype.indexOf.call(li.parentNode.children, li), a.tagName,"
+                     " a.tagName === 'TEXTAREA' ? a.selectionStart : null, a.tagName === 'TEXTAREA' ? a.selectionEnd : null] : null; })()")
+
+
+def type_description(driver, page, i, text):
+    """Real click into description i's text box, caret to the end, then real typing."""
+    driver.click_selector(card(i, "textarea"))
+    page.eval(f"(() => {{ const t = document.querySelector({json.dumps(card(i, 'textarea'))});"
+              " t.setSelectionRange(t.value.length, t.value.length); })()")
+    driver.type_text(text, 0.02)
+
+
+def add_description(driver, page):
+    driver.click_element("eq-add-desc")
+    return len(snap(page)["draft"]["descriptions"])
+
+
+def save_item(driver, page):
+    driver.press("Enter", modifiers=2)  # Ctrl+Enter
+    return snap(page)
+
+
+def authoring_raw(page, payload):
+    """Send one JsAuthoring command straight to Unity, bypassing the page's own checks."""
+    request_id = "check-" + str(random.randint(100000, 999999))
+    payload = dict(payload, requestId=request_id)
+    page.eval(f"unityInstance.SendMessage('VRHEDemo', 'JsAuthoring', {json.dumps(json.dumps(payload))})")
+    return page.eval(f"VRHEDemoPage.test.takeReply({json.dumps(request_id)})")
+
+
+def fill_storage(page):
+    """Fill this origin's localStorage until the browser refuses even one more character."""
+    return page.eval("(() => { let n = 0, size = 1 << 20, chars = 0;"
+                     f" while (size >= 1) {{ try {{ localStorage.setItem({json.dumps(FILLER_PREFIX)} + n, 'x'.repeat(size));"
+                     " n++; chars += size; } catch (e) { size = Math.floor(size / 2); } }"
+                     " return {keys: n, chars: chars}; })()")
+
+
+def free_storage(page):
+    return page.eval("(() => { const keys = []; for (let i = 0; i < localStorage.length; i++) {"
+                     f" const k = localStorage.key(i); if (k.startsWith({json.dumps(FILLER_PREFIX)})) keys.push(k); }}"
+                     " keys.forEach(k => localStorage.removeItem(k)); return keys.length; })()")
+
+
+def run_authoring_checks(page, driver, checks, site):
+    """Stage 2 in one session. Returns what the reload, restart and export checks compare against."""
+    rec = {r["name"]: r for r in site["records"]}
+    a4, b2 = rec["Rack A4"], rec["Rack B2"]
+    starter = {l["name"]: l["labelId"] for l in site["labels"]}
+    serial, model, asset_tag = starter["Serial number"], starter["Model"], starter["Asset tag"]
+    ctx = {"pacing": []}
+
+    # --- Rack A4: bounds advice, a store refusal, then a 1U switch with one empty unnamed description.
+    s = open_rack(driver, page, a4)
+    checks.check("a rack panel shows its equipment list (empty) and the Add equipment form",
+                 s["record"]["equipment"] == [] and visible(page, "eq-add") and s["record"]["rackUnits"] == 42,
+                 f"{len(s['record']['equipment'])} items, {s['record']['rackUnits']} RU")
+    raw0 = page.eval("VRHEDemoPage.test.storedRaw()")
+    s = add_equipment(driver, page, "Synthetic switch SW-01", "43")
+    checks.check("RU 43 in a 42 RU rack: flagged while typing, refused by the store, nothing written",
+                 "use 1 to 42" in s["addCheck"] and s["lastAuthoring"]["status"] == "Invalid" and
+                 s["panel"] == "record" and page.eval("VRHEDemoPage.test.storedRaw()") == raw0,
+                 f"{s['lastAuthoring']['status']}: {s['addStatus']}")
+    set_field(driver, page, "eq-new-start", "40")
+    driver.press("Enter")  # Enter in the form adds; "to RU" left blank means the same unit
+    s = wait_panel(page, "equipment", "new item editor")
+    sw = s["equipment"]
+    first = sw["descriptions"]
+    checks.check("Add equipment opens the new item with exactly one empty, unnamed description",
+                 sw["name"] == "Synthetic switch SW-01" and (sw["ruStart"], sw["ruEnd"]) == (40, 40) and
+                 len(first) == 1 and first[0]["labelId"] == "" and first[0]["text"] == "" and sw["revision"] == 1,
+                 f"{sw['name']} RU {sw['ruStart']}-{sw['ruEnd']}, {len(first)} description(s)")
+    checks.check("equipment and description identities are their own prefixed UUIDs, linked to the rack",
+                 is_id(sw["equipmentId"], "eq") and is_id(first[0]["descriptionId"], "dsc") and
+                 sw["rackRecordId"] == a4["recordId"], f"{sw['equipmentId']} / {first[0]['descriptionId']}")
+    ctx["SW"] = sw["equipmentId"]
+
+    # One named, one unnamed and another named description; typing never moves the view.
+    choose_name(page, 0, serial)
+    type_description(driver, page, 0, "SYN-SW-0001")
+    add_description(driver, page)
+    uplinks = "Uplinks to the core www aaa sss ddd qqq eee xxx"
+    st0 = state(page)
+    ctx["pacing"].append(pacing(page, "panel.equipment typing", lambda: type_description(driver, page, 1, uplinks)))
+    driver.hold(["w"], 0.6)  # a held key inside the text box types one "w"
+    uplinks += "w"
+    st1 = state(page)
+    checks.check("typing W A S D Q E X in an equipment description moves nothing",
+                 same_pose(st0, st1) and snap(page)["draft"]["descriptions"][1]["text"] == uplinks,
+                 f"moved {dist(st0['feet'], st1['feet']):.5f} m")
+    add_description(driver, page)
+    choose_name(page, 2, model)
+    type_description(driver, page, 2, "Synthetic 48-port switch")
+    page.eval(f"document.querySelector({json.dumps(card(2, 'select'))}).focus()")
+    st0 = state(page)
+    driver.type_text("hlqx", 0.05)
+    s = snap(page)
+    st1 = state(page)
+    checks.check("letters typed while a name list has focus open no panel and move nothing",
+                 s["panel"] == "equipment" and s["draft"]["descriptions"][2]["labelId"] == model and same_pose(st0, st1),
+                 f"panel {s['panel']}")
+    n = add_description(driver, page)
+    view = in_clear_view(page, card(n - 1, "textarea"))
+    checks.check("Add description focuses the new text box and scrolls it into view above the Save row",
+                 view["ok"] and view["focused"], view.get("why", ""))
+    text_locked = page.eval(f"document.querySelector({json.dumps(card(0, 'button[data-act=remove]'))}).disabled")
+    driver.click_selector(card(n - 1, "button[data-act=remove]"))
+    s = snap(page)
+    checks.check("Remove works on an empty description and is unavailable for one with text",
+                 text_locked and len(s["draft"]["descriptions"]) == n - 1, f"{n} -> {len(s['draft']['descriptions'])}")
+    before = focus_spot(page)
+    s = save_item(driver, page)
+    after = focus_spot(page)
+    checks.check("after Ctrl+Enter the caret stays where it was, so typing carries on in the same description",
+                 before is not None and before == after, f"{before} -> {after}")
+    sw = s["equipment"]
+    checks.check("Ctrl+Enter saves the item: one unnamed and two named descriptions, first ID kept",
+                 s["lastAuthoring"]["status"] == "Saved" and sw["revision"] == 2 and
+                 [(d["labelId"], d["text"]) for d in sw["descriptions"]] ==
+                 [(serial, "SYN-SW-0001"), ("", uplinks), (model, "Synthetic 48-port switch")] and
+                 sw["descriptions"][0]["descriptionId"] == first[0]["descriptionId"],
+                 f"{s['lastAuthoring']['status']}: {s['eqStatus']}")
+
+    # A 2U server at RU 20-21, after an overlap warning while typing.
+    driver.click_element("eq-back")
+    s = wait(lambda: (lambda x: x if x["panel"] == "record" and x["record"]["recordId"] == a4["recordId"] else None)(snap(page)),
+             5, what="back to A4")
+    checks.check("the item's back link returns to its rack, which lists it",
+                 [e["equipmentId"] for e in s["record"]["equipment"]] == [ctx["SW"]])
+    set_field(driver, page, "eq-new-name", "Synthetic server SRV-01")
+    set_field(driver, page, "eq-new-start", "40")
+    overlap_text = snap(page)["addCheck"]
+    checks.check("a rack unit already in use is flagged while typing (front/rear is not recorded)",
+                 "Shares rack units with Synthetic switch SW-01" in overlap_text and "front" in overlap_text, overlap_text)
+    set_field(driver, page, "eq-new-start", "20")
+    set_field(driver, page, "eq-new-end", "21")
+    driver.click_element("eq-add-btn")
+    s = wait(lambda: (lambda x: x if x["panel"] == "equipment" and x["equipment"]["equipmentId"] != ctx["SW"] else None)(snap(page)),
+             5, what="server editor")
+    srv = s["equipment"]
+    checks.check("a 2U device is one record covering RU 20-21",
+                 (srv["ruStart"], srv["ruEnd"]) == (20, 21) and len(srv["descriptions"]) == 1, f"RU {srv['ruStart']}-{srv['ruEnd']}")
+    ctx["SRV"] = srv["equipmentId"]
+    choose_name(page, 0, serial)
+    type_description(driver, page, 0, "SYN-SRV-0002")
+    driver.click_element("eq-save")
+    doc = stored_doc(page)
+    sw_doc, srv_doc = stored_item(doc, ctx["SW"]), stored_item(doc, ctx["SRV"])
+    checks.check("the same name holds different text on each item (choosing a name copies nothing)",
+                 (sw_doc["descriptions"][0]["labelId"], sw_doc["descriptions"][0]["text"]) == (serial, "SYN-SW-0001") and
+                 (srv_doc["descriptions"][0]["labelId"], srv_doc["descriptions"][0]["text"]) == (serial, "SYN-SRV-0002"))
+    checks.check("saving the server left the switch unchanged (record-local)",
+                 sw_doc["revision"] == 2 and triples(sw_doc["descriptions"]) == triples(sw["descriptions"]))
+    driver.click_element("eq-back")
+    s = wait(lambda: (lambda x: x if x["panel"] == "record" and len(x["record"]["equipment"]) == 2 else None)(snap(page)),
+             5, what="A4 with two items")
+    checks.check("rack A4 lists both devices, top of the rack first",
+                 [(e["name"], e["ruStart"], e["ruEnd"]) for e in s["record"]["equipment"]] ==
+                 [("Synthetic switch SW-01", 40, 40), ("Synthetic server SRV-01", 20, 21)])
+    driver.press("Escape")
+
+    # --- The shared list: add a misspelt name, then use it on two items in two racks.
+    open_names(driver, page)
+    doc0 = stored_doc(page)
+    ctx["pacing"].append(pacing(page, "panel.names typing", lambda: set_field(driver, page, "names-new", "Serail no")))
+    driver.click_element("names-add")
+    s = snap(page)
+    typo = s["lastAuthoring"]["labelId"]
+    doc1 = stored_doc(page)
+    checks.check("Add name puts the name in the shared list and changes no equipment record",
+                 s["lastAuthoring"]["status"] == "Saved" and is_id(typo, "lbl") and
+                 [e["revision"] for e in doc0["equipment"]] == [e["revision"] for e in doc1["equipment"]] and
+                 any(l["labelId"] == typo and not l["retired"] for l in s["catalog"]["labels"]), s["namesStatus"])
+    driver.press("Escape")
+
+    s = open_rack(driver, page, b2)
+    add_equipment(driver, page, "Synthetic router RT-01", "10", "11")
+    s = wait_panel(page, "equipment", "router editor")
+    ctx["RT"] = s["equipment"]["equipmentId"]
+    choose_name(page, 0, typo)
+    type_description(driver, page, 0, "SYN-RT-0003")
+    add_description(driver, page)
+    choose_name(page, 1, serial)
+    type_description(driver, page, 1, "RT-SERIAL-B")
+    add_description(driver, page)
+    choose_name(page, 2, "__new")
+    form_shown = page.eval(f"document.querySelector({json.dumps(card(2, '.desc-new'))}).getClientRects().length > 0")
+    driver.click_selector(card(2, ".desc-new input"))
+    driver.type_text("Firmware version", 0.02)
+    driver.click_selector(card(2, "button[data-act=new-add]"))
+    s = snap(page)
+    firmware = s["lastAuthoring"]["labelId"]
+    doc = stored_doc(page)
+    checks.check("'New name...' in a description adds the name and chooses it for that description only",
+                 form_shown and s["lastAuthoring"]["status"] == "Saved" and s["draft"]["descriptions"][2]["labelId"] == firmware and
+                 s["draft"]["descriptions"][0]["labelId"] == typo and stored_item(doc, ctx["SRV"])["revision"] == 2,
+                 s["eqStatus"])
+    type_description(driver, page, 2, "1.0.0-synthetic")
+    # Clicking a blank part of the panel leaves the text box; a shortcut then asks before dropping the
+    # unsaved changes, and Keep editing (Esc) goes back to the description that was being typed in.
+    driver.click_selector("#equipment-title")
+    driver.press("l")
+    asked = snap(page)
+    driver.press("Escape")
+    back = in_clear_view(page, card(2, "textarea"))
+    s = snap(page)
+    checks.check("a shortcut with unsaved changes asks first; Keep editing returns to the description in use",
+                 asked["confirmVisible"] and asked["panel"] == "equipment" and back["focused"] and back["ok"] and
+                 not s["confirmVisible"] and s["draft"]["descriptions"][2]["text"] == "1.0.0-synthetic",
+                 f"asked {asked['confirmVisible']}; {back.get('why', '')}")
+    s = save_item(driver, page)
+    checks.check("router saved with a misspelt name, Serial number and the new name",
+                 s["lastAuthoring"]["status"] == "Saved" and
+                 [(d["labelId"], d["text"]) for d in s["equipment"]["descriptions"]] ==
+                 [(typo, "SYN-RT-0003"), (serial, "RT-SERIAL-B"), (firmware, "1.0.0-synthetic")], s["eqStatus"])
+    driver.press("Escape")
+
+    # Hierarchy in the Equipment list; opening an item selects its rack in the view.
+    open_list(driver, page)
+    listed = page.eval(f"Array.from(document.querySelectorAll('#list-items > li[data-record=\"{a4['recordId']}\"] .eq-sub li'))"
+                       ".map(n => n.dataset.equipment)")
+    s = open_item_from_list(driver, page, ctx["SW"])
+    checks.check("the Equipment list shows each rack's items; Open opens the item and selects its rack",
+                 listed == [ctx["SW"], ctx["SRV"]] and snap(page)["selected"] == a4["recordId"], f"listed {len(listed or [])}")
+    add_description(driver, page)
+    choose_name(page, 3, typo)
+    type_description(driver, page, 3, "SW-OLD-77")
+    s = save_item(driver, page)
+    checks.check("switch saved with a fourth description under the misspelt name",
+                 s["lastAuthoring"]["status"] == "Saved" and s["equipment"]["revision"] == 3)
+
+    # --- Rename: a spelling fix reaches every description; no text or equipment record changes.
+    before = stored_doc(page)
+    open_names(driver, page)
+    driver.click_selector(f'#names-list li[data-label="{typo}"] button[data-act=rename]')
+    set_field(driver, page, "names-rename-input", "Serial no.")
+    driver.click_selector("#names-list .name-form button[data-act=rename-go]")
+    s = snap(page)
+    after = stored_doc(page)
+    label = stored_label(after, typo)
+    unchanged = all(triples(stored_item(after, i)["descriptions"]) == triples(stored_item(before, i)["descriptions"]) and
+                    stored_item(after, i)["revision"] == stored_item(before, i)["revision"] for i in (ctx["SW"], ctx["RT"]))
+    checks.check("Rename fixes the spelling everywhere: same descriptions, same text, same item versions",
+                 s["lastAuthoring"]["status"] == "Saved" and s["lastAuthoring"]["affected"] == 2 and label["name"] == "Serial no." and
+                 label["previousNames"] == ["Serail no"] and unchanged, s["namesStatus"])
+
+    # --- Remove: impossible without a replacement, in the page and in the store.
+    driver.click_selector(f'#names-list li[data-label="{typo}"] button[data-act=remove]')
+    go_disabled = page.eval("document.querySelector('#names-list .name-form button[data-act=replace-go]').disabled")
+    raw0 = page.eval("VRHEDemoPage.test.storedRaw()")
+    revision = catalog_label(page, typo)["revision"]
+    replies = [authoring_raw(page, {"op": "replaceLabel", "labelId": typo, "baseRevision": revision,
+                                    "replacementLabelId": rid, "replacementName": rname})
+               for rid, rname in (("", ""), ("", "   "), (typo, ""), ("", "serial NO."))]
+    checks.check("Remove can't be confirmed until a replacement is chosen (button disabled)", go_disabled)
+    checks.check("the store itself refuses removal without a valid replacement and writes nothing",
+                 all(r and r["status"] == "Invalid" for r in replies) and page.eval("VRHEDemoPage.test.storedRaw()") == raw0,
+                 "; ".join(f"{r['status']}" if r else "no reply" for r in replies))
+
+    # --- Replace with an existing name across two items, with a name clash on both.
+    page.eval(f"(() => {{ const s = document.getElementById('names-rep-existing'); s.value = {json.dumps(serial)};"
+              " s.dispatchEvent(new Event('change', {bubbles: true})); })()")
+    before = stored_doc(page)
+    driver.click_selector("#names-list .name-form button[data-act=replace-go]")
+    s = snap(page)
+    after = stored_doc(page)
+    moved = {i: [(d["descriptionId"], serial if d["labelId"] == typo else d["labelId"], d["text"])
+                 for d in stored_item(before, i)["descriptions"]] for i in (ctx["SW"], ctx["RT"])}
+    checks.check("Replace moves every description from 'Serial no.' to 'Serial number', keeping IDs, order and text",
+                 s["lastAuthoring"]["status"] == "Saved" and s["lastAuthoring"]["affected"] == 2 and
+                 all(triples(stored_item(after, i)["descriptions"]) == moved[i] for i in moved) and
+                 triples(stored_item(after, ctx["SRV"])["descriptions"]) == triples(stored_item(before, ctx["SRV"])["descriptions"]),
+                 s["namesStatus"])
+    checks.check("where an item already had 'Serial number', both descriptions are kept and the page says so",
+                 any("Both descriptions are kept" in w for w in s["namesWarnings"]) and
+                 [d["text"] for d in stored_item(after, ctx["SW"])["descriptions"] if d["labelId"] == serial] == ["SYN-SW-0001", "SW-OLD-77"],
+                 "; ".join(s["namesWarnings"]))
+    retired = stored_label(after, typo)
+    options = page.eval(f"(() => {{ const l = VRHEDemoPage.test.snapshot().catalog.labels;"
+                        f" return l.filter(x => !x.retired).map(x => x.labelId).includes({json.dumps(typo)}); }})()")
+    checks.check("the replaced name leaves the list and stays recorded as replaced, with what moved",
+                 retired["retired"] and retired["replacedByLabelId"] == serial and len(retired["reassignedDescriptionIds"]) == 2 and
+                 not options and page.eval(f"!!document.querySelector('#names-retired li[data-label=\"{typo}\"]')"))
+
+    # --- A refused browser write (storage full) changes nothing; the same replacement works afterwards.
+    set_field(driver, page, "names-new", "Asset no.")
+    driver.click_element("names-add")
+    asset_no = snap(page)["lastAuthoring"]["labelId"]
+    driver.press("Escape")
+    open_item_from_list(driver, page, ctx["SRV"])
+    add_description(driver, page)
+    choose_name(page, 1, asset_no)
+    type_description(driver, page, 1, "AN-555")
+    save_item(driver, page)
+    open_names(driver, page)
+    driver.click_selector(f'#names-list li[data-label="{asset_no}"] button[data-act=remove]')
+    page.eval(f"(() => {{ const s = document.getElementById('names-rep-existing'); s.value = {json.dumps(asset_tag)};"
+              " s.dispatchEvent(new Event('change', {bubbles: true})); })()")
+    raw0 = page.eval("VRHEDemoPage.test.storedRaw()")
+    filled = fill_storage(page)
+    driver.click_selector("#names-list .name-form button[data-act=replace-go]")
+    s = snap(page)
+    checks.check("with browser storage full, the replacement is refused and nothing changes",
+                 s["lastAuthoring"]["status"] == "StorageError" and "Nothing was changed" in s["namesStatus"] and
+                 page.eval("VRHEDemoPage.test.storedRaw()") == raw0 and not catalog_label(page, asset_no)["retired"],
+                 f"filled {filled['keys']} keys / {filled['chars']} chars; {s['namesStatus'][:120]}")
+    freed = free_storage(page)
+    page.eval(f"(() => {{ const s = document.getElementById('names-rep-existing'); s.value = {json.dumps(asset_tag)};"
+              " s.dispatchEvent(new Event('change', {bubbles: true})); })()")
+    driver.click_selector("#names-list .name-form button[data-act=replace-go]")
+    s = snap(page)
+    srv_doc = stored_item(stored_doc(page), ctx["SRV"])
+    checks.check("after space is freed the same replacement succeeds and keeps the text",
+                 freed == filled["keys"] and s["lastAuthoring"]["status"] == "Saved" and
+                 (srv_doc["descriptions"][1]["labelId"], srv_doc["descriptions"][1]["text"]) == (asset_tag, "AN-555"),
+                 s["namesStatus"][:120])
+    ctx["pacing"].append(pacing(page, "panel.names open (2 s)", lambda: time.sleep(2.0)))
+    driver.press("Escape")
+
+    # The final state that reload, restart and export must reproduce.
+    doc = stored_doc(page)
+    ctx["expect"] = {i: {"name": stored_item(doc, i)["name"], "ru": (stored_item(doc, i)["ruStart"], stored_item(doc, i)["ruEnd"]),
+                         "descriptions": triples(stored_item(doc, i)["descriptions"])} for i in (ctx["SW"], ctx["SRV"], ctx["RT"])}
+    ctx["labels"] = {"typo": typo, "asset_no": asset_no, "firmware": firmware, "serial": serial, "asset_tag": asset_tag}
+    ctx["pacing"] = [p for p in ctx["pacing"] if p]
+    return ctx
+
+
+def check_authoring_persisted(page, driver, checks, ctx, when):
+    """Open every item through the Equipment list and compare it with the state saved earlier."""
+    ok = True
+    for equipment_id, expect in ctx["expect"].items():
+        s = open_item_from_list(driver, page, equipment_id)
+        e = s["equipment"]
+        ok = ok and e["name"] == expect["name"] and (e["ruStart"], e["ruEnd"]) == tuple(expect["ru"]) and \
+            [tuple(x) for x in triples(e["descriptions"])] == [tuple(x) for x in expect["descriptions"]]
+        driver.press("Escape")
+    labels = {l["labelId"]: l for l in snap(page)["catalog"]["labels"]}
+    names = ctx["labels"]
+    checks.check(f"{when} keeps every equipment item, its RU range and each description's ID, name and text", ok)
+    checks.check(f"{when} keeps the name list: replaced names retired, the new name active",
+                 labels[names["typo"]]["retired"] and labels[names["asset_no"]]["retired"] and
+                 not labels[names["firmware"]]["retired"] and labels[names["typo"]]["replacedByName"] == "Serial number")
+
+
+def check_authoring_export(export, ctx, checks):
+    items = {e["equipmentId"]: e for e in export.get("equipment", [])}
+    ok = all(i in items and [tuple(x) for x in triples(items[i]["descriptions"])] == [tuple(x) for x in ctx["expect"][i]["descriptions"]]
+             for i in ctx["expect"])
+    labels = {l["labelId"]: l for l in export.get("labels", [])}
+    checks.check("export (format 2) carries every equipment item with its descriptions and name labels", ok and
+                 export.get("schemaVersion") == 2 and
+                 items[ctx["SRV"]]["descriptions"][0]["labelName"] == "Serial number" if ok else False)
+    checks.check("export keeps replaced names inspectable and says no spreadsheet column is touched",
+                 labels[ctx["labels"]["typo"]]["retired"] and labels[ctx["labels"]["typo"]]["replacedByLabelId"] == ctx["labels"]["serial"] and
+                 "never renames, clears or deletes a spreadsheet column" in export.get("mappingNotice", ""))
+
+
+def check_reset_v2(page, checks, site):
+    doc = stored_doc(page)
+    active = [l for l in (doc or {}).get("labels", []) if not l["retired"]]
+    checks.check("Reset demo data starts over: no rack notes, no equipment, only the starter names",
+                 doc is not None and doc["rackNotes"] == [] and doc["equipment"] == [] and
+                 doc["migration"]["state"] == "reset" and
+                 sorted(l["labelId"] for l in active) == sorted(l["labelId"] for l in site["labels"]) and
+                 len(doc["labels"]) == len(site["labels"]),
+                 f"{len((doc or {}).get('equipment', []))} items, {len(active)} names")
+
+
+# ------------------------------------------------------------------------------- migration from the first demo
+MIGRATION_UNKNOWN = "rec-11111111-2222-3333-4444-555555555555"
+
+
+def save_note_old_build(page, driver, record_id, text):
+    """Open a rack in whichever build is running and save a rack note (real typing, Ctrl+Enter)."""
+    page.eval(f"unityInstance.SendMessage('VRHEDemo', 'JsOpenRecord', JSON.stringify({{recordId: {json.dumps(record_id)}, how: 'check'}}))")
+    wait(lambda: (lambda x: x if x["panel"] == "record" else None)(snap(page)), 5, what="record panel")
+    page.eval("document.getElementById('rec-description').select()")
+    driver.type_text(text, 0.02)
+    driver.press("Enter", modifiers=2)
+    s = snap(page)
+    driver.press("Escape")
+    return s["lastSave"]
+
+
+def open_note(page, record_id):
+    page.eval(f"unityInstance.SendMessage('VRHEDemo', 'JsOpenRecord', JSON.stringify({{recordId: {json.dumps(record_id)}, how: 'check'}}))")
+    return wait(lambda: (lambda x: x if x["panel"] == "record" else None)(snap(page)), 5, what="record panel")["record"]
+
+
+def run_migration(args, results, downloads, checks, site):
+    """The delivered first-demo build writes version 1 data in a real browser profile; this build then
+    reads the same profile; finally the first build runs again on it."""
+    rec = {r["name"]: r for r in site["records"]}
+    a3, b4 = rec["Rack A3"], rec["Rack B4"]
+    v1_key, v2_key = V1_PREFIX + site["siteId"], V2_PREFIX + site["siteId"]
+    old = argparse.Namespace(**vars(args))
+    old.bundle = args.old_bundle
+    notes = {"A3": "A3 note saved by the first demo build " + str(random.randint(1000, 9999)),
+             "B4": "B4 note, second save " + str(random.randint(1000, 9999))}
+    out = {}
+
+    def old_session(page, browser):
+        prepare(page, browser, downloads)
+        out["old_label"] = http_json(DEMO_URL + "data/build-info.json").get("label")
+        driver = Driver(page)
+        checks.check("first demo build uses the version 1 key", snap(page)["storageKey"] == v1_key)
+        a = save_note_old_build(page, driver, a3["recordId"], notes["A3"])
+        save_note_old_build(page, driver, b4["recordId"], "B4 first save")
+        b = save_note_old_build(page, driver, b4["recordId"], notes["B4"])
+        raw = json.loads(page.eval(f"localStorage.getItem({json.dumps(v1_key)})"))
+        raw["entries"].append({"recordId": MIGRATION_UNKNOWN, "description": "note for a rack this site version lacks",
+                               "revision": 4, "updatedAt": "2026-11-10T08:00:00Z"})
+        page.eval(f"localStorage.setItem({json.dumps(v1_key)}, {json.dumps(json.dumps(raw))})")
+        out["v1_raw"] = page.eval(f"localStorage.getItem({json.dumps(v1_key)})")
+        checks.check("first demo build saved version 1 rack notes (A3 once, B4 twice) plus an unknown record",
+                     a["status"] == "Saved" and b["status"] == "Saved" and b["revision"] == 2 and
+                     page.eval(f"localStorage.getItem({json.dumps(v2_key)})") is None)
+
+    def new_session(page, browser):
+        prepare(page, browser, downloads)
+        driver = Driver(page)
+        checks.check("this build opens the profile without writing anything",
+                     page.eval(f"localStorage.getItem({json.dumps(v2_key)})") is None and
+                     page.eval(f"localStorage.getItem({json.dumps(v1_key)})") == out["v1_raw"])
+        a, b = open_note(page, a3["recordId"]), None
+        driver.press("Escape")
+        b = open_note(page, b4["recordId"])
+        driver.press("Escape")
+        checks.check("first-demo rack notes are carried over as rack notes with their versions",
+                     a["description"] == notes["A3"] and a["revision"] == 1 and a["source"] == "local edit" and
+                     b["description"] == notes["B4"] and b["revision"] == 2 and a["equipment"] == [],
+                     f"A3 v{a['revision']}, B4 v{b['revision']}")
+        driver.click_selector("button[data-action=data]")
+        wait_panel(page, "data")
+        migration_text = page.eval("document.getElementById('data-migration').textContent")
+        checks.check("Saved data panel explains the carry-over and the kept copy",
+                     "Carried over 3 rack notes" in migration_text and "kept unchanged" in migration_text, migration_text)
+        driver.click_element("data-export")
+        export = json.loads(wait(lambda: page.eval("VRHEDemoPage.test.lastExportJson()"), 5, what="export"))
+        copies = {c["key"]: c for c in export["storedCopies"]}
+        checks.check("export before any save holds the carried notes, the unknown record and the raw version 1 copy",
+                     {r["recordId"]: r["description"] for r in export["records"]}[a3["recordId"]] == notes["A3"] and
+                     export["unmatchedStoredEntries"][0]["recordId"] == MIGRATION_UNKNOWN and
+                     copies.get(v1_key, {}).get("raw") == out["v1_raw"] and export["migration"]["state"] == "carried over" and
+                     page.eval(f"localStorage.getItem({json.dumps(v2_key)})") is None)
+        driver.press("Escape")
+        s = open_rack(driver, page, a3)
+        add_equipment(driver, page, "Synthetic patch panel PP-01", "42")
+        wait_panel(page, "equipment", "patch panel")
+        driver.press("Escape")
+        doc = json.loads(page.eval(f"localStorage.getItem({json.dumps(v2_key)})"))
+        notes_v2 = {e["recordId"]: e for e in doc["rackNotes"]}
+        checks.check("the first save writes format 2 with every carried note (unknown included); version 1 untouched",
+                     notes_v2[a3["recordId"]]["description"] == notes["A3"] and notes_v2[b4["recordId"]]["revision"] == 2 and
+                     MIGRATION_UNKNOWN in notes_v2 and doc["migration"]["fromKey"] == v1_key and
+                     doc["migration"]["sourceEntries"] == 3 and
+                     page.eval(f"localStorage.getItem({json.dumps(v1_key)})") == out["v1_raw"])
+        reload_page(page)
+        a = open_note(page, a3["recordId"])
+        driver.press("Escape")
+        checks.check("after a reload this build still shows the carried note and the new equipment",
+                     a["description"] == notes["A3"] and [e["name"] for e in a["equipment"]] == ["Synthetic patch panel PP-01"])
+
+    def old_again(page, browser):
+        prepare(page, browser, downloads)
+        a = open_note(page, a3["recordId"])
+        checks.check("the first demo build still finds its own saved notes afterwards",
+                     a["description"] == notes["A3"] and a["revision"] == 1 and
+                     page.eval(f"localStorage.getItem({json.dumps(v1_key)})") == out["v1_raw"])
+
+    _, code = run_session(old, results, old_session)
+    _, code = run_session(args, results, new_session)
+    _, code = run_session(old, results, old_again)
+    return out
 
 
 def close_browser(browser_cdp):
@@ -1017,7 +1639,15 @@ def main():
     parser.add_argument("--profile-dir", required=True, help="throwaway persistent profile for this check")
     parser.add_argument("--devtools-port", type=int, default=9333)
     parser.add_argument("--bundle", help="extracted Windows demo bundle to check instead of Builds/InteractiveDemo")
+    parser.add_argument("--part", default="all", choices=["all", "authoring", "migration"])
+    parser.add_argument("--old-bundle", help="extracted first-demo bundle (for --part migration)")
     args = parser.parse_args()
+    if args.part == "migration":
+        if not args.old_bundle or not os.path.isfile(os.path.join(args.old_bundle, "bundle.json")):
+            raise SystemExit("--part migration needs --old-bundle <extracted first-demo bundle folder>")
+        args.old_bundle = os.path.abspath(args.old_bundle)
+    if os.path.isdir(args.profile_dir) and os.listdir(args.profile_dir) and args.part == "migration":
+        raise SystemExit("--part migration needs a new, empty --profile-dir")
     if args.bundle:
         args.bundle = os.path.abspath(args.bundle)
         if not os.path.isfile(os.path.join(args.bundle, "bundle.json")):
@@ -1032,7 +1662,7 @@ def main():
     with open(SITE, encoding="utf-8") as f:
         site = json.load(f)
     checks = Checks()
-    summary = {"browser": args.browser, "started": stamp, "profile": "throwaway profile for this check",
+    summary = {"browser": args.browser, "started": stamp, "profile": "throwaway profile for this check", "part": args.part,
                "target": "bundle " + json.load(open(os.path.join(args.bundle, "bundle.json"), encoding="utf-8"))["build"]["label"]
                if args.bundle else "Builds/InteractiveDemo"}
 
@@ -1050,15 +1680,46 @@ def main():
         time.sleep(0.5)
         return result
 
-    outcome, code = run_session(args, results, first)
-    summary["pacing"] = outcome["pacing"]
-    checks.check("closing the browser stops the demo server by itself", code == 0, f"exit {code}")
-
     def second(page, browser):
         prepare(page, browser, downloads)
-        run_session_two(page, Driver(page), checks, site, outcome["notes"])
+        run_session_two(page, Driver(page), checks, site, outcome["notes"], outcome["authoring"])
 
-    run_session(args, results, second)
+    def authoring_first(page, browser):
+        summary["browser_version"] = http_json(f"http://127.0.0.1:{args.devtools_port}/json/version").get("Browser")
+        prepare(page, browser, downloads)
+        driver = Driver(page)
+        ctx = run_authoring_checks(page, driver, checks, site)
+        reload_page(page)
+        check_authoring_persisted(page, driver, checks, ctx, "a page reload")
+        driver.click_selector("button[data-action=data]")
+        driver.click_element("data-export")
+        export = json.loads(wait(lambda: page.eval("VRHEDemoPage.test.lastExportJson()"), 5, what="export"))
+        check_authoring_export(export, ctx, checks)
+        driver.press("Escape")
+        page.eval("unityInstance.SendMessage('VRHEDemo', 'JsCommand', 'report')")
+        time.sleep(0.5)
+        return {"authoring": ctx, "pacing": ctx["pacing"]}
+
+    def authoring_second(page, browser):
+        prepare(page, browser, downloads)
+        driver = Driver(page)
+        check_authoring_persisted(page, driver, checks, outcome["authoring"], "closing and restarting the browser")
+        driver.click_selector("button[data-action=data]")
+        driver.click_element("data-reset")
+        driver.click_element("data-reset-yes")
+        time.sleep(0.3)
+        check_reset_v2(page, checks, site)
+        driver.press("Escape")
+
+    if args.part == "migration":
+        summary["browser_version"] = "see launcher logs"
+        summary["old_bundle"] = json.load(open(os.path.join(args.old_bundle, "bundle.json"), encoding="utf-8"))["build"]["label"]
+        run_migration(args, results, downloads, checks, site)
+    else:
+        outcome, code = run_session(args, results, first if args.part == "all" else authoring_first)
+        summary["pacing"] = outcome["pacing"]
+        checks.check("closing the browser stops the demo server by itself", code == 0, f"exit {code}")
+        run_session(args, results, second if args.part == "all" else authoring_second)
 
     summary["checks"] = checks.items
     summary["passed"] = len(checks.items) - len(checks.failed)
