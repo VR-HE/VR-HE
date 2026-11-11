@@ -1,5 +1,7 @@
 # Shared project instructions
 
+> **ON HOLD from November 11, 2026.** VR-HE development is paused until Arlen explicitly resumes it, pending an evaluation of the NetBox system his company already uses. NetBox as a backend is a possible direction, not an approved change. Do not implement, build or package anything. Read [the pause checkpoint and restart steps](docs/HANDOFF.md#on-hold--pause-checkpoint-november-11-2026) first.
+
 ## Purpose and authority
 
 VR-HE is a Unity work utility for Gaussian splat tours of ISP hubsites/headends and information attached to places and equipment.

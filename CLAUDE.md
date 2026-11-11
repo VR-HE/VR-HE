@@ -1,5 +1,7 @@
 # Claude Code entry point
 
+> **ON HOLD from November 11, 2026.** Development is paused until Arlen explicitly resumes it, pending an evaluation of the NetBox system his company already uses. Do not implement, build or package anything. Read [the pause checkpoint and restart steps](docs/HANDOFF.md#on-hold--pause-checkpoint-november-11-2026) first.
+
 Read and follow [AGENTS.md](AGENTS.md), then [docs/HANDOFF.md](docs/HANDOFF.md).
 
 **Build work requires MAX effort.** Use [the project launcher](scripts/start-claude.sh), then verify the active model/effort before implementation. The launch request is not proof the backend accepted MAX.

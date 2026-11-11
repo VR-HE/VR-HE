@@ -489,6 +489,34 @@ Validation:
 - Archive CRCs, seven JSON documents/two JSONL streams, consistent build identifiers and all 17 aggregate pacing formulas pass. Checked 9 edited/new Markdown files: 101 internal file links resolve, 14 tables have consistent columns, JSON/whitespace/privacy checks pass and all 8 baseline blob hashes match 9fd2fa6.
 - Archive SHA-256: 6ec401464aabb63b186b296faa61b8909b10ae29c218c024e02ec25074d48d46. This is a review of supplied manual telemetry, not an independently executed Windows or weakest-device test.
 
+## November 11, 2026 — development paused pending a NetBox evaluation
+
+Human contribution:
+- Arlen put VR-HE on hold indefinitely. His company already uses NetBox, and its actual coverage and installed extensions need evaluating before he decides whether VR-HE should continue. Using NetBox as a backend is a possible future direction, not an approved architecture change. Development stays paused until he explicitly resumes it.
+
+AI contribution:
+- Claude Code fast-forwarded proto/equipment-descriptions from 9fd2fa6 to origin's e997112. That commit holds only documentation and Codex's review of the manual Windows results.
+  - Session: Opus 5.5, run by the 2.1.321 binary started with --effort max and CLAUDE_CODE_EFFORT_LEVEL=max.
+- It wrote the pause checkpoint at the top of [the handoff](HANDOFF.md#on-hold--pause-checkpoint-november-11-2026). The checkpoint covers:
+  - restart steps, and the branch and commit;
+  - implemented features, and the Linux automated checks separately from the partial Windows manual evidence;
+  - remaining gaps, provisional choices and questions for the NetBox review;
+  - ignored artifacts and preservation gaps.
+- Pause notices pointing to the checkpoint were added to AGENTS.md, CLAUDE.md and README.md.
+- It copied the session's non-reproducible working files (helper scripts, run logs and the screenshot review, 12 MB) from /tmp, which is emptied at boot. They are now in the ignored folder prototypes/browser-splat-rendering/TestResults/raw/claude-session-20261111/. Nothing was deleted, moved or rebuilt.
+- No NetBox instance, company system or Windows device was contacted, and no NetBox capability is claimed. No app code, build, ZIP or saved record changed.
+
+Validation:
+- All three ZIPs match their .sha256 files. The benchmark build's five files match the hash list taken before the authoring work.
+- All local branches match origin, with no uncommitted changes, stashes or extra worktrees. No demo server, test browser or VR-HE Editor process was left running.
+- Documentation check over all tracked Markdown files: 173 internal links resolve across 27 files, none broken, and tables are consistent. No e-mail address or home path was added.
+
+Preservation gaps (details in the handoff):
+- Bundles/ and TestResults/raw/ exist only on this laptop.
+- No export of Arlen's Windows demo records has been supplied.
+- The raw Windows results ZIPs were not found on this laptop.
+- Rebuilding depends on Unity 6000.3.15f1 and two packages downloaded from the internet. Local copies of the packages are in Library/PackageCache.
+
 ## Entry template
 
 For each meaningful change, record:

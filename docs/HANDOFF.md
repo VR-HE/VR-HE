@@ -2,6 +2,135 @@
 
 Updated November 11, 2026.
 
+> **ON HOLD: development is paused indefinitely, from November 11, 2026.** Do not implement, build, package or extend anything until Arlen explicitly resumes the project. Reason: his company already uses NetBox, and its actual coverage and installed extensions need evaluating before he decides whether VR-HE should continue. Using NetBox as a backend is a possible future direction, not an approved architecture change. Start with the pause checkpoint and restart steps directly below.
+
+## ON HOLD — pause checkpoint, November 11, 2026
+
+The sections after this one describe the project as it stood at the pause. Their "next" steps are suspended until Arlen gives renewed direction. These include asking for his first modification, running the full Windows checklist and the early implementation stages.
+
+### Restart steps
+
+1. Run `cd ~/Projects/VR-HE`, `git fetch origin`, `git switch proto/equipment-descriptions` and `git status`. If the tree is clean, update with `git merge --ff-only origin/proto/equipment-descriptions`. If there are local changes or the fast-forward fails, stop and ask; do not reset or discard anything.
+2. Read [AGENTS.md](../AGENTS.md), then this handoff, starting with this section.
+3. Review the NetBox findings with Arlen. None are recorded in this repository at the pause. Ask him for them and record them in the docs before comparing options; see [the questions below](#netbox-questions-for-the-restart).
+4. Get Arlen's explicit renewed direction before any implementation, build or packaging. Record it in [DECISIONS.md](DECISIONS.md) and the [development log](DEVELOPMENT_LOG.md). Then update or remove the ON HOLD notices here and in AGENTS.md, CLAUDE.md and README.md.
+5. Before build work:
+   - Start Claude with MAX effort and verify it ([MAX effort](#max-effort-for-claude-build-work)).
+   - Check that Unity 6000.3.15f1 with Web support is still installed and that there is enough free disk space.
+   - Check that the ZIPs still match their checksums: `sha256sum -c *.sha256` in the Bundles folder.
+
+### Where the code stands
+
+- The working branch is **proto/equipment-descriptions**, pushed to origin. It contains every earlier branch: main (d731a36), docs/project-foundation (ff1e070), proto/browser-splat-rendering (f993dd6) and proto/interactive-browser-demo (6f802b1).
+- The last commit before the pause is e997112, "Record partial manual Windows authoring evidence and user feedback". The pause checkpoint is the documentation-only commit directly after it.
+- State at the pause:
+  - All four local branches match origin.
+  - No uncommitted changes, stashes, extra worktrees or unfinished code.
+  - Nothing is merged into main. Pull request #1 (docs/project-foundation) is open and #2 (proto/browser-splat-rendering) is a draft; the two later branches have none.
+  - No demo server, test browser or VR-HE Unity Editor was left running, and The Veil was not touched.
+
+### What exists (prototypes on synthetic data only)
+
+- A rendering-only browser benchmark: UnitySplats over WebGL 2 on Unity 6000.3.15f1 ([results](#browser-splat-rendering-milestone--november-10-results)).
+- An interactive browser demo: walking, first and third person, Q/E/X, rack selection, rack notes saved in the browser, and export ([section](#interactive-browser-demo--november-11)).
+- Equipment and description authoring, with the saved mouse Y-inversion option ([section](#equipment-and-description-authoring--november-11)):
+  - several items per rack, each with an RU range;
+  - descriptions, and a reusable name list with D041 replacement;
+  - record format 2, which carries over earlier rack notes.
+- Not implemented:
+  - the VR-HE application, capture, a backend, and Google Sheets, Drive or Gemini integration;
+  - production login, VPN and MFA, and designated-editor roles;
+  - templates, cabinet states, partial rescans, and phone or Quest builds.
+
+### Evidence: Linux automated checks versus partial Windows manual use
+
+| Evidence | Source | Shows | Does not show |
+| --- | --- | --- | --- |
+| Linux automated checks, on the development laptop | 47 EditMode tests. Chrome 157 and Brave 1.99, driven by trusted DevTools input against the final 4f4f9ac ZIP. Wine 9.0. | 47 of 47 tests. Chrome 124 of 124; Brave 122 of 124, the two misses being the expected smaller canvas. Carry-over 9 of 9 in each browser. 59.4-60 fps in the new panels, no interval over 50 ms (limited by the 60 Hz display, not capacity). Wine 18 of 18, which is emulation. | Anything on Windows. Native drop-down pop-ups, which were set by script. How captured-mouse looking feels. Use by real people. |
+| Partial Windows manual use, on Arlen's personal PC with the same ZIP | Two sessions, reviewed by Codex: one in an unrecorded browser reporting a Chrome 157 user agent, one in Edge 157.0.4341.42 ([report](../prototypes/browser-splat-rendering/TestResults/windows-manual-20261111/README.md)). | The 250k room at 1280x720, about 60 fps in focused use; longest focused frame intervals 25 ms and 23 ms. 3 equipment items added, 2 equipment saves, 1 rack-note save, no page errors. | Not the 17-step checklist. With no record export, profile or name-operation events, these remain unverified on Windows: carry-over of real saved text, values after reload and restart, separate text per item, D041 rename and replacement, and inversion. |
+| Windows benchmark baselines (rendering only, November 10) | Edge and Chrome on the same PC | About 60 fps through 250k splats at 60 Hz | Uncapped capacity; the authoring demo |
+
+Arlen's feedback is that the core mechanics work as he hoped, and the overall direction is right with more modification needed. This is not acceptance of the prototype defaults.
+
+### Remaining gaps
+
+- The full 17-step Windows checklist, including carry-over, D041, inversion, reload, restart and export.
+- Human use:
+  - native drop-downs and how captured-mouse looking feels;
+  - whether the help is clear to non-gamers;
+  - screen readers, non-US keyboards and display scaling.
+- A crash or power loss during a save: argued from the single-write design, not tested. Two tabs in a real browser and large data volumes are also untested.
+- Also untested:
+  - Firefox for the demo, macOS, phones, Quest, touch, controllers and VR;
+  - the Toughbook (D035), real captures and physical scale;
+  - uncapped capacity.
+
+### Provisional choices (proposals, not decisions)
+
+- The long-term Unity version and renderer are open. Unity 6000.3.15f1 with URP is approved for the initial prototype only (D031). UnitySplats at revision 689e0a7 is the leading browser candidate but has not been selected.
+- The demo's browser-local record store and its export (format 2) are prototype formats. They are not a backend or a spreadsheet mapping.
+- Authoring defaults, set in demo-site.json and detailed in [the prototype README](../prototypes/browser-splat-rendering/README.md#equipment-descriptions-and-names-branch-protoequipment-descriptions):
+  - one name list per site;
+  - 42U racks, with RU 1 at the bottom;
+  - overlapping RU ranges give a warning (the alternative is to block them);
+  - a name clash keeps both descriptions (the alternative is to block the change);
+  - limits of 50 items per rack, 20 descriptions per item and 100 names;
+  - six starter names;
+  - equipment items cannot be deleted, and only empty descriptions can be removed;
+  - no templates, and front or rear placement is not recorded.
+- Control defaults, including mouse inversion off, are listed in the same README.
+
+### NetBox questions for the restart
+
+No NetBox evaluation is recorded here. No assistant has contacted NetBox or any company system, and nothing in this repository describes NetBox's capabilities. To compare the findings with the confirmed requirements, they should establish:
+- The company's NetBox version and the plugins or extensions actually installed.
+- Which confirmed VR-HE requirements it already covers, and how:
+  - racks, RU ranges and equipment records (D037);
+  - per-item descriptions, reusable names, and replacement before removal (D038, D039, D041);
+  - equipment templates (D007-D009), attachments, and two-way spreadsheet sync with Google Sheets and Drive (D010, D011, D015);
+  - Gemini-assisted drafts (D028, D029);
+  - designated editors and production access (D003, D004, D006, D040).
+- Which requirements it does not cover. For example, check whether anything in it provides splat-based site tours (D001), cabinet states (D026), partial rescans (D018), or phone and VR use (D014, D021).
+- Whether company policy would let VR-HE read or write NetBox data, and who would approve that.
+
+### Ignored artifacts (development laptop only, not in Git)
+
+Paths are under `~/Projects/VR-HE/prototypes/browser-splat-rendering/` unless given in full. At the pause, each ZIP's SHA-256 was re-verified against the `.sha256` file beside it.
+
+| Artifact | Location | Notes |
+| --- | --- | --- |
+| Current demo ZIP (authoring build 4f4f9ac) | `~/Projects/VR-HE/prototypes/browser-splat-rendering/Bundles/VRHE-Interactive-Demo-20261111-4f4f9ac.zip` | 33,134,200 bytes; SHA-256 `0be32045b60cfd477f25d95d637f24cb6637c19fadc4b5c62af6698bb08e1b32`; build label interactive-demo-4f4f9ac2fd78-20261111T144938Z |
+| Earlier demo ZIP (294f4b2) | `Bundles/VRHE-Interactive-Demo-20261111-294f4b2.zip` | SHA-256 `8dcebd10b6af8f8089028898da6c91d9e0abf366ca655ee9fd24ee7889af6486` |
+| Benchmark test ZIP | `Bundles/VRHE-Toughbook-Browser-Test-20261110-7d07732.zip` | SHA-256 `c934948138f8c3be35b966a82e64f698c9b2d3f5dbec22bc09d0b0fbe759f526` |
+| Portable Python cache | `Bundles/cache/` (13 MB) | The python.org 3.14.10 embeddable package and its signature files; can be downloaded again |
+| Builds | `Builds/WebGL` (benchmark, 61 MB); `Builds/InteractiveDemo` (62 MB, the 4f4f9ac build) | The benchmark's five files still match the hash list taken before the authoring work. A demo rebuild gives a new build label and ZIP hash |
+| Synthetic fixtures | `Fixtures/Generated/` (331 MB) | Can be regenerated with Tools/generate_synthetic_splats.py; the fixtures regenerated for the ZIPs were byte-identical |
+| Raw results | `TestResults/raw/` (70 MB) | November 10 benchmark runs, 19 `interactive-demo/verify-*` runs and EditMode XML. Only curated summaries are in Git |
+| Claude session working files | `TestResults/raw/claude-session-20261111/` (12 MB, inside the folder above) | Helper scripts (Wine check, summary generators, documentation check), run logs and the screenshot review, copied from /tmp at the pause; see its README.txt |
+| Unity caches | `Library/` (3.8 GB, including PackageCache), `Logs/`, `UserSettings/`, generated `.csproj` and `.slnx` files | Regenerated by Unity |
+| Windows demo data, on Arlen's personal PC | `%LOCALAPPDATA%\VRHE-Interactive-Demo\browser-profiles\edge` and `\chrome`, plus the `results` folder inside the extracted bundle. If the manual DEMO-SERVER-ONLY route was ever used, the everyday browser profile also holds records for `http://127.0.0.1:8791/` | No export of it has been supplied, and the reviewed sessions recorded none |
+| Windows raw results ZIPs | Not found on this laptop (Downloads, Documents, Desktop and the repository were searched): VRHE-results-20261110-212233.zip, VRHE-results-20261110-214722.zip and VRHE-demo-results-20261111-105736.zip | Git holds the reviewed summaries and each archive's SHA-256 |
+
+There is no Linux demo profile holding Arlen's own data: `~/.local/share/vrhe-interactive-demo` does not exist. The Linux checks used throwaway profiles.
+
+### Preservation gaps: separate backup or export still needed
+
+1. **Single copies on one laptop.** `Bundles/` (114 MB) and `TestResults/raw/` (70 MB) exist only on this laptop's disk, not in Git or on GitHub. The disk is 96% full, with about 20 GB free. A rebuild cannot reproduce the delivered ZIPs byte for byte. Copy both folders to separate storage if they must survive a disk failure or a clean-up.
+2. **Windows demo data.** On the personal PC:
+   - Start the demo with RUN-DEMO-EDGE.cmd (and RUN-DEMO-CHROME.cmd, if Chrome was used).
+   - Choose Saved data & export, then Download JSON export, and keep the JSON. A copy also goes to the bundle's `results` folder.
+   - Do not use Reset demo data, and do not delete `%LOCALAPPDATA%\VRHE-Interactive-Demo` or the extracted bundle folder.
+3. **Raw Windows archives.** The three results ZIPs exist only where Arlen keeps them. Keep them if the raw telemetry matters.
+4. **Rebuild dependencies outside the repository.** A rebuild needs:
+   - Unity 6000.3.15f1 with Web support, installed under `~/Unity/Hub/Editor`;
+   - UnitySplats at Git revision 689e0a7;
+   - com.netpyoung.webp 0.3.22 from OpenUPM.
+
+   Local copies of both packages are in `Library/PackageCache`; deleting `Library/` removes those copies.
+5. **The session's temporary folder.** It is under /tmp (2.8 GB), which is emptied at boot. Its non-reproducible parts are copied to `TestResults/raw/claude-session-20261111/`. The rest is expendable: throwaway browser profiles, extracted bundles and a scratch Wine prefix.
+
+If disk space is needed during the pause, `Library/`, `Fixtures/Generated/` and `Builds/` can be regenerated, with the limits above. `Bundles/` and `TestResults/raw/` cannot.
+
 ## Current state
 
 VR-HE/VR-HE is the selected private repository. ChatGPT/Codex is authenticated as VR-HE with read and write permissions. Initial documentation is prepared on docs/project-foundation; check the pull request for whether it has been merged.
@@ -419,6 +548,8 @@ After the necessary choices are made:
 These are proposed stages, not a promise that every device has a compatible renderer or that capture/training can run on every viewing device.
 
 ## Start prompt for a coding assistant
+
+While the project is ON HOLD, follow [the restart steps](#restart-steps) and implement nothing until Arlen resumes it. Once he has:
 
 Read AGENTS.md, this handoff, PRODUCT_SPEC.md and DECISIONS.md before editing. Report the actual repository state and current branch. Preserve confirmed requirements and identify open choices. Use verified MAX effort for Claude build work. Continue the assigned small task, record human/AI contributions and test evidence, and leave a concrete handoff. Do not claim unrun device tests, infer shared credentials or silently redefine confirmed Google requirements, X semantics, AI powers or the renderer.
 
