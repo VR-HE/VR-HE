@@ -22,7 +22,7 @@ sys.dont_write_bytecode = True  # loading the generator by path must not leave _
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 PROJECT = os.path.dirname(TOOLS)
 SITE = os.path.join(PROJECT, "Assets", "InteractiveDemo", "Data", "demo-site.json")
-ID = re.compile(r"^(site|rec|anc)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+ID = re.compile(r"^(site|rec|anc|lbl)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 TOLERANCE = 1e-6
 PLAYER_RADIUS = 0.25
 
@@ -64,12 +64,26 @@ def main():
         if not ok:
             failures.append(name)
 
-    ids = [site["siteId"]] + [r["recordId"] for r in site["records"]] + [a["anchorId"] for a in site["anchors"]]
+    labels = site.get("labels", [])
+    ids = ([site["siteId"]] + [r["recordId"] for r in site["records"]] + [a["anchorId"] for a in site["anchors"]] +
+           [l["labelId"] for l in labels])
+    check("site schema version 2 (rack notes, authoring rules, starter description names)",
+          site.get("schema") == "vrhe.demo.site" and site.get("schemaVersion") == 2)
     check("identifiers are prefixed UUIDs", all(ID.match(i) for i in ids))
     check("identifiers are unique", len(ids) == len(set(ids)))
     records = {r["recordId"]: r for r in site["records"]}
     check("every anchor points to a record", all(a["recordId"] in records for a in site["anchors"]))
-    check("names are not used as identifiers", not ({r["name"] for r in site["records"]} & set(ids)))
+    check("names are not used as identifiers",
+          not (({r["name"] for r in site["records"]} | {l["name"] for l in labels}) & set(ids)))
+    keys = [" ".join(l["name"].split()).lower() for l in labels]
+    check("starter description names are present, trimmed and unique (ignoring case)",
+          len(labels) > 0 and len(keys) == len(set(keys)) and all(l["name"] == " ".join(l["name"].split()) for l in labels),
+          ", ".join(l["name"] for l in labels))
+    rules = site.get("authoring", {})
+    check("authoring rules use documented values",
+          rules.get("ruNumbering") in ("bottom-up", "top-down") and rules.get("ruOverlap") in ("warn", "block") and
+          rules.get("labelCollision") in ("keep-both", "block") and 1 <= rules.get("rackUnitsDefault", 0) <= 100,
+          json.dumps(rules))
 
     racks = sorted({r.name.split("_")[0] for r in rects if r.name.startswith("rack")}, key=lambda n: int(n[4:]))
     check("ten generated racks and ten rack anchors", len(racks) == 10 and len(site["anchors"]) == 10)

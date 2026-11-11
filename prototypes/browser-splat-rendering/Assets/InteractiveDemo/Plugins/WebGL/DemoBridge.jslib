@@ -82,6 +82,24 @@ mergeInto(LibraryManager.library, {
     return VRHEDemoString(JSON.stringify(result));
   },
 
+  // Keys that start with prefix, so exports can include earlier-format data and backups.
+  VRHE_Demo_StorageKeys__deps: ['$VRHEDemoString'],
+  VRHE_Demo_StorageKeys: function (prefixPtr) {
+    var result;
+    try {
+      var prefix = UTF8ToString(prefixPtr);
+      var keys = [];
+      for (var i = 0; i < window.localStorage.length; i++) {
+        var key = window.localStorage.key(i);
+        if (key !== null && key.indexOf(prefix) === 0) keys.push(key);
+      }
+      result = { ok: true, found: keys.length > 0, value: '', error: '', keys: keys };
+    } catch (e) {
+      result = { ok: false, found: false, value: '', error: String(e && e.name ? e.name + ': ' + e.message : e), keys: [] };
+    }
+    return VRHEDemoString(JSON.stringify(result));
+  },
+
   VRHE_Demo_PageOrigin__deps: ['$VRHEDemoString'],
   VRHE_Demo_PageOrigin: function () {
     var origin = '';

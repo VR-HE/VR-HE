@@ -1,6 +1,6 @@
 {
   "schema": "vrhe.demo.site",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "siteId": "site-bfaaec37-26c3-4ca9-99f2-b1fb9de68f5a",
   "siteName": "Synthetic equipment room (demo)",
   "dataNotice": "Synthetic demo data. No real site, equipment, capture or company information.",
@@ -204,6 +204,43 @@
       "name": "Rack B5",
       "location": "Row B, position 5 of 5; front faces the back wall",
       "description": "Synthetic demo rack B5. Placeholder text: replace it with any made-up note to test saving."
+    }
+  ],
+  "authoring": {
+    "rackUnitsDefault": 42,
+    "ruNumbering": "bottom-up",
+    "ruOverlap": "warn",
+    "labelCollision": "keep-both",
+    "maxEquipmentPerRack": 50,
+    "maxDescriptionsPerItem": 20,
+    "maxLabels": 100,
+    "maxEquipmentNameLength": 80,
+    "maxLabelNameLength": 60
+  },
+  "labels": [
+    {
+      "labelId": "lbl-4c6cd2dd-80f0-4b50-bd09-d778336bd2a4",
+      "name": "Serial number"
+    },
+    {
+      "labelId": "lbl-73074191-07c6-4094-b8d5-3bee2973e780",
+      "name": "Asset tag"
+    },
+    {
+      "labelId": "lbl-0dcfb979-d97a-468b-b04b-40dee0c09709",
+      "name": "Model"
+    },
+    {
+      "labelId": "lbl-609a714a-e330-41a1-9f4a-16518e099bc2",
+      "name": "Power feed"
+    },
+    {
+      "labelId": "lbl-40349bee-3fac-4158-a579-7898da27d839",
+      "name": "Network connections"
+    },
+    {
+      "labelId": "lbl-dc274a2f-dd81-426d-8036-0527c5915c85",
+      "name": "Maintenance notes"
     }
   ]
 }

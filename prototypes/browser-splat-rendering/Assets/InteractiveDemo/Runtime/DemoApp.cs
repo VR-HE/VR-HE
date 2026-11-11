@@ -13,11 +13,17 @@
 //   JsUiState     {"inputAllowed","panel","typing","lookSpeed"}  input gate from the page
 //   JsOpenRecord  {"recordId","how","requestId"}   re-reads storage, replies "openRecord"
 //   JsSelectRecord{"recordId","face"}              selects (and optionally turns toward) an item
-//   JsSaveRecord  {"recordId","description","baseRevision","requestId"}  replies "saveResult"
+//   JsSaveRecord  {"recordId","description","baseRevision","requestId"}  rack note; replies "saveResult"
+//   JsAuthoring   {"op","requestId",...}  equipment and description names; replies "authoring"
+//                 (ops and fields: AuthoringRequest in DemoMessages.cs; rules: DemoRecordStore)
 //   JsCommand     toggleView | resetView | export | clearData | deselect | report
 //   JsTest        state:<id> | pacingBegin:<label> | pacingEnd:<id> | project:<recordId>:<id>
 // JsTest exists for the automated browser checks. It reads state or opens timing windows and
 // changes nothing the user sees.
+//
+// Racks are the selectable items in the view. Equipment records live inside a rack (RU ranges)
+// and have no anchor of their own yet: opening one selects its rack. Description names are a
+// shared list; renaming or replacing one is done by the store in a single write (D041).
 //
 // Extension points: a production site package, tour content, built-in guidance, server-backed
 // records and the spreadsheet adapter would replace data/site.json and DemoRecordStore here.
@@ -529,6 +535,104 @@ namespace VRHE.InteractiveDemo
                 PostSite();
         }
 
+        public void JsAuthoring(string json)
+        {
+            var request = Parse<AuthoringRequest>(json);
+            if (!m_ready || request == null)
+                return;
+            var reply = new AuthoringMessage { requestId = request.requestId ?? "", op = request.op ?? "" };
+            AuthoringResult result = null;
+            var rackId = request.recordId;
+            var equipmentId = request.equipmentId;
+            switch (request.op)
+            {
+                case "openEquipment":
+                case "catalog":
+                    m_store.Reload();  // pick up changes from another tab or an earlier session
+                    reply.status = "Opened";
+                    if (request.op == "openEquipment")
+                    {
+                        var item = m_store.GetEquipment(request.equipmentId);
+                        if (item == null)
+                        {
+                            reply.status = SaveStatus.UnknownRecord.ToString();
+                            reply.message = "That equipment record is not in this browser profile.";
+                            break;
+                        }
+                        m_events.equipmentOpened++;
+                        rackId = item.rackRecordId;
+                        if (m_proxyByRecord.TryGetValue(rackId, out var proxy))
+                            SetSelection(proxy, "equipment");  // the item has no anchor of its own: show its rack
+                    }
+                    break;
+                case "createEquipment":
+                    result = m_store.CreateEquipment(request.recordId, request.name, request.ruStart, request.ruEnd);
+                    break;
+                case "saveEquipment":
+                    result = m_store.SaveEquipment(request.draft);
+                    equipmentId = request.draft?.equipmentId;
+                    break;
+                case "createLabel":
+                    result = m_store.CreateLabel(request.name);
+                    break;
+                case "renameLabel":
+                    result = m_store.RenameLabel(request.labelId, request.baseRevision, request.name);
+                    break;
+                case "replaceLabel":
+                    result = m_store.ReplaceLabel(request.labelId, request.baseRevision, request.replacementLabelId,
+                        request.replacementName);
+                    break;
+                default:
+                    reply.status = SaveStatus.Invalid.ToString();
+                    reply.message = "Unknown operation " + request.op;
+                    break;
+            }
+            if (result != null)
+            {
+                reply.status = result.Status.ToString();
+                reply.message = result.Message ?? "";
+                reply.warnings.AddRange(result.Warnings);
+                reply.labelId = result.LabelId ?? "";
+                reply.affected = result.Affected;
+                if (!string.IsNullOrEmpty(result.EquipmentId))
+                    equipmentId = result.EquipmentId;
+                Count(request.op, result.Status);
+            }
+            // Always reply with the stored state, so a refused or conflicting change shows what is saved now.
+            var equipment = string.IsNullOrEmpty(equipmentId) ? null : m_store.GetEquipment(equipmentId);
+            if (equipment != null)
+            {
+                reply.equipment = equipment;
+                reply.equipmentId = equipment.equipmentId;
+                rackId = equipment.rackRecordId;
+            }
+            reply.rack = string.IsNullOrEmpty(rackId) ? null : m_store.Get(rackId);
+            reply.catalog = m_store.Catalog();
+            reply.readOnly = m_store.IsReadOnly;
+            reply.storeStatus = m_store.StatusMessage;
+            Post(reply);
+            if (result?.Status == SaveStatus.Saved)
+                PostSite();
+        }
+
+        void Count(string op, SaveStatus status)
+        {
+            switch (status)
+            {
+                case SaveStatus.Saved:
+                    if (op == "createEquipment") m_events.equipmentAdded++;
+                    else if (op == "saveEquipment") m_events.equipmentSaved++;
+                    else if (op == "createLabel") m_events.namesAdded++;
+                    else if (op == "renameLabel") m_events.namesRenamed++;
+                    else if (op == "replaceLabel") m_events.namesReplaced++;
+                    break;
+                case SaveStatus.NoChange: m_events.authoringNoChange++; break;
+                case SaveStatus.Conflict: m_events.authoringConflicts++; break;
+                case SaveStatus.StorageError: m_events.authoringStorageErrors++; break;
+                default: m_events.authoringRefused++; break;
+            }
+        }
+
         public void JsCommand(string command)
         {
             if (!m_ready)
@@ -646,9 +750,15 @@ namespace VRHE.InteractiveDemo
                 storageDescription = m_store.StorageDescription,
                 storeStatus = m_store.StatusMessage,
                 readOnly = m_store.IsReadOnly,
-                build = BuildLabel()
+                build = BuildLabel(),
+                legacyStorageKey = m_store.LegacyStorageKey,
+                persisted = m_store.IsPersisted,
+                migration = m_store.Migration,
+                authoring = m_store.Rules,
+                activeNames = m_store.Catalog().active
             };
             foreach (var view in m_store.All())
+            {
                 message.records.Add(new RecordSummary
                 {
                     recordId = view.recordId,
@@ -656,8 +766,12 @@ namespace VRHE.InteractiveDemo
                     kind = view.kind,
                     location = view.location,
                     revision = view.revision,
-                    source = view.source
+                    source = view.source,
+                    rackUnits = view.rackUnits,
+                    equipment = view.equipment
                 });
+                message.equipmentCount += view.equipment.Count;
+            }
             Post(message);
         }
 

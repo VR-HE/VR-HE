@@ -2,7 +2,8 @@
 // Unity -> page messages go through DemoBrowser.Post and are handled in demo-ui.js
 // (onUnityMessage, switch on "type"). Field names are part of that contract; change both sides
 // together. JsonUtility cannot write null objects, so absent records arrive with an empty
-// recordId.
+// recordId (racks) or equipmentId (equipment). The record, equipment and name views themselves
+// are defined in Records/DemoRecordModel.cs.
 
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,10 @@ namespace VRHE.InteractiveDemo
         public string name;
         public string kind;
         public string location;
-        public int revision;
-        public string source;
+        public int revision;      // rack note revision
+        public string source;     // rack note: "seed" or "local edit"
+        public int rackUnits;
+        public List<EquipmentSummary> equipment = new();  // top of the rack first
     }
 
     [Serializable]
@@ -50,6 +53,12 @@ namespace VRHE.InteractiveDemo
         public string storeStatus;
         public bool readOnly;
         public string build;
+        public string legacyStorageKey;   // the first demo's key, read for migration only
+        public bool persisted;            // the current format has been written in this profile
+        public StoredMigration migration;
+        public DemoAuthoringSettings authoring;
+        public int activeNames;
+        public int equipmentCount;
         public List<RecordSummary> records = new();
     }
 
@@ -95,6 +104,26 @@ namespace VRHE.InteractiveDemo
         public bool readOnly;
         public string storeStatus = "";
         public DemoRecordView record;
+    }
+
+    /// <summary>Reply to JsAuthoring: the outcome plus the current views the page needs to redraw.</summary>
+    [Serializable]
+    sealed class AuthoringMessage
+    {
+        public string type = "authoring";
+        public string requestId = "";
+        public string op = "";
+        public string status = "";      // a SaveStatus name, or "Opened" for openEquipment/catalog
+        public string message = "";
+        public List<string> warnings = new();
+        public bool readOnly;
+        public string storeStatus = "";
+        public string equipmentId = "";
+        public string labelId = "";
+        public int affected;
+        public DemoRecordView rack;      // the rack involved, if any (empty recordId otherwise)
+        public EquipmentView equipment;  // the item involved as stored now (empty equipmentId otherwise)
+        public CatalogView catalog;      // always the current list of description names
     }
 
     [Serializable]
@@ -169,6 +198,28 @@ namespace VRHE.InteractiveDemo
         public string requestId;
     }
 
+    /// <summary>
+    /// Page -> Unity authoring command. op: openEquipment | catalog | createEquipment |
+    /// saveEquipment | createLabel | renameLabel | replaceLabel. Every rule is enforced in
+    /// DemoRecordStore; the page's disabled buttons are convenience only.
+    /// </summary>
+    [Serializable]
+    sealed class AuthoringRequest
+    {
+        public string op;
+        public string requestId;
+        public string recordId;            // createEquipment: the rack
+        public string equipmentId;         // openEquipment
+        public string name;                // createEquipment, createLabel, renameLabel (the new spelling)
+        public int ruStart;
+        public int ruEnd;
+        public EquipmentDraft draft;       // saveEquipment
+        public string labelId;             // renameLabel, replaceLabel: the name being changed
+        public int baseRevision;           // renameLabel, replaceLabel: that name's revision when shown
+        public string replacementLabelId;  // replaceLabel: an existing name ...
+        public string replacementName;     // ... or a new name (exactly one of the two)
+    }
+
     [Serializable]
     sealed class UiState
     {
@@ -200,13 +251,23 @@ namespace VRHE.InteractiveDemo
         public int viewToggles;
         public int viewResets;
         public int clears;
+        public int equipmentOpened;
+        public int equipmentAdded;
+        public int equipmentSaved;
+        public int namesAdded;
+        public int namesRenamed;
+        public int namesReplaced;
+        public int authoringNoChange;
+        public int authoringConflicts;
+        public int authoringRefused;      // a rule said no (invalid input, name clash, overlap block, read-only)
+        public int authoringStorageErrors;
     }
 
     [Serializable]
     sealed class SessionReport
     {
         public string schema = "vrhe.demo.session-report";
-        public int schemaVersion = 1;
+        public int schemaVersion = 2;  // 2: equipment and description-name counts
         public string notice = "Synthetic demo session. Counts and timings only; record text is not included.";
         public string reason;
         public string build;

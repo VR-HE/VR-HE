@@ -3,6 +3,7 @@
 // storage, so the scene can still be opened and stepped through without a browser.
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using VRHE.InteractiveDemo.Records;
@@ -26,6 +27,7 @@ namespace VRHE.InteractiveDemo
         [DllImport("__Internal")] static extern string VRHE_Demo_StorageGet(string key);
         [DllImport("__Internal")] static extern string VRHE_Demo_StorageSet(string key, string value);
         [DllImport("__Internal")] static extern string VRHE_Demo_StorageRemove(string key);
+        [DllImport("__Internal")] static extern string VRHE_Demo_StorageKeys(string prefix);
         [DllImport("__Internal")] static extern string VRHE_Demo_PageOrigin();
 
         public static bool IsBrowser => true;
@@ -35,6 +37,7 @@ namespace VRHE.InteractiveDemo
         public static string StorageGet(string key) => VRHE_Demo_StorageGet(key);
         public static string StorageSet(string key, string value) => VRHE_Demo_StorageSet(key, value);
         public static string StorageRemove(string key) => VRHE_Demo_StorageRemove(key);
+        public static string StorageKeys(string prefix) => VRHE_Demo_StorageKeys(prefix);
         public static string PageOrigin() => VRHE_Demo_PageOrigin();
 #else
         public static bool IsBrowser => false;
@@ -44,6 +47,7 @@ namespace VRHE.InteractiveDemo
         public static string StorageGet(string key) => throw new NotSupportedException("browser storage outside WebGL");
         public static string StorageSet(string key, string value) => throw new NotSupportedException("browser storage outside WebGL");
         public static string StorageRemove(string key) => throw new NotSupportedException("browser storage outside WebGL");
+        public static string StorageKeys(string prefix) => throw new NotSupportedException("browser storage outside WebGL");
         public static string PageOrigin() => "editor";
 #endif
     }
@@ -58,6 +62,7 @@ namespace VRHE.InteractiveDemo
             public bool found;
             public string value;
             public string error;
+            public string[] keys;
         }
 
         readonly string m_origin;
@@ -84,6 +89,14 @@ namespace VRHE.InteractiveDemo
         public bool TryRemove(string key, out string error)
         {
             var envelope = Call(() => DemoBrowser.StorageRemove(key));
+            error = envelope.ok ? null : envelope.error;
+            return envelope.ok;
+        }
+
+        public bool TryListKeys(string prefix, out List<string> keys, out string error)
+        {
+            var envelope = Call(() => DemoBrowser.StorageKeys(prefix));
+            keys = new List<string>(envelope.ok && envelope.keys != null ? envelope.keys : Array.Empty<string>());
             error = envelope.ok ? null : envelope.error;
             return envelope.ok;
         }
