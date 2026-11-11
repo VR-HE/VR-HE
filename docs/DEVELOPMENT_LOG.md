@@ -473,6 +473,22 @@ Not tested:
 - A crash or power loss mid-write: the argument rests on one complete-document write per change. A refused write was tested.
 - Two tabs editing in a real browser, very large lists, the Toughbook (D035), and real captures and scale.
 
+## November 11, 2026 — reviewed manual Windows authoring use and direction feedback
+
+Human contribution:
+- Arlen uploaded VRHE-demo-results-20261111-105736.zip and said he is pleased with the direction: more modification is needed, but the overall idea is right. He did not select a new feature or approve all prototype defaults.
+
+AI contribution:
+- ChatGPT/Codex reviewed the archive, parsed telemetry/logs and checked all 17 aggregate pacing buckets. Both Windows sessions report the 250k room at 1280x720 with about 60 fps during focused categories; longest focused intervals are 25/23 ms, with separate 55/56 ms unfocused and 319/327 ms loading maxima.
+- The native launcher ties the second session to Edge 157.0.4341.42, Windows 11 Home 26H2 build 26300.9974 and the personal gaming PC. The first has only a reduced Chrome/157 user agent; exact product/version is unproven.
+- Counters show equipment additions and saves. No page-console errors occur; each console has the expected CPU-sort warning. No record exports or name-operation events are included, so full data-preservation, reload/restart, D041 and inversion assertions remain open from this upload.
+- Codex added a bounded review/compact metrics, updated current Windows status and recorded the positive direction feedback. Next, ask Arlen which modification matters first; do not invent a new feature from general encouragement.
+- No app code, build, bundle, saved record or user device was changed; raw results stay outside Git.
+
+Validation:
+- Archive CRCs, seven JSON documents/two JSONL streams, consistent build identifiers and all 17 aggregate pacing formulas pass. Checked 9 edited/new Markdown files: 101 internal file links resolve, 14 tables have consistent columns, JSON/whitespace/privacy checks pass and all 8 baseline blob hashes match 9fd2fa6.
+- Archive SHA-256: 6ec401464aabb63b186b296faa61b8909b10ae29c218c024e02ec25074d48d46. This is a review of supplied manual telemetry, not an independently executed Windows or weakest-device test.
+
 ## Entry template
 
 For each meaningful change, record:
