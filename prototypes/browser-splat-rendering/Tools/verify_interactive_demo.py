@@ -230,14 +230,12 @@ class Driver:
         time.sleep(0.2)
 
     def click_element(self, element_id):
-        rect = self.cdp.eval(f"(() => {{ const r = document.getElementById({json.dumps(element_id)}).getBoundingClientRect();"
-                             " return [r.left + r.width / 2, r.top + r.height / 2, r.width]; })()")
-        if not rect or rect[2] == 0:
-            raise RuntimeError(f"element {element_id} is not visible")
-        self.click(rect[0], rect[1])
+        self.click_selector("#" + element_id)
 
     def click_selector(self, selector):
+        # Panels scroll; bring the control into view first, as a person would, then click its centre.
         rect = self.cdp.eval(f"(() => {{ const e = document.querySelector({json.dumps(selector)}); if (!e) return null;"
+                             " e.scrollIntoView({block: 'nearest'});"
                              " const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2, r.width]; })()")
         if not rect or rect[2] == 0:
             raise RuntimeError(f"element {selector} is not visible")
@@ -404,6 +402,171 @@ def face(driver, page, yaw, tolerance=1.5):
             return
         turn_by_drag(driver, page, turn)
     raise RuntimeError(f"could not face yaw {yaw}")
+
+
+# ------------------------------------------------------------------------------- mouse Y inversion (D036)
+PREFS_KEY = "vrhe.demo.ui-preferences.v1"
+
+
+def stored_prefs(page):
+    raw = page.eval(f"localStorage.getItem({json.dumps(PREFS_KEY)})")
+    try:
+        return json.loads(raw) if raw else None
+    except ValueError:
+        return {"unreadable": raw}
+
+
+def set_invert(driver, page, on):
+    """Tick or untick Help > Settings > Invert mouse Y-axis with a real click, then close Help with Esc."""
+    focus_view(driver, page)
+    if snap(page)["panel"] != "help":
+        driver.press("h")
+        wait(lambda: snap(page)["panel"] == "help", 5, what="help panel")
+    if bool(page.eval("document.getElementById('invert-mouse-y').checked")) != on:
+        driver.click_element("invert-mouse-y")
+    driver.press("Escape")
+    wait(lambda: snap(page)["panel"] == "", 5, what="help closed")
+    return snap(page)["invertMouseY"] == on
+
+
+def drag_look(driver, page, dx, dy):
+    """One real left-button drag through the canvas centre; returns (yaw change, pitch change)."""
+    cx, cy = canvas_center(page)
+    st0 = state(page)
+    driver.drag(cx - dx / 2, cy - dy / 2, dx, dy, 30, 1.0)
+    st1 = state(page)
+    return angle_delta(st0["viewYaw"], st1["viewYaw"]), st1["pitch"] - st0["pitch"]
+
+
+def captured_vertical(driver, page, pixels=80):
+    """Under pointer lock, move the mouse straight down in steps; returns (yaw change, pitch change) or None."""
+    cx, cy = canvas_center(page)
+    focus_view(driver, page)
+    driver.press("x")
+    for _ in range(2):
+        driver.press("m")
+        time.sleep(0.6)
+        if snap(page)["locked"]:
+            break
+        time.sleep(1.5)  # Chrome briefly refuses a new lock right after Esc released the previous one
+    else:
+        return None
+    driver.mouse("mouseMoved", cx, cy)   # settle: the first locked move may carry an old offset
+    time.sleep(0.3)
+    st0 = state(page)
+    for i in range(8):
+        driver.mouse("mouseMoved", cx, cy + pixels * (i + 1) / 8)
+        time.sleep(0.03)
+    time.sleep(0.3)
+    st1 = state(page)
+    driver.press("Escape")
+    time.sleep(0.4)
+    return angle_delta(st0["viewYaw"], st1["viewYaw"]), st1["pitch"] - st0["pitch"]
+
+
+def nearest_rack_yaw(page, site, name):
+    anchor = next(a for a in site["anchors"] if a["recordId"] == {r["name"]: r for r in site["records"]}[name]["recordId"])
+    feet = state(page)["feet"]
+    return math.degrees(math.atan2(anchor["center"][0] - feet[0], anchor["center"][2] - feet[2]))
+
+
+def run_inversion_checks(page, driver, checks, site):
+    """D036 with the preference ON: vertical look reverses in first person, captured mouse and third-person
+    orbit; horizontal look, wheel zoom, picking and Q/E/X keep their meanings; panels still block input."""
+    checks.check("Invert mouse Y-axis is off by default in a new profile",
+                 not snap(page)["invertMouseY"] and not page.eval("document.getElementById('invert-mouse-y').checked"))
+    focus_view(driver, page)
+    driver.press("x")
+    yaw_n, pitch_n = drag_look(driver, page, 120, 60)
+    driver.press("x")
+    checks.check("Help > Settings checkbox turns inversion on (real click)", set_invert(driver, page, True))
+    prefs = stored_prefs(page) or {}
+    checks.check("inversion choice is saved in this browser profile", prefs.get("invertMouseY") is True, f"{prefs}")
+    focus_view(driver, page)
+    driver.press("x")
+    yaw_i, pitch_i = drag_look(driver, page, 120, 60)
+    checks.check("inverted drag: same turn, vertical reversed (first person)",
+                 abs(yaw_i - yaw_n) < 1.5 and 15 < yaw_i < 21 and -12 < pitch_i < -6 and 6 < pitch_n < 12,
+                 f"normal yaw {yaw_n:.1f} pitch {pitch_n:.1f}; inverted yaw {yaw_i:.1f} pitch {pitch_i:.1f}")
+    moved = captured_vertical(driver, page)
+    checks.check("inverted captured mouse: moving down looks up (synthetic events; manual check still needed)",
+                 moved is not None and moved[1] < -3 and abs(moved[0]) < 2,
+                 f"yaw {moved[0]:.1f}, pitch {moved[1]:.1f}" if moved else "pointer lock refused")
+
+    # Picking uses absolute coordinates: unchanged by the preference.
+    focus_view(driver, page)
+    face(driver, page, nearest_rack_yaw(page, site, "Rack A5"))
+    driver.press("x")
+    a5 = {r["name"]: r for r in site["records"]}["Rack A5"]["recordId"]
+    p = page.eval(f"VRHEDemoPage.test.project({json.dumps(a5)})")
+    driver.mouse("mouseMoved", p["clientX"], p["clientY"])
+    time.sleep(0.4)
+    hovered = state(page)["hoveredRecordId"]
+    driver.click(p["clientX"], p["clientY"])
+    checks.check("with inversion on, pointing and clicking still pick the rack under the pointer",
+                 hovered == a5 and snap(page)["selected"] == a5, f"hovered {hovered[:12]}, selected {snap(page)['selected'][:12]}")
+
+    # Q/E/X unchanged.
+    st0 = state(page)
+    driver.hold(["q"], 0.6)
+    st1 = state(page)
+    driver.hold(["e"], 1.2)
+    st2 = state(page)
+    drag_look(driver, page, 0, 60)
+    before_x = state(page)
+    driver.press("x")
+    st3 = state(page)
+    checks.check("with inversion on, Q raises, E lowers and X restores height and a level view",
+                 st1["heightOffset"] - st0["heightOffset"] > 0.25 and st2["heightOffset"] < st1["heightOffset"] - 0.4 and
+                 abs(before_x["pitch"]) > 3 and abs(st3["heightOffset"]) < 1e-3 and abs(st3["pitch"]) < 1e-3,
+                 f"Q +{st1['heightOffset'] - st0['heightOffset']:.2f} m, E to {st2['heightOffset']:.2f} m, "
+                 f"X from pitch {before_x['pitch']:.1f} to {st3['pitch']:.3f}")
+
+    # Third person: orbit pitch reverses, orbit yaw and wheel zoom do not.
+    driver.press("v")
+    time.sleep(1.2)
+    driver.press("x")
+    yaw_t, pitch_t = drag_look(driver, page, 100, 60)
+    st0 = state(page)
+    driver.wheel(*canvas_center(page), 300)
+    st1 = state(page)
+    checks.check("inverted third-person orbit: same horizontal orbit, vertical reversed",
+                 st0["view"] == "third" and 12 < yaw_t < 18 and -12 < pitch_t < -6, f"yaw {yaw_t:.1f}, pitch {pitch_t:.1f}")
+    checks.check("with inversion on, the mouse wheel still zooms out", st1["orbitDistance"] > st0["orbitDistance"] + 0.5,
+                 f"{st0['orbitDistance']:.2f} -> {st1['orbitDistance']:.2f} m")
+    driver.wheel(*canvas_center(page), -300)
+    driver.press("x")
+    driver.press("v")
+    time.sleep(0.5)
+
+    # A panel still blocks movement.
+    driver.press("h")
+    st0 = state(page)
+    driver.hold(["w"], 0.5)
+    st1 = state(page)
+    driver.press("Escape")
+    checks.check("with inversion on, W does nothing while Help is open", dist(st0["feet"], st1["feet"]) < 1e-4)
+
+
+def check_inversion_persists(page, driver, checks, when):
+    s = snap(page)
+    prefs = stored_prefs(page) or {}
+    checks.check(f"inversion still on after {when} (checkbox, page state, stored preference)",
+                 s["invertMouseY"] and page.eval("document.getElementById('invert-mouse-y').checked") and
+                 prefs.get("invertMouseY") is True, f"{prefs}")
+    focus_view(driver, page)
+    driver.press("x")
+    yaw, pitch = drag_look(driver, page, 120, 60)
+    driver.press("x")
+    checks.check(f"after {when}, a drag down still looks up (inverted)", 15 < yaw < 21 and -12 < pitch < -6,
+                 f"yaw {yaw:.1f}, pitch {pitch:.1f}")
+
+
+def reload_page(page):
+    page.call("Page.reload", {"ignoreCache": True})
+    time.sleep(1.0)
+    wait(lambda: page.eval("!!(window.VRHEDemoPage && VRHEDemoPage.test.snapshot().ready)"), 120, 0.5, "ready after reload")
+    page.call("Emulation.setFocusEmulationEnabled", {"enabled": True})
 
 
 def run_session_one(args, page, browser, driver, checks, site, results, downloads):
@@ -733,12 +896,48 @@ def run_session_one(args, page, browser, driver, checks, site, results, download
         driver.press("Escape")
         time.sleep(0.4)
         checks.check("Esc releases the mouse", not snap(page)["locked"])
+        moved = captured_vertical(driver, page)
+        checks.check("captured mouse moving down looks down with inversion off (synthetic events)",
+                     moved is not None and moved[1] > 3 and abs(moved[0]) < 2,
+                     f"yaw {moved[0]:.1f}, pitch {moved[1]:.1f}" if moved else "pointer lock refused")
+
+    # Optional mouse Y inversion (D036), then a reload with it on.
+    run_inversion_checks(page, driver, checks, site)
+    reload_page(page)
+    check_inversion_persists(page, driver, checks, "a page reload")
     return {"notes": {"A1": note_a, "B1": note_b},
             "pacing": [x for x in (pace_idle, pace_move, pace_height, pace_look, pace_orbit, pace_third_move,
                                    pace_typing, pace_panel) if x]}
 
 
+def run_inversion_session_two(page, driver, checks):
+    """After a browser restart: the preference persists; turning it off restores normal look; older and
+    unreadable stored preferences fall back to defaults without breaking the page."""
+    check_inversion_persists(page, driver, checks, "closing and restarting the browser")
+    checks.check("unticking the checkbox turns inversion off", set_invert(driver, page, False))
+    focus_view(driver, page)
+    driver.press("x")
+    yaw, pitch = drag_look(driver, page, 120, 60)
+    driver.press("x")
+    prefs = stored_prefs(page) or {}
+    checks.check("inversion off again: a drag down looks down, and off is saved",
+                 15 < yaw < 21 and 6 < pitch < 12 and prefs.get("invertMouseY") is False,
+                 f"yaw {yaw:.1f}, pitch {pitch:.1f}, stored {prefs}")
+    page.eval(f"localStorage.setItem({json.dumps(PREFS_KEY)}, JSON.stringify({{lookSpeed: 1.5}}))")
+    reload_page(page)
+    s = snap(page)
+    checks.check("an older stored preference without the inversion field loads as normal look, keeping look speed",
+                 not s["invertMouseY"] and abs(s["lookSpeed"] - 1.5) < 1e-6, f"invert {s['invertMouseY']}, speed {s['lookSpeed']}")
+    page.eval(f"localStorage.setItem({json.dumps(PREFS_KEY)}, '{{not json')")
+    reload_page(page)
+    s = snap(page)
+    checks.check("an unreadable stored preference loads the defaults and the demo still starts",
+                 s["ready"] and not s["invertMouseY"] and abs(s["lookSpeed"] - 1.0) < 1e-6 and not s["error"],
+                 f"invert {s['invertMouseY']}, speed {s['lookSpeed']}, error {s['error']!r}")
+
+
 def run_session_two(page, driver, checks, site, notes):
+    run_inversion_session_two(page, driver, checks)
     rec = {r["name"]: r for r in site["records"]}
     for name, key in (("Rack A1", "A1"), ("Rack B1", "B1")):
         r = rec[name]
