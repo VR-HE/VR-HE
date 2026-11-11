@@ -110,15 +110,15 @@ A small work-utility slice built on the tested 250k synthetic room ([task](../..
 | Path | Purpose |
 | --- | --- |
 | `Assets/InteractiveDemo/Data/demo-site.json` | Synthetic site: frozen site/record/anchor IDs (prefixed UUIDs), ten rack anchors, proxy obstacles and the spawn point. `Tools/check_demo_site.py` checks it against the generated room |
-| `Assets/InteractiveDemo/Records/` | Assembly `VRHE.InteractiveDemo.Records`: site validation, `DemoRecordStore` (versioned local schema, revision checks, labelled JSON export), `IKeyValueStorage` and `DemoPaths` |
+| `Assets/InteractiveDemo/Records/` | Assembly `VRHE.InteractiveDemo.Records`: site validation and authoring settings (`DemoSiteDefinition`), the stored, view and draft shapes (`DemoRecordModel`), `DemoRecordStore` (record format 2: rack notes, equipment, descriptions and names; revision checks; carry-over of format 1; labelled JSON export), `IKeyValueStorage` and `DemoPaths` |
 | `Assets/InteractiveDemo/Runtime/` | `DemoApp` (startup, per-frame flow, page bridge), `DemoPlayer` (walking, camera height, first/third person, orbit), `DemoInput` (input gate and sources), selection, outlines and frame pacing |
 | `Assets/InteractiveDemo/Plugins/WebGL/DemoBridge.jslib` | Page bridge: messages, mouse frames and localStorage access with error envelopes |
 | `Assets/InteractiveDemo/Editor/DemoProjectSetup.cs` | Creates the scene and materials; builds only the demo scene into `Builds/InteractiveDemo` |
-| `Assets/InteractiveDemo/Tests/Editor/` | EditMode tests: record identity, persistence, conflicts, damaged or newer data, export and the URL rule |
-| `Assets/WebGLTemplates/VRHEInteractiveDemo/` | Page: panels, help, record editor, input gate, mouse and pointer lock, HUD, local results reporting |
+| `Assets/InteractiveDemo/Tests/Editor/` | EditMode tests: record identity, persistence, conflicts, damaged or newer data, carry-over of format 1, equipment and RU rules, descriptions, names (D041), failed writes, export and the URL rule |
+| `Assets/WebGLTemplates/VRHEInteractiveDemo/` | Page: panels, help, the rack panel (rack note and equipment list), the equipment editor, the Description names panel, input gate, mouse and pointer lock, HUD, local results reporting |
 | `Tools/interactive_demo_unity.sh` | `setup`, `test` and `build` with this project's explicit path only |
 | `Tools/demo_server.py` | Local demo server at the fixed address `http://127.0.0.1:8791/`; `run` opens Edge, Chrome or Brave with a persistent demo profile; `serve`; `collect` |
-| `Tools/verify_interactive_demo.py` | Real-browser checks through the Chrome DevTools Protocol, on the development build or an extracted bundle (`--bundle`) |
+| `Tools/verify_interactive_demo.py` | Real-browser checks through the Chrome DevTools Protocol, on the development build or an extracted bundle (`--bundle`). `--part all` (default), `authoring`, or `migration --old-bundle <extracted earlier bundle>` |
 | `Tools/package_demo_bundle.py`, `Tools/windows-demo-bundle/` | Windows ZIP, launchers and `START-HERE-DEMO.txt` |
 
 ```bash
@@ -129,6 +129,8 @@ python3 -I "$P/Tools/check_demo_site.py"      # proxies against the generated ro
 python3 -I "$P/Tools/demo_server.py" run --browser chrome --build "$P/Builds/InteractiveDemo" \
   --fixtures "$P/Fixtures/Generated" --results "$P/TestResults/raw/interactive-demo/manual"
 python3 -I "$P/Tools/verify_interactive_demo.py" --browser chrome --profile-dir <throwaway folder>
+python3 -I "$P/Tools/verify_interactive_demo.py" --browser chrome --profile-dir <new empty folder> \
+  --part migration --old-bundle <extracted 294f4b2 bundle folder>   # old build saves, this build carries over
 python3 -I "$P/Tools/package_demo_bundle.py"  # needs a clean tree and a build of committed source
 ```
 
@@ -136,7 +138,7 @@ The Unity script refuses to run while an Editor has this project open, and puts 
 
 How the pieces fit:
 - The splat is a picture only. Walking uses a CharacterController against proxy BoxColliders, and picking raycasts against anchor boxes; both come from `demo-site.json`, in metres, Unity's left-handed Y-up frame. The generated room spans x -4..4 and z -3..3 with the floor at y = 0.
-- Records are keyed by `recordId`. Display names, anchor IDs and splat indexes are never keys. The store lives under `vrhe.demo.records.v1.<siteId>` in the page's localStorage, in the `vrhe.demo.local-records` schema, version 1. Saves carry the revision they were based on, and a stale revision is refused. Entries for unknown records are kept. Newer-schema data is read-only. Unreadable data is backed up before the first write.
+- Records are keyed by ID: `recordId` for racks, `equipmentId`, `descriptionId` and `labelId` for the authoring data below. Display names, anchor IDs, list positions and splat indexes are never keys. The store is one document under `vrhe.demo.records.v2.<siteId>` in the page's localStorage, in the `vrhe.demo.local-records` schema, version 2. Every change carries the revision it was based on, and a stale revision is refused. Entries for unknown records are kept. Newer-schema data is read-only. Unreadable data is backed up before the first write. The version 1 key is read for the carry-over and never written.
 - Input: the page decides whether Unity may act on the keyboard and mouse (the canvas and window have focus, and no panel or text field is active). Unity forgets held keys at every change. The page sends one packed mouse frame per Unity update and owns pointer lock and the context menu.
 - Runtime files sit under `data/` in the build (`DemoPaths`). Unity reads a bare `site.json` as a host name and refuses `http://site.json/`.
 - Extension points: a site package or tour content would replace `demo-site.json`. A server, spreadsheet or Gemini-draft adapter would implement `IKeyValueStorage` or replace `DemoRecordStore` behind the same record contract. None is implemented.
@@ -148,14 +150,61 @@ Prototype defaults (implementation choices, not user decisions; all are fields i
 | Walk / Shift speed | 1.3 / 2.6 m/s |
 | Arrow keys | As W/S/A/D (D022): Up forward, Down back, Left/Right step sideways; turning is by mouse. The unexposed `arrowKeysTurn` option in `DemoApp` makes Left/Right turn at 90 deg/s instead |
 | Mouse look | 0.15 deg per pixel, adjustable 0.25-3x in Help; first-person pitch limit 80 deg |
-| Mouse Y inversion | Source update: optional checkbox in Help > Settings, default off, saved with sensitivity in this profile. Shared drag/captured look/orbit only; delivered 294f4b2 ZIP predates this change |
+| Mouse Y inversion | Optional checkbox in Help > Settings, default off, saved with sensitivity in this profile. Vertical drag/captured look and third-person orbit only; horizontal look, picking, wheel and Q/E/X are unchanged. Not in the 294f4b2 ZIP |
 | Eye height, Q/E | 1.6 m; Q/E move 0.6 m/s within -0.9 to +1.0 m; X restores 1.6 m and a level view |
 | View switch | V; third person starts 2.6 m behind (wheel 1.2-5 m), orbit pitch -30 to 70 deg, the camera pulls in at walls |
 | Placeholder figure | Plain, non-gendered, about 1.73 m tall; a rough size cue, not a verified scale reference |
 | Canvas | 1280x720 when the window allows, otherwise reduced to fit and labelled; devicePixelRatio 1; no frame cap |
 
-November 11 follow-up: Arlen reports the core mechanics work as hoped. The current editor has one description string for each rack record; it is not yet an equipment placement/RU editor. Multiple equipment per rack, occupied RU ranges, one unnamed equipment description initially, optional additional descriptions and an editable reusable description-name catalog are confirmed next requirements. See [the authoring task](../../docs/EQUIPMENT_DESCRIPTIONS_TASK.md). Existing saved rack descriptions need migration/preservation, not reassignment to an arbitrary server.
+### Equipment, descriptions and names (branch proto/equipment-descriptions)
 
-The Y-inversion page source needs a new local build/package and real-browser application checks. Isolated source checks are in the development log; no updated ZIP was produced by the cloud review.
+A local prototype of [the authoring task](../../docs/EQUIPMENT_DESCRIPTIONS_TASK.md) on synthetic data (D037-D039, D041). Results: [Linux results](TestResults/equipment-descriptions-linux-20261111/README.md). Production data model, templates, roles and spreadsheet mapping remain open.
 
-Not in this slice: production authentication (now including [Google Authenticator-compatible MFA](../../docs/PRODUCTION_AUTHENTICATION.md)), Google Drive/Sheets/Gemini, live sync, capture, cabinet states, partial rescanning, touch and VR controls. Physical scale accuracy is not demonstrated.
+What a person can do:
+- Open a rack by selection, right-click, Enter or the L list. The rack panel holds the **rack note** (rack-level text; the single description of the earlier demo) and the rack's **equipment list**, top of the rack first, with an Add equipment form: name, From RU, to RU.
+- A new item opens with exactly one empty, unnamed description. **+ Add description** adds another to that item only. Each description has a name list: "(no name)", the active names, **New name...** and **Manage names...**. Up and down buttons change the display order. Remove is offered only for an empty description.
+- **Description names** (toolbar button, or Manage names...) adds a name, **Rename** fixes a spelling everywhere, and **Remove...** first requires an existing or new replacement name (D041).
+- The L list shows each rack with its items. Open on an item opens it and selects its rack in the view. Equipment has no anchor of its own: the scan is a picture, and an item is a record, not movable geometry.
+
+Data format 2 is one document per site; field names are in `DemoRecordModel.cs`.
+
+| Part | Holds |
+| --- | --- |
+| `rackNotes[]` | `recordId`, `description` (the rack note), `revision`, `updatedAt`; the shape of format 1 `entries[]` |
+| `equipment[]` | `equipmentId` (`eq-<uuid>`), `rackRecordId`, `name`, `ruStart` and `ruEnd` (inclusive), `revision`, times and `descriptions[]` |
+| `equipment[].descriptions[]` | `descriptionId` (`dsc-<uuid>`), `labelId` (empty = unnamed), `text`, times. List order is display order only |
+| `labels[]` | `labelId` (`lbl-<uuid>`), `name`, `revision`, `retired`, `replacedByLabelId`, `previousNames[]`, `reassignedDescriptionIds[]` |
+| `migration` | Carry-over state, the format 1 key, entry counts and times |
+
+Rules, enforced by the store's commands (the page's live hints and disabled buttons only show them):
+- Each command reloads the stored document, checks the change, builds the complete next document and writes it with one `localStorage.setItem`. The in-memory copy changes only after that write succeeds. A refused or failed write, such as a full storage area, leaves the stored data and the screen as they were, so a rename or replacement is never half applied in storage.
+- RU ranges are whole numbers within 1 to the rack's units, start no higher than end. An overlap with another item in the same rack is saved with a warning (`ruOverlap: warn`) or refused (`block`). Front/rear use is not recorded.
+- A description keeps its ID through text, name and order changes. Only an empty description can be removed, and an item keeps at least one. Deleting text is not offered: D041 does not authorize value deletion.
+- Adding a name that already exists (same letters, ignoring case and extra spaces) reuses it and changes no equipment. Rename keeps the `labelId`, so every description follows without its text changing. Renaming onto another active name is refused, with advice to use Replace.
+- Replace moves every description that uses the old name to the replacement (an existing name, or a new one created in the same write). Each description keeps its ID, item and text. The old name is retired with `replacedByLabelId`, never deleted. No replacement, a blank, unknown or retired one, or the old name itself is refused with nothing written.
+- When an item already has a description under the replacement name, both are kept and the result warns (`labelCollision: keep-both`), or the replacement is refused naming the items (`block`). Values are never merged or overwritten.
+- An editor opened before a replacement cannot save the retired name; the save is refused as a conflict naming the replacement.
+
+Carry-over of format 1 (the 294f4b2 demo):
+- On first load the format 1 rack descriptions appear as rack notes. They are not turned into equipment descriptions. Nothing is written until the first change; that write creates the format 2 document and records the carry-over in `migration`.
+- The format 1 copy is never changed or removed, and every export includes it raw (`storedCopies`). If the old build changes its copy later, this build says so and keeps both; the format 2 document stays the source.
+- Reset starts over (original rack notes, no equipment, starter names) and does not bring the format 1 notes back. Records for racks this build does not know are kept and exported (`unmatchedStoredEntries`, `unmatchedEquipment`).
+
+Export format 2 (`vrhe.demo.records-export`): `records[]` (racks with their rack note and equipment summary), `equipment[]` (each item with its descriptions and their names and name states), `labels[]` (including retired names and their replacements), `authoring` (the settings below), `migration`, the unmatched lists and `storedCopies`. A format 1 export's `records[].description` is format 2's `records[].description`, the rack note; format 1 had no equipment or names.
+
+Spreadsheet readiness, without an adapter ([spreadsheet rules](../../docs/SPREADSHEET_SYNC.md)): a mapping would join on these IDs, never on display names or row positions. Renaming a name changes only `labels[].name`; it is not a column rename. A replacement reassigns references; it is not a column merge or delete. Removing an empty description is local to one item, not a shared column delete. The export's `mappingNotice` says so.
+
+Proposals, not decisions; the settings are in the `authoring` block of `demo-site.json`, checked by `DemoSiteDefinition`:
+
+| Setting | Prototype default |
+| --- | --- |
+| Name list scope and storage | One list per site, stored with that site's records in this browser profile; starter names from `demo-site.json` |
+| `rackUnitsDefault` | 42 RU (a rack record may set `rackUnits`) |
+| `ruNumbering` | `bottom-up`: RU 1 is the bottom position |
+| `ruOverlap` | `warn` (alternative `block`) |
+| `labelCollision` | `keep-both` (alternative `block`) |
+| `maxEquipmentPerRack`, `maxDescriptionsPerItem`, `maxLabels` | 50, 20, 100 |
+| `maxEquipmentNameLength`, `maxLabelNameLength` | 80 and 60 characters; rack notes and descriptions up to 4000 |
+| Replaced names | Kept, left out of the name lists and shown under "Replaced names" with their replacement |
+
+Not in this slice: templates for new equipment, deleting equipment or descriptions that hold text, cabinet states, production authentication (including [Google Authenticator-compatible MFA](../../docs/PRODUCTION_AUTHENTICATION.md)), Google Drive/Sheets/Gemini, live sync, capture, partial rescanning, touch and VR controls. Physical scale accuracy is not demonstrated.
